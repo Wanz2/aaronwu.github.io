@@ -4,19 +4,41 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hexo</title>
+    <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Hexo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Wanz2">
     
 
     
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://wanz2.github.io/index.html">
+    <meta name="description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
+
+VM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
+<meta property="og:url" content="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
+
+VM">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045435665?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045508291?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500">
+<meta property="og:updated_time" content="2017-03-31T19:34:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
+<meta name="twitter:description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
+
+VM">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
 
     
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -70,12 +92,10 @@
 </div>
     </header>
     <div id="container">
-      <div id="main">
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置" itemprop="url">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</a>
@@ -89,9 +109,16 @@
     
   </p>
 </header>
-    <div class="article-content">
-        
-        <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>&emsp;&emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：</p>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>&emsp;&emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：</p>
 <ol>
 <li>VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</li>
 <li>Windows主机中配置Xshell工具以远程控制虚拟系统</li>
@@ -116,14 +143,9 @@
 <li>在“用户身份验证”中输入登录用帐号密码：<br><img src="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500" alt="这里写图片描述"></li>
 <li>配置成功，点击连接即可接入虚拟系统</li>
 </ol>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
+  
+	</div>
+		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 
@@ -131,213 +153,43 @@
 
 
 
-
-<div class="comments-count">
+	<div class="article-share" id="share">
 	
-</div>
+	  <div data-url="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Hexo" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
 
 </footer>
 
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/" title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置" itemprop="url">Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Wanz2" target="_blank" itemprop="author">Wanz2</a>
-		
-  <p class="article-time">
-    <time datetime="2017-03-31T19:27:21.000Z" itemprop="datePublished"> Published 2017-04-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h1><h3 id="windows-10-64位-专业版（非必须）"><a href="#windows-10-64位-专业版（非必须）" class="headerlink" title="windows 10 64位 专业版（非必须）"></a>windows 10 64位 专业版（非必须）</h3><h3 id="visual-studio-2013（墙裂推荐此版本）"><a href="#visual-studio-2013（墙裂推荐此版本）" class="headerlink" title="visual studio 2013（墙裂推荐此版本）"></a>visual studio 2013（墙裂推荐此版本）</h3><ol>
-<li>笔者使用的操作系统为win10 64位，在其他版本的64位windows系统上应该同样可行。</li>
-<li>visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如下：<br>a. 打开vs2013，点击“工具”-“扩展和更新”<br>b. 在弹出的对话框中点击“联机”，在右上角搜索框中搜索NuGet，在搜索结果中“NuGet Package Manager”项上面的“下载”，开始下载NuGet，下载完后进行安装<br>c. 安装完后重启vs2013，重启后点击“工具”-“扩展和更新”，选择“已安装”，可以看到NuGet Package Manager已经安装好了。</li>
-</ol>
-<h1 id="二、配置步骤"><a href="#二、配置步骤" class="headerlink" title="二、配置步骤"></a>二、配置步骤</h1><ol>
-<li><p>下载代码<br>从<a href="https://github.com/Microsoft/caffe" target="_blank" rel="external">https://github.com/Microsoft/caffe</a><br>得到文件“caffe-master.zip”<br>或从<a href="https://github.com/BVLC/caffe/tree/windows" target="_blank" rel="external">https://github.com/BVLC/caffe/tree/windows</a><br>得到文件“caffe-windows.zip”<br>二者的配置步骤相同，均能编译成功，本文以源码“caffe-master.zip”为例</p>
-</li>
-<li><p>解压后进入如下路径：\caffe-master\windows 之后的操作均在该目录下进行，因此之后省略\caffe-master的路径</p>
-</li>
-<li><p>在\windows目录下复制文件 CommonSettings.props.example(应该会以副本形式出现CommonSettings.props - 副本.example),并将该副本改名为CommonSettings.props。(请确认显示文件扩展名这个选项已生效)</p>
-</li>
-<li><p>用vs（或其他编辑器）打开CommonSettings.props，将第7行<code>CpuOnlyBuild</code>标签中的值改为true，将第8行<code>UseCuDNN</code>标签中的值改为false，更改完毕后保存并退出。<br>（这两步是将caffe的GPU版本关闭，仅使用CPU版本。由于打开GPU会出现其他错误，作为初学者，我们先从CPU版本开始，等熟悉caffe之后再深入研究GPU版本）</p>
-</li>
-<li><p>用vs打开\windows下的Caffe.sln，可以看到该解决方案中共有16个项目，请注意核对。（若下载的源码为BVLC的“caffe-windows.zip”，则该解决方案中只有15个项目，所缺少的项目为“caffe.managed”，但经过笔者测试，在编译时并没有影响）右击“解决方案‘Caffe’”，选择“属性”，将“配置属性”-“配置”修改成Release和x64，如下图所示<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe1.png?imageView/2/w/500" alt="这里写图片描述"><br>（这一步是使用Release来进行编译，若用Debug，则之后每次都要打开vs，会不方便）<br>注意：在上图顶部工具栏中的“解决方案配置”和“解决方案平台”框，若你的vs2013中将这两个框在工具栏中显示，则要在工具栏中将配置改成Release和x64，否则直接右击“解决方案Caffe”来更改配置是无效的。</p>
-</li>
-<li><p>右击解决方案中的libcaffe项目，选择“属性”，在打开的属性页中选择“C/C++”-“常规”，将“将警告视为错误”设为“否”，如下图所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe2.png?imageView/2/w/500" alt="这里写图片描述"></p>
-</li>
-<li><p>右击“libcaffe”项目，选择“生成”，之后是一段时间的等待。<br>注意：点击“生成”后会出现如下图的窗口，此时vs正在使用NuGet对caffe的一些依赖文件进行自动还原<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe3.png?imageView/2/w/500" alt="这里写图片描述"><br>还原成功后，会在caffe-master的同级目录生成文件夹NugetPackages。</p>
-</li>
-<li><p>右击“解决方案Caffe”，选择“生成解决方案”，之后又是一段时间的等待</p>
-</li>
-<li><p>等待过后生成成功，到此windows下的caffe配置完成，此时在\caffe-master目录下会生成Build文件夹，即为我们编译成功的文件夹，而\caffe-master\Build\x64\Release目录下则会有我们编译出的caffe.exe执行文件，到此caffe配置完成。</p>
-</li>
-</ol>
-<p>主要参考</p>
-<ol>
-<li><a href="http://www.cnblogs.com/yixuan-xu/p/5858595.html" target="_blank" rel="external">http://www.cnblogs.com/yixuan-xu/p/5858595.html</a></li>
-<li><a href="http://m.blog.csdn.net/article/details?id=51355143" target="_blank" rel="external">http://m.blog.csdn.net/article/details?id=51355143</a></li>
-<li><a href="http://blog.csdn.net/qq_14845119/article/details/52415090" target="_blank" rel="external">http://blog.csdn.net/qq_14845119/article/details/52415090</a></li>
-</ol>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
+   	       
+	</article>
 	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/"  title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">
+ <strong>下一篇：</strong><br/> 
+ <span>Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置
+</span>
+</a>
 </div>
 
-</footer>
+</nav>
 
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/01/吴文安的第一篇随想录/" title="吴文安的第一篇随想录" itemprop="url">吴文安的第一篇随想录</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Wanz2" target="_blank" itemprop="author">Wanz2</a>
-		
-  <p class="article-time">
-    <time datetime="2017-03-31T19:11:57.000Z" itemprop="datePublished"> Published 2017-04-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Hello World!</p>
-<p>养眼美女！</p>
-<p>jnbvmnbmn</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
 	
-</div>
 
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/01/hello-world/" title="Hello World" itemprop="url">Hello World</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Wanz2" target="_blank" itemprop="author">Wanz2</a>
-		
-  <p class="article-time">
-    <time datetime="2017-03-31T18:54:17.000Z" itemprop="datePublished"> Published 2017-04-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-
-</div>
+</div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
+ 
+  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -468,12 +320,89 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
 
 
 
@@ -544,4 +473,4 @@ var _hmt = _hmt || [];
 <!-- Tiny_search End -->
 
   </body>
- </html>
+</html>
