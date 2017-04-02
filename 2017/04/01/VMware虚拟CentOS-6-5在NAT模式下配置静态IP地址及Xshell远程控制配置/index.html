@@ -32,7 +32,7 @@ VM">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500">
-<meta property="og:updated_time" content="2017-03-31T19:34:34.000Z">
+<meta property="og:updated_time" content="2017-04-02T02:50:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
 <meta name="twitter:description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
@@ -66,7 +66,7 @@ VM">
 				<h1 class="site-name"><a href="/" title="Hexo">Hexo</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -105,14 +105,14 @@ VM">
 		<a href="/about" title="Wanz2" target="_blank" itemprop="author">Wanz2</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
+    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished"> 發表於 2017-04-01</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
 		
@@ -124,7 +124,7 @@ VM">
 <li>Windows主机中配置Xshell工具以远程控制虚拟系统</li>
 </ol>
 <h1 id="二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><a href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置" class="headerlink" title="二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置"></a>二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</h1><ol>
-<li>在VMware中配置NAT网络模式<br> 1.1 在虚拟机设置中将网络适配器设置为NAT模式<br><img src="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500" alt="这里写图片描述"><br> 1.2 在VMware工具栏点击“编辑”-“虚拟网络编辑器”，在弹出的窗口中选择“更改设置”<br><img src="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500" alt="这里写图片描述"><br> 1.3 在弹出的窗口中选择VMnet8，并将其VMnet信息选择为NAT模式，点击“NAT设置”<br><img src="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500" alt="这里写图片描述"><br> 1.4 在弹出的窗口中，记住“网关IP”，之后配置IP地址会用到。在“端口转发”中选择“添加”<br><img src="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500" alt="这里写图片描述"><br> 1.5 在弹出的窗口中进行如下配置，其中主机端口可以自行设定，推荐设定值范围在10000和65535之间；虚拟机IP地址的前三位与上一步中网关地址的前三位相同，表示网段，虚拟机IP地址的最后一位可自行设定；虚拟机端口设置为22，为SSH协议的默认接口；“描述”选项可自行设定。设定结束后选择“确定”，在上一级窗口中选择“应用”并确定，至此VMware中的NAT网络配置结束。<br><img src="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500" alt="这里写图片描述"></li>
+<li>在VMware中配置NAT网络模式<br> 1.1 在虚拟机设置中将网络适配器设置为NAT模式<br><img src="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500" alt=""><br> 1.2 在VMware工具栏点击“编辑”-“虚拟网络编辑器”，在弹出的窗口中选择“更改设置”<br><img src="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500" alt=""><br> 1.3 在弹出的窗口中选择VMnet8，并将其VMnet信息选择为NAT模式，点击“NAT设置”<br><img src="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500" alt="这里写图片描述"><br> 1.4 在弹出的窗口中，记住“网关IP”，之后配置IP地址会用到。在“端口转发”中选择“添加”<br><img src="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500" alt="这里写图片描述"><br> 1.5 在弹出的窗口中进行如下配置，其中主机端口可以自行设定，推荐设定值范围在10000和65535之间；虚拟机IP地址的前三位与上一步中网关地址的前三位相同，表示网段，虚拟机IP地址的最后一位可自行设定；虚拟机端口设置为22，为SSH协议的默认接口；“描述”选项可自行设定。设定结束后选择“确定”，在上一级窗口中选择“应用”并确定，至此VMware中的NAT网络配置结束。<br><img src="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500" alt="这里写图片描述"></li>
 <li>在CentOS中配置静态IP地址<br> 2.1 打开CentOS，输入<pre><code>  `ifconfig`
 查看网卡信息，注意信息中的网卡名：
 </code></pre><img src="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500" alt="这里写图片描述"><pre><code>上图中“eth0”即为网卡名，表示第一块网卡
@@ -182,17 +182,17 @@ VM">
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -203,7 +203,7 @@ VM">
   
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -225,7 +225,7 @@ VM">
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
@@ -456,7 +456,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
