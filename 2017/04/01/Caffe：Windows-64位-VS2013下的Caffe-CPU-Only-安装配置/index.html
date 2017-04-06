@@ -22,7 +22,7 @@ visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/caffe1.png?imageView/2/w/500">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/caffe2.png?imageView/2/w/500">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/caffe3.png?imageView/2/w/500">
-<meta property="og:updated_time" content="2017-03-31T19:27:51.000Z">
+<meta property="og:updated_time" content="2017-04-06T15:35:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">
 <meta name="twitter:description" content="一、环境准备windows 10 64位 专业版（非必须）visual studio 2013（墙裂推荐此版本）
@@ -152,7 +152,8 @@ var themeMenus = {};
       
         <h1 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h1><h3 id="windows-10-64位-专业版（非必须）"><a href="#windows-10-64位-专业版（非必须）" class="headerlink" title="windows 10 64位 专业版（非必须）"></a>windows 10 64位 专业版（非必须）</h3><h3 id="visual-studio-2013（墙裂推荐此版本）"><a href="#visual-studio-2013（墙裂推荐此版本）" class="headerlink" title="visual studio 2013（墙裂推荐此版本）"></a>visual studio 2013（墙裂推荐此版本）</h3><ol>
 <li>笔者使用的操作系统为win10 64位，在其他版本的64位windows系统上应该同样可行。</li>
-<li>visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如下：<br>a. 打开vs2013，点击“工具”-“扩展和更新”<br>b. 在弹出的对话框中点击“联机”，在右上角搜索框中搜索NuGet，在搜索结果中“NuGet Package Manager”项上面的“下载”，开始下载NuGet，下载完后进行安装<br>c. 安装完后重启vs2013，重启后点击“工具”-“扩展和更新”，选择“已安装”，可以看到NuGet Package Manager已经安装好了。</li>
+<li>visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如下：<br>a. 打开vs2013，点击“工具”-“扩展和更新”<br>b. 在弹出的对话框中点击“联机”，在右上角搜索框中搜索NuGet，在搜索结果中“NuGet Package Manager”项上面的“下载”，开始下载NuGet，下载完后进行安装<br>c. 安装完后重启vs2013，重启后点击“工具”-“扩展和更新”，选择“已安装”，可以看到NuGet Package Manager已经安装好了。<a id="more"></a>
+</li>
 </ol>
 <h1 id="二、配置步骤"><a href="#二、配置步骤" class="headerlink" title="二、配置步骤"></a>二、配置步骤</h1><ol>
 <li><p>下载代码<br>从<a href="https://github.com/Microsoft/caffe" target="_blank" rel="external">https://github.com/Microsoft/caffe</a><br>得到文件“caffe-master.zip”<br>或从<a href="https://github.com/BVLC/caffe/tree/windows" target="_blank" rel="external">https://github.com/BVLC/caffe/tree/windows</a><br>得到文件“caffe-windows.zip”<br>二者的配置步骤相同，均能编译成功，本文以源码“caffe-master.zip”为例</p>
