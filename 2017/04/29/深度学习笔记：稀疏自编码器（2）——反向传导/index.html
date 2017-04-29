@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。
 0.本文中所使用的符号和一些约定本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$其他符号：|符号|描述||—|—||$(x^{(j)},y^{(j)})$|">
-<meta property="og:updated_time" content="2017-04-29T15:42:16.000Z">
+<meta property="og:updated_time" content="2017-04-29T15:50:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。
@@ -59,7 +59,7 @@ var themeMenus = {};
 
   themeMenus["/archives"] = "Archives"; 
 
-  themeMenus["/categories"] = "Kategorien"; 
+  themeMenus["/categories"] = "Categories"; 
 
   themeMenus["/about"] = "About"; 
 
@@ -92,7 +92,7 @@ var themeMenus = {};
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Kategorien</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
                     
@@ -142,7 +142,7 @@ var themeMenus = {};
     <div class="article-entry" itemprop="articleBody">
       
         <p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。</p>
-<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>其他符号：<br>|符号|描述|<br>|—|—|<br>|$(x^{(j)},y^{(j)})$|第$j$个样本|<br>|$m$|样本总数|<br>|$(x,y)$|单个样本|<br>|$x<em>i$|第$i$个输入值|<br>|$f()$|神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$|<br>|$W</em>{ij}^{(l)}$|神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值|<br>|$b_i^{(l)}$|第$l+1$层第$i$个神经元输入的偏置项|<br>|$n_l$|神经网络的总层数|<br>|$L_l$|第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$|<br>|$s_l$|第$l$层的节点数（不包括偏置单元）|<br>|$a_i^{l}$|第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$|<br>|$z_i^{(l)}$|第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z<em>i^{(l)})$|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
+<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>其他符号：<br>|符号|描述|<br>|—|—|<br>|$(x^{(j)},y^{(j)})$|第$j$个样本|<br>|$m$|样本总数|<br>|$(x,y)$|单个样本|<br>|$x<em>i$|第$i$个输入值|<br>|$f()$|神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$|<br>|$W</em>{ij}^{(l)}$|神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值|<br>|$b_i^{(l)}$|第$l+1$层第$i$个神经元输入的偏置项|<br>|$n_l$|神经网络的总层数|<br>|$L_l$|第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$|<br>|$s_l$|第$l$层的节点数（不包括偏置单元）|<br>|$a_i^{l}$|第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$|<br>|$z_i^{(l)}$|第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z<em>i^{(l)})$|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$<br><a id="more"></a></p>
 <h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：<br>$J(W,b;x,y)=\frac{1}{2}|h<em>{w,b}(x)-y|^{2}$<br>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：<br>$J(W,b)<br>=[\frac{1}{m}\sum</em>{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum<em>{l=1}^{n</em>{l}-1}\sum<em>{i=1}^{s</em>{l}}\sum<em>{j=1}^{s</em>{l+1}}(W<em>{ji}^{(l)})^{2}$<br>&emsp;&emsp;&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum</em>{i=1}^{m}(\frac{1}{2}|h<em>{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum</em>{l=1}^{n<em>{l}-1}\sum</em>{i=1}^{s<em>{l}}\sum</em>{j=1}^{s<em>{l+1}}(W</em>{ji}^{(l)})^{2}$<br>其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性</p>
 <h2 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2.梯度下降"></a>2.梯度下降</h2><p>&emsp;&emsp;为了优化代价函数，要进行以下几步：</p>
 <ol>
@@ -190,7 +190,7 @@ var themeMenus = {};
 <nav id="article-nav">
   
     <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
           深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
@@ -200,7 +200,7 @@ var themeMenus = {};
   
   
     <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">深度学习笔记：稀疏自编码器（1）————神经元与神经网络</div>
     </a>
   

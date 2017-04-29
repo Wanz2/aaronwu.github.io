@@ -21,7 +21,7 @@
 <meta property="og:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。
 #1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念
 1.1 随机变量的部分数字特征&amp;emsp;&amp;emsp;假设有二维随机向量$(X,Y)$|数字特征">
-<meta property="og:updated_time" content="2017-04-29T15:48:14.000Z">
+<meta property="og:updated_time" content="2017-04-29T15:51:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta name="twitter:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。
@@ -62,7 +62,7 @@ var themeMenus = {};
 
   themeMenus["/archives"] = "Archives"; 
 
-  themeMenus["/categories"] = "Kategorien"; 
+  themeMenus["/categories"] = "Categories"; 
 
   themeMenus["/about"] = "About"; 
 
@@ -95,7 +95,7 @@ var themeMenus = {};
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Kategorien</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
                     
@@ -146,7 +146,7 @@ var themeMenus = {};
       
         <h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。</p>
 <p>#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念</p>
-<h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|</p>
+<h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|<br><a id="more"></a></p>
 <h2 id="1-2-随机变量的标准化"><a href="#1-2-随机变量的标准化" class="headerlink" title="1.2 随机变量的标准化"></a>1.2 随机变量的标准化</h2><h3 id="1-2-1-为什么要对随机变量进行标准化处理"><a href="#1-2-1-为什么要对随机变量进行标准化处理" class="headerlink" title="1.2.1 为什么要对随机变量进行标准化处理"></a>1.2.1 为什么要对随机变量进行标准化处理</h3><p>&emsp;&emsp;随机变量的标准化，包含以下两点：</p>
 <ol>
 <li>将随机变量的分布中心$E(X)$移至原点，不使分布中心偏左或偏右</li>
@@ -217,7 +217,7 @@ var themeMenus = {};
   
   
     <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习</div>
     </a>
   
