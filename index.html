@@ -106,6 +106,380 @@ var themeMenus = {};
         
           <section id="main">
   
+    <article id="post-深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" class="article-date">
+	  <time datetime="2017-04-29T15:47:45.000Z" itemprop="datePublished">April 29, 2017</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。</p>
+<p>#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念</p>
+<h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|</p>
+<h2 id="1-2-随机变量的标准化"><a href="#1-2-随机变量的标准化" class="headerlink" title="1.2 随机变量的标准化"></a>1.2 随机变量的标准化</h2><h3 id="1-2-1-为什么要对随机变量进行标准化处理"><a href="#1-2-1-为什么要对随机变量进行标准化处理" class="headerlink" title="1.2.1 为什么要对随机变量进行标准化处理"></a>1.2.1 为什么要对随机变量进行标准化处理</h3><p>&emsp;&emsp;随机变量的标准化，包含以下两点：</p>
+<ol>
+<li>将随机变量的分布中心$E(X)$移至原点，不使分布中心偏左或偏右</li>
+<li>缩小或扩大坐标轴，使分布不至于过疏或过密<br>在排除了这些干扰以后，随机变量$X$的一些性质就会显露出来，便于我们进行进一步的分析。<h2 id="1-2-如何进行标准化处理"><a href="#1-2-如何进行标准化处理" class="headerlink" title="1.2 如何进行标准化处理"></a>1.2 如何进行标准化处理</h2>&emsp;&emsp;令随机变量$X$均值为0，方差为1。令$X^<em>$和$Y^</em>$分别表示标准化后的$X$和$Y$，则<br>$X^<em>=\frac{X-E(X)}{\sqrt{D(X)}}$，$Y^</em>=\frac{Y-E(X)}{\sqrt{D(X)}}$<br>而标准化后的$X^<em>$和$Y^</em>$的协方差就是<strong>相关系数，用$\rho$或$\rho_{XY}$表示</strong>，即<br>$Cov(X^<em>,Y^</em>)=\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}=\rho _{xy}$</li>
+</ol>
+<h2 id="1-3-相关系数的意义"><a href="#1-3-相关系数的意义" class="headerlink" title="1.3 相关系数的意义"></a>1.3 相关系数的意义</h2><p>&emsp;&emsp;通过上一节中随机变量的标准化，我们引出了相关系数，那么两个随机变量的相关系数有什么意义呢？<br>&emsp;&emsp;结论：相关系数是对于随机变量相关性的度量：</p>
+<ul>
+<li>当相关系数$\rho=1$时，随机变量$X$和$Y$之间存在线性关系，且为正线性相关</li>
+<li>当相关系数$\rho=-1$时，两者之间为负线性关系</li>
+<li>$|\rho|\leq1$，线性相关性随着$|\rho|$的减小而减小。当$|\rho|=0$时，两者之间就不存在线性关系了</li>
+<li>注意：<ul>
+<li>当$|\rho|=0$，随机变量$X$和$Y$是不线性相关的，但<strong>不能代表两者相互独立</strong>，他们之间可能存在别的相关关系；但当$X$和$Y$相互独立时，它们的相关系数$|\rho|=0$。可以说，<strong>$|\rho|=0$是$X$和$Y$相互独立的必要不充分条件。</strong></li>
+<li>但是，当随机变量$(X,Y)$服从二维正态分布时，则$X$和$Y$不相关等价于两者相互独立</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;&emsp;笔者在这里仅给出结论，因为本文仅仅是笔者在应用到相关知识点时的复习，为了理清思路而做的记录，关于上述结论的证明，可以在任意一本概率论的书中找到。</p>
+<p>##1.4 协方差矩阵<br>&emsp;&emsp;令$(X_1,X_2,…,X<em>n)$为$n$维随机向量($n\geq2$),记$b</em>{ij}=Cov(X_i,X_j)=E((X_i-E(X_i))(X_j-E(X<em>j))), i,j=1,2,…,n$，则矩阵<br>$B=\begin{bmatrix}b</em>{11}&amp;b<em>{12}&amp;\cdots&amp;b</em>{1n}\b<em>{21}&amp;b</em>{22}&amp;\cdots&amp;b<em>{2n}\\vdots&amp;\vdots&amp; &amp;\vdots\b</em>{n1}&amp;b<em>{n2}&amp;\cdots&amp;b</em>{nn}\end{bmatrix}$</p>
+<h2 id="为-X-1-cdots-X-n-的协方差矩阵。"><a href="#为-X-1-cdots-X-n-的协方差矩阵。" class="headerlink" title="为$(X_1,\cdots,X_n)$的协方差矩阵。"></a>为$(X_1,\cdots,X_n)$的协方差矩阵。</h2><p>#2.数理统计中的协方差和协方差矩阵概念<br>&emsp;&emsp;以上所说的是概率论中的协方差概念，但是我们在深度学习的实际运用中，通常是对已经获得的数据进行分析，因此类比概率论中的随机变量的数字特征，可以得到数理统计中的相关统计量，同时可以定义协方差和协方差矩阵</p>
+<p>##2.1数理统计中的统计量<br>&emsp;&emsp;记$(X_1,X_2,\cdots,X_n)$是来自总体$X$的样本，$(x_1,x_2,\cdots,x<em>n)$是样本观察值。<br>|统计量|意义|描述|<br>|—|—|—|<br>|$\bar{X}$|样本均值|$\bar{X}=\frac{1}{n}\sum</em>{i=1}^{n}X<em>i$|<br>|$S^2$|样本方差|$S^2=\frac{1}{n-1}\sum</em>{i=1}^{n}(X<em>i-\bar{X})^2$|<br>|$S$|样本标准差|$S=\sqrt{\frac{1}{n-1}\sum</em>{i=1}^{n}(X_i-\bar{X})^2}$|</p>
+<p>##2.2样本协方差<br>&emsp;&emsp;样本均值表征了样本分布的中间点；而样本标准差则是样本各个观察值到样本分布中间点的距离的平均值。样本均值和样本标准差均是用来描述一维数据的。<br>&emsp;&emsp;但在生活中我们通常会用到多维数据，比如我们有两个总体$X$和$Y$，两者的样本分别是$(X_1,X_2,\cdots,X_n)$和$(Y_1,Y_2,\cdots,Y_n)$，样本观察值分别是$(x_1,x_2,\cdots,x_n)$和$(y_1,y_2,\cdots,y<em>n)$，我们希望能够分析出这两个样本的相关性，因此需要定义样本之间的协方差。回忆一下样本方差的定义：<br>$S^2=\frac{1}{n-1}\sum</em>{i=1}^{n}(X<em>i-\bar{X})^2$<br>仿照样本方差定义，我们可以定义样本协方差：<br>$Cov(X,Y)=\frac{1}{n-1}\sum</em>{i=1}^{n}(X_i-\bar{X})(Y_i-\bar{Y})$</p>
+<p>##2.3样本协方差矩阵<br>&emsp;&emsp;同样地，我们可以定义数理统计中的协方差矩阵概念，但这里的协方差矩阵并不是描述两个总体之间相关性，而是用来描述样本各维度之间的相关性。<br>&emsp;&emsp;比如我们有一个$m$维的总体$X=(X_1,X_2,\cdots,X_m)^{\mathrm{T} }$，有样本${(X^{(1)}_1,X^{(1)}_2,\cdots,X^{(1)}_m)^{\mathrm{T} },(X^{(2)}_1,X^{(2)}_2\cdots,X^{(2)}_m)^{\mathrm{T} },\cdots,(X^{(n)}_1,X^{(n)}_2\cdots,X^{(n)}_m)^{\mathrm{T} }}$，观察值分别是${(x^{(1)}_1,x^{(1)}_2\cdots,x^{(1)}_m)^{\mathrm{T} },(x^{(2)}_1,x^{(2)}_2\cdots,x^{(2)}_m)^{\mathrm{T} },\cdots,(x^{(n)}_1,x^{(n)}_2\cdots,x^{(n)}<em>m)^{\mathrm{T} }}$，我们想研究这些样本各个维度之间的相关性，可以这样定义样本协方差矩阵：<br>记$b</em>{ij}=Cov(X_i,X<em>j)=\frac{1}{n-1}\sum</em>{k=1}^{n}(X^{(k)}_i-\bar{X_i}^{(k)})(X^{(k)}_j-\bar{X<em>j}^{(k)})$<br>则矩阵<br>$B=\begin{bmatrix}b</em>{11}&amp;b<em>{12}&amp;\cdots&amp;b</em>{1n}\b<em>{21}&amp;b</em>{22}&amp;\cdots&amp;b<em>{2n}\\vdots&amp;\vdots&amp; &amp;\vdots\b</em>{n1}&amp;b<em>{n2}&amp;\cdots&amp;b</em>{nn}\end{bmatrix}$<br>为$X$的协方差矩阵</p>
+<p><strong>注意</strong>在计算样本协方差矩阵时，要牢记它是计算同一个样本不同维度之间的协方差，而不是计算不同样本之间的协方差，切记！</p>
+<p>参考资料：</p>
+<ol>
+<li>武大版《概率论与数理统计》，齐民友主编。</li>
+<li><a href="http://pinkyjie.com/2010/08/31/covariance/" target="_blank" rel="external">浅谈协方差矩阵</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/">深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" class="article-date">
+	  <time datetime="2017-04-29T15:45:57.000Z" itemprop="datePublished">April 29, 2017</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见<a href="http://deeplearning.stanford.edu/wiki/index.php/Exercise:Sparse_Autoencoder" target="_blank" rel="external">Exercise:Sparse Autoencoder</a>，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">% sampleIMAGES.m</div><div class="line">function patches = sampleIMAGES() % 函数返回64*10000的矩阵patches</div><div class="line">% sampleIMAGES</div><div class="line">% Returns 10000 patches for training</div><div class="line"></div><div class="line">load IMAGES;    % load images from disk </div><div class="line"></div><div class="line">patchsize = 8;  % we&apos;ll use 8x8 patches </div><div class="line">numpatches = 10000;</div><div class="line"></div><div class="line">% Initialize patches with zeros.  Your code will fill in this matrix--one</div><div class="line">% column per patch, 10000 columns. </div><div class="line">patches = zeros(patchsize*patchsize, numpatches);</div><div class="line"></div><div class="line">%% ---------- YOUR CODE HERE --------------------------------------</div><div class="line">%  Instructions: Fill in the variable called &quot;patches&quot; using data </div><div class="line">%  from IMAGES.  </div><div class="line">%  </div><div class="line">%  IMAGES is a 3D array containing 10 images</div><div class="line">%  For instance, IMAGES(:,:,6) is a 512x512 array containing the 6th image,</div><div class="line">%  and you can type &quot;imagesc(IMAGES(:,:,6)), colormap gray;&quot; to visualize</div><div class="line">%  it. (The contrast（对比度） on these images look a bit off because they have</div><div class="line">%  been preprocessed using using &quot;whitening（白化）.&quot;  See the lecture notes for</div><div class="line">%  more details.) As a second example, IMAGES(21:30,21:30,1) is an image</div><div class="line">%  patch（图像片） corresponding to the pixels in the block (21,21) to (30,30) of</div><div class="line">%  Image 1</div><div class="line"></div><div class="line">%% 注释译文：</div><div class="line">%   指导：用IMAGES中提取出的数据填充变量&quot;patches&quot;</div><div class="line">%   </div><div class="line">%   IMAGES是一个包含10个图片的3D向量</div><div class="line">%   举个栗子：</div><div class="line">%   IMAGES(:,:,6)是一个包含第6张图片的512*512的向量，</div><div class="line">%   输入“imagesc(IMAGES(:,:,6)),colormap gray;”能显示出该图片。</div><div class="line">%   图片对比度比较低，因为图片经过了白化预处理，教程笔记中有关于白化的更多细节</div><div class="line">%   第二个栗子：</div><div class="line">%   IMAGES(21:30,21:30,1)是第1张图片里从像素点(21,21)到(30,30)的像素块组成的图像片</div><div class="line"></div><div class="line">%%</div><div class="line">for imageNum = 1:10 % 在每张图片中选取1000个patch，共10000个patch</div><div class="line">    [rowNum, colNum] = size(IMAGES(:, :, imageNum)); % 返回每张图片的尺寸，保存在rowNum和colNum中</div><div class="line">    for patchNum = 1:1000 % 每个patch的尺寸为8*8</div><div class="line">        xPos = randi([1, rowNum-patchsize+1]); % 设置xPos为1和图像最大行数之间的一个随机数</div><div class="line">        yPos = randi([1, colNum-patchsize+1]); % 设置yPos为1和图像最大列数之间的一个随机数</div><div class="line">        patches(:, (imageNum-1)*1000+patchNum) =  reshape(IMAGES(xPos:xPos+7, yPos:yPos+7, imageNum), 64, 1);</div><div class="line">        % reshape将提取出的8*8的图像变形为64*1的列向量</div><div class="line">        % patches选中矩阵patches相应的列放入64*1的列向量</div><div class="line">    end</div><div class="line">end</div><div class="line">        </div><div class="line"></div><div class="line"></div><div class="line">%% ---------------------------------------------------------------</div><div class="line">% For the autoencoder to work well we need to normalize the data</div><div class="line">% Specifically, since the output of the network is bounded between [0,1]</div><div class="line">% (due to the sigmoid activation function), we have to make sure </div><div class="line">% the range of pixel values is also bounded between [0,1]</div><div class="line">patches = normalizeData(patches);</div><div class="line"></div><div class="line">end</div><div class="line"></div><div class="line"></div><div class="line">%% ---------------------------------------------------------------</div><div class="line">function patches = normalizeData(patches)</div><div class="line"></div><div class="line">% Squash data to [0.1, 0.9] since we use sigmoid as the activation</div><div class="line">% function in the output layer</div><div class="line"></div><div class="line">% Remove DC (mean of images). </div><div class="line">patches = bsxfun(@minus, patches, mean(patches));</div><div class="line"></div><div class="line">% Truncate to +/-3 standard deviations and scale to -1 to 1</div><div class="line">pstd = 3 * std(patches(:));</div><div class="line">patches = max(min(patches, pstd), -pstd) / pstd;</div><div class="line"></div><div class="line">% Rescale from [-1,1] to [0.1,0.9]</div><div class="line">patches = (patches + 1) * 0.4 + 0.1;</div><div class="line"></div><div class="line">end</div></pre></td></tr></table></figure></p>
+<p>&emsp;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div></pre></td><td class="code"><pre><div class="line">% sparseAutoencoderCost.m</div><div class="line">function [cost,grad] = sparseAutoencoderCost(theta, visibleSize, hiddenSize, ...</div><div class="line">                                             lambda, sparsityParam, beta, data)</div><div class="line">%%</div><div class="line">% 本函数返回代价函数以及一次迭代后更新权重的变化值</div><div class="line">%%</div><div class="line">% visibleSize: the number of input units (probably 64) </div><div class="line">% hiddenSize: the number of hidden units (probably 25) </div><div class="line">% lambda: weight decay parameter 权重衰减参数</div><div class="line">% sparsityParam: The desired average activation for the hidden units (denoted in the lecture</div><div class="line">%                           notes by the greek alphabet rho, which looks</div><div class="line">%                           like a lower-case &quot;p&quot;). 隐藏层期望激活度，在教程中用rho表示</div><div class="line">% beta: weight of sparsity penalty term 稀疏性惩罚项的权重，在教程中用beta表示</div><div class="line">% data: Our 64x10000 matrix containing the training data.  So, data(:,i) is the i-th training example. </div><div class="line">  </div><div class="line">% The input theta is a vector (because minFunc expects the parameters to be</div><div class="line">% a vector). </div><div class="line">% 输入的theta是向量</div><div class="line">% theta是由所有参数组合起来的一个s1*s2+s2*s3+s2+s3维的向量</div><div class="line">% 之所以要将参数转换成这样的格式，是因为要满足minFunc函数的参数</div><div class="line"></div><div class="line">% We first convert theta to the (W1, W2, b1, b2) matrix/vector format, so that this </div><div class="line">% follows the notation convention（记符惯例） of the lecture notes.</div><div class="line">% 我们先将theta转换为(W1,W2,b1,b2)的矩阵/向量格式，符合教程笔记的记符惯例</div><div class="line"></div><div class="line">W1 = reshape(theta(1:hiddenSize*visibleSize), hiddenSize, visibleSize);</div><div class="line">% 将theta中第1到第s1*s2个元素变形组合成s2*s1维的矩阵，变形时使用向量按列开始填充</div><div class="line">W2 = reshape(theta(hiddenSize*visibleSize+1:2*hiddenSize*visibleSize), visibleSize, hiddenSize);</div><div class="line">% 将第s1*s2+1到第2*s2*s3个元素变形组合成s3*s3维矩阵，这里有s1=s3</div><div class="line">b1 = theta(2*hiddenSize*visibleSize+1:2*hiddenSize*visibleSize+hiddenSize);</div><div class="line">% 类似上面，初始化输入层偏置项向量b1</div><div class="line">b2 = theta(2*hiddenSize*visibleSize+hiddenSize+1:end);</div><div class="line">% 初始化第二层偏置项向量b2</div><div class="line"></div><div class="line">% Cost and gradient variables (your code needs to compute these values). </div><div class="line">% Here, we initialize them to zeros. </div><div class="line">cost = 0; % 将代价值初始化为0</div><div class="line">W1grad = zeros(size(W1)); </div><div class="line">W2grad = zeros(size(W2));</div><div class="line">b1grad = zeros(size(b1)); </div><div class="line">b2grad = zeros(size(b2));</div><div class="line"></div><div class="line">%% ---------- YOUR CODE HERE --------------------------------------</div><div class="line">%  Instructions: Compute the cost/optimization objective J_sparse(W,b) for the Sparse Autoencoder,</div><div class="line">%                and the corresponding gradients W1grad, W2grad, b1grad, b2grad.</div><div class="line">%</div><div class="line">% W1grad, W2grad, b1grad and b2grad should be computed using backpropagation.</div><div class="line">% Note that W1grad has the same dimensions as W1, b1grad has the same dimensions</div><div class="line">% as b1, etc.  Your code should set W1grad to be the partial derivative of J_sparse(W,b) with</div><div class="line">% respect to W1.  I.e., W1grad(i,j) should be the partial derivative of J_sparse(W,b) </div><div class="line">% with respect to the input parameter W1(i,j).  Thus, W1grad should be equal to the term </div><div class="line">% [(1/m) \Delta W^&#123;(1)&#125; + \lambda W^&#123;(1)&#125;] in the last block of pseudo-code in Section 2.2 </div><div class="line">% of the lecture notes (and similarly for W2grad, b1grad, b2grad).</div><div class="line">% </div><div class="line">% Stated differently, if we were using batch gradient descent to optimize the parameters,</div><div class="line">% the gradient descent update to W1 would be W1 := W1 - alpha * W1grad, and similarly for W2, b1, b2. </div><div class="line">% </div><div class="line"></div><div class="line">%%</div><div class="line">% </div><div class="line">%注释译文</div><div class="line">% 指导：为稀疏自编码器计算代价/优化对象J_sparse(W,b)，以及对应的梯度W1grad, W2grad, b1grad, b2grad</div><div class="line">% </div><div class="line">% W1grad, W2grad, b1grad和b2grad应该使用反向传导计算。</div><div class="line">% 注意W1grad和W1有相同的维度，b1grad和b1有相同的维度等。</div><div class="line">% 你的代码应该设置W1grad为J_sparse(W,b)关于W1的偏导数，</div><div class="line">% 也就是说，W1grad(i,j)应该是J_sparse(W,b)关于输入参数W1(i,j)的偏导数。</div><div class="line">% 因此，W1grad应该等于项[(1/m) \Delta W^&#123;(1)&#125;+ \ambdaW^&#123;(1)&#125;]（其他参数也一样），</div><div class="line">% 参见课件Section2.2最后一块的伪代码</div><div class="line">% 换句话说，如果我们使用批量梯度下降法去最小化参数，</div><div class="line">% W1权值的更新应该是W1:= W1-alpha*W1grad, 而W2,b1,b2也类似</div><div class="line">%</div><div class="line"></div><div class="line">% J_sparse(W,b)共有三项</div><div class="line">Jcost = 0; % 样本均方误差项</div><div class="line">Jweight = 0; % 权重衰减项</div><div class="line">Jsparse = 0; % 稀疏性惩罚项</div><div class="line">[n m] = size(data); % n表示样本特征数，m表示样本个数</div><div class="line"></div><div class="line">% 前向算法计算各神经网络节点的线性组合值和active值</div><div class="line">z2 = W1*data + repmat(b1, 1, m); % 第二层输入值，即隐藏层中各节点输入值矩阵，repmat函数将矩阵进行重复并组合起来</div><div class="line">a2 = sigmoid(z2); % 第二层输出值（激活值），注意sigmoid函数在本文件164行定义</div><div class="line">z3 = W2*a2 + repmat(b2, 1, m); % 第三层输入值</div><div class="line">a3 = sigmoid(z3); % 输出层各节点输出值（激活值）矩阵</div><div class="line"></div><div class="line">% 计算样本均方误差项</div><div class="line">Jcost = (0.5/m)*sum(sum((a3-data).^2));</div><div class="line"></div><div class="line">% 计算权重衰减项</div><div class="line">Jweight = (1/2)*(sum(sum(W1.^2)) + sum(sum(W2.^2)));</div><div class="line"></div><div class="line">% 计算稀疏性惩罚项</div><div class="line">rho = (1/m).*sum(a2, 2); % 求出教程中的rho，即隐藏层（第二层）神经元的平均活跃度，</div><div class="line">                                        % 在训练集上取隐藏层每个节点输出值的平均</div><div class="line">Jsparse = sum(sparsityParam .* log(sparsityParam ./ rho) + ...</div><div class="line">              (1-sparsityParam) .* log((1-sparsityParam) ./ (1 - rho )));</div><div class="line">          </div><div class="line">% 代价函数总表达式</div><div class="line">cost = Jcost+lambda*Jweight+beta*Jsparse;</div><div class="line"></div><div class="line">% 计算残差</div><div class="line">d3 = -(data-a3).*sigmoidInv(z3); % 输出层（第三层）残差，sigmoidInv为sigmoid导数，在第170行有定义</div><div class="line">sterm = beta*(-sparsityParam./rho+(1-sparsityParam)./(1-rho)); % 隐藏层稀疏性规则项</div><div class="line">d2 = (W2&apos;*d3+repmat(sterm, 1, m)).*sigmoidInv(z2); % 隐藏层（第二层）残差，计算时要加入稀疏性规则项</div><div class="line"></div><div class="line">% 计算W1grad</div><div class="line">W1grad = W1grad+d2*data&apos;;</div><div class="line">W1grad = (1/m).*W1grad+lambda*W1;</div><div class="line"></div><div class="line">% 计算W2grad</div><div class="line">W2grad = W2grad+d3*a2&apos;;</div><div class="line">W2grad = (1/m).*W2grad+lambda*W2;</div><div class="line"></div><div class="line">% 计算b1grad</div><div class="line">b1grad = b1grad + sum(d2, 2); % 注意b的偏导数是一个向量，因此要把一行的值累加起来</div><div class="line">b1grad = (1/m)*b1grad;</div><div class="line"></div><div class="line">% 计算b2grad</div><div class="line">b2grad = b2grad + sum(d3, 2);</div><div class="line">b2grad = (1/m)*b2grad;</div><div class="line"></div><div class="line"></div><div class="line">%-------------------------------------------------------------------</div><div class="line">% After computing the cost and gradient, we will convert the gradients back</div><div class="line">% to a vector format (suitable for minFunc).  Specifically, we will unroll</div><div class="line">% your gradient matrices into a vector.</div><div class="line"></div><div class="line">grad = [W1grad(:) ; W2grad(:) ; b1grad(:) ; b2grad(:)]; %将各矩阵按列首尾相接成为一个列向量</div><div class="line"></div><div class="line">end</div><div class="line"></div><div class="line">%-------------------------------------------------------------------</div><div class="line">% Here&apos;s an implementation of the sigmoid function, which you may find useful</div><div class="line">% in your computation of the costs and the gradients.  This inputs a (row or</div><div class="line">% column) vector (say (z1, z2, z3)) and returns (f(z1), f(z2), f(z3)). </div><div class="line"></div><div class="line">% 定义sigmoid函数</div><div class="line">function sigm = sigmoid(x)</div><div class="line">  </div><div class="line">    sigm = 1 ./ (1 + exp(-x));</div><div class="line">end</div><div class="line"></div><div class="line">% sigmoid函数求导</div><div class="line">function sigmInv = sigmoidInv(x)</div><div class="line">    </div><div class="line">    sigmInv = sigmoid(x).*(1-sigmoid(x)); </div><div class="line">end</div></pre></td></tr></table></figure>
+<p>&emsp;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">% computeNumericalGradient.m</div><div class="line">function numgrad = computeNumericalGradient(J, theta)</div><div class="line">% numgrad = computeNumericalGradient(J, theta)</div><div class="line">% theta: a vector of parameters</div><div class="line">% J: a function that outputs a real-number. Calling y = J(theta) will return the</div><div class="line">% function value at theta. </div><div class="line">  </div><div class="line">% Initialize numgrad with zeros</div><div class="line">numgrad = zeros(size(theta));</div><div class="line"></div><div class="line">%% ---------- YOUR CODE HERE --------------------------------------</div><div class="line">% Instructions: </div><div class="line">% Implement numerical gradient checking, and return the result in numgrad.  </div><div class="line">% (See Section 2.3 of the lecture notes.)</div><div class="line">% You should write code so that numgrad(i) is (the numerical approximation to) the </div><div class="line">% partial derivative of J with respect to the i-th input argument, evaluated at theta.  </div><div class="line">% I.e., numgrad(i) should be the (approximately) the partial derivative of J with </div><div class="line">% respect to theta(i).</div><div class="line">%                </div><div class="line">% Hint: You will probably want to compute the elements of numgrad one at a time. </div><div class="line"></div><div class="line">%% 注释译文</div><div class="line">% 指导：</div><div class="line">% 实现数值上的梯度检验，并将结果返回到numgrad中</div><div class="line">% （查看课程笔记的Section 2.3）</div><div class="line">% 你应当写代码使numgrad(i)是J关于第i个输入参数的偏导数的近似值，输入参数为theta</div><div class="line">% 也就是说，numgrad(i)应该近似是J关于theta(i)的偏导数</div><div class="line">%</div><div class="line">% 提示：你很可能希望一次计算一个numgrad中的元素</div><div class="line"></div><div class="line">epsilon = 1e-4;</div><div class="line">n = size(theta, 1); % n为向量theta的维度</div><div class="line">E = eye(n); % 函数eye(n)用来创建n维的单位矩阵</div><div class="line">for i = 1:n</div><div class="line">    delta = E(:, i)*epsilon;</div><div class="line">    numgrad(i) = (J(theta+delta)-J(theta-delta))/(2.0*epsilon);</div><div class="line">end</div><div class="line">  </div><div class="line">%% ---------------------------------------------------------------</div><div class="line">end</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-深度学习笔记：稀疏自编码器（3）——稀疏自编码算法"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" class="article-date">
+	  <time datetime="2017-04-29T15:43:53.000Z" itemprop="datePublished">April 29, 2017</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。</p>
+<h2 id="0-本文中使用的符号"><a href="#0-本文中使用的符号" class="headerlink" title="0.本文中使用的符号"></a>0.本文中使用的符号</h2><p>&emsp;&emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号<br>|符号|描述|<br>|—|—|<br>|$m$|样本总数|<br>|$a<em>{j}^{(2)}$|第2层第$j$个神经元的激活度|<br>|$a</em>{j}^{(2)}(x)$|在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度|<br>|$\hat{\rho<em>{j}}$|$\hat{\rho</em>{j}}=\frac{1}{m}\sum<em>{i=1}^{m}[a</em>{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度|<br>|$\rho$|表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制|<br>|$s<em>2$|第2层（隐藏层）神经元的数量|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|</p>
+<h2 id="1-什么是稀疏自编码器"><a href="#1-什么是稀疏自编码器" class="headerlink" title="1.什么是稀疏自编码器"></a>1.什么是稀疏自编码器</h2><p>&emsp;&emsp;先上图：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png" alt="此处输入图片的描述"><br>&emsp;&emsp;上图为有一个隐藏层的稀疏自编码器示意图。稀疏自编码器为非监督学习，其所使用的样本集${x^{(1)},x^{(2)},…,x^{(m)}}$为没有类别标记的样本，我们希望令输出值$h_{W,b}(x)$与输入值$x$近似相等。</p>
+<h2 id="2-为什么要用稀疏自编码器"><a href="#2-为什么要用稀疏自编码器" class="headerlink" title="2.为什么要用稀疏自编码器"></a>2.为什么要用稀疏自编码器</h2><p>&emsp;&emsp;由于为数据人工增加类别标记是一个非常麻烦的过程，我们希望机器能够自己学习到样本中的一些重要特征。通过对隐藏层施加一些限制，能够使得它在恶劣的环境下学习到能最好表达样本的特征，并能有效地对样本进行降维。这种限制可以是对隐藏层稀疏性的限制。</p>
+<h2 id="3-稀疏性限制"><a href="#3-稀疏性限制" class="headerlink" title="3.稀疏性限制"></a>3.稀疏性限制</h2><h3 id="3-1稀疏性"><a href="#3-1稀疏性" class="headerlink" title="3.1稀疏性"></a>3.1稀疏性</h3><p>&emsp;&emsp;当使用sigmoid函数作为激活函数时，若神经元输出值为1，则可认为其被激活，若神经元输出值为0，则可认为其被抑制（使用tanh函数时，代表激活和抑制的值分别为1和-1）。稀疏性限制就是要保证大多数神经元输出为0，即被抑制的状态。</p>
+<h3 id="3-2如何限制隐藏层稀疏性"><a href="#3-2如何限制隐藏层稀疏性" class="headerlink" title="3.2如何限制隐藏层稀疏性"></a>3.2如何限制隐藏层稀疏性</h3><p>&emsp;&emsp;在本文开始所给出的稀疏自编码网络中，为了限制隐藏结点稀疏性，可以进行如下表示：</p>
+<ol>
+<li>使用$a_{j}^{(2)}$表示第2层第$j$个神经元的激活度。</li>
+<li>使用$a_{j}^{(2)}(x)$表示在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度。</li>
+<li>使用$\hat{\rho<em>{j}}=\frac{1}{m}\sum</em>{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度。</li>
+<li>使用$\rho$表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制。<br>&emsp;&emsp;我们希望$\hat{\rho_{j}}$和$\rho$越接近越好，因此我们要对这两者有显著差异的情况进行惩罚，惩罚使用KL散度。</li>
+</ol>
+<hr>
+<p><strong>PS. 什么是KL散度？</strong><br>&emsp;&emsp;KL散度又称相对熵，是对两个概率分布P和Q差异的非对称性度量，非对称性意味着$D(P|Q)\neq D(Q|P)$，$D(P|Q)$表示用概率分布$Q$来拟合概率分布$P$时所产生的信息损耗。其定义为：<br>给定随机变量$s$，若为<br>离散型随机变量：$D(P|Q)=\sum(p(i)log(\frac{p(i)}{q(i)}))$，此处p和q表示随机变量的分布律，$p(i)$表示随机变量$s$取$i$的概率<br>连续型随机变量：$D(P|Q)=\int p(s)log(\frac{p(s)}{q(s)})d(s)$，此处$p$和$q$表示随机变量$s$的概率密度<br>&emsp;&emsp;KL散度的性质是，当$P=Q$时值为0，随着$P$和$Q$差异增大而递增。</p>
+<hr>
+<p>&emsp;&emsp;在这里，我们是要用$\hat{\rho<em>j}$去逼近$\rho$，这里的KL散度是：<br>$\sum</em>{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)=\sum</em>{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}<em>j}$<br>&emsp;&emsp;于是我们在代价函数中加入这一惩罚因子，代价函数就变成：<br>$J</em>{sparse}(W,b)=J(W,b)+\beta \sum_{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)$<br>&emsp;&emsp;代价函数改变了，在反向传导时残差公式也要做出相应的改变，之前隐藏层第$i$个结点残差为：<br>$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)})f’(z<em>{i}^{(2)})$<br>现在应该将其换成：<br>$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}<em>i}))f’(z</em>{i}^{(2)})$</p>
+<hr>
+<p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：<br><img src="http://odnk9as2f.bkt.clouddn.com/ab2e3ac6ec9172f9b2d9b8d3542158dc.png" alt="此处输入图片的描述"><br>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述"><br>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在<img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述">中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-深度学习笔记：稀疏自编码器（2）——反向传导"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">深度学习笔记：稀疏自编码器（2）——反向传导</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" class="article-date">
+	  <time datetime="2017-04-29T15:41:01.000Z" itemprop="datePublished">April 29, 2017</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。</p>
+<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>其他符号：<br>|符号|描述|<br>|—|—|<br>|$(x^{(j)},y^{(j)})$|第$j$个样本|<br>|$m$|样本总数|<br>|$(x,y)$|单个样本|<br>|$x<em>i$|第$i$个输入值|<br>|$f()$|神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$|<br>|$W</em>{ij}^{(l)}$|神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值|<br>|$b_i^{(l)}$|第$l+1$层第$i$个神经元输入的偏置项|<br>|$n_l$|神经网络的总层数|<br>|$L_l$|第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$|<br>|$s_l$|第$l$层的节点数（不包括偏置单元）|<br>|$a_i^{l}$|第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$|<br>|$z_i^{(l)}$|第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z<em>i^{(l)})$|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
+<h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：<br>$J(W,b;x,y)=\frac{1}{2}|h<em>{w,b}(x)-y|^{2}$<br>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：<br>$J(W,b)<br>=[\frac{1}{m}\sum</em>{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum<em>{l=1}^{n</em>{l}-1}\sum<em>{i=1}^{s</em>{l}}\sum<em>{j=1}^{s</em>{l+1}}(W<em>{ji}^{(l)})^{2}$<br>&emsp;&emsp;&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum</em>{i=1}^{m}(\frac{1}{2}|h<em>{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum</em>{l=1}^{n<em>{l}-1}\sum</em>{i=1}^{s<em>{l}}\sum</em>{j=1}^{s<em>{l+1}}(W</em>{ji}^{(l)})^{2}$<br>其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性</p>
+<h2 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2.梯度下降"></a>2.梯度下降</h2><p>&emsp;&emsp;为了优化代价函数，要进行以下几步：</p>
+<ol>
+<li>初始化每一个参数$W_{ij}^{(l)}$和$b_i^{(l)}$为很小的接近零的随机值</li>
+<li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：<br>$W<em>{ij}^{(l)}=W</em>{ij}^{(l)}-\alpha\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)$<br>$b</em>{i}^{(l)}=b<em>{i}^{(l)}-\alpha\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b)$<br>其中$\alpha$是学习速率。<br>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。<h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2>&emsp;&emsp;我们将求偏导的项单独拿出来看：<br>$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W</em>{ij}^{(l)}$&emsp;&emsp;&emsp;(1)<br>$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)<br>&emsp;<br>&emsp;&emsp;显然，求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$。<br>&emsp;&emsp;由于：<br>$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{l+1}}{\partial W<em>{ij}^{l}}$&emsp;&emsp;&emsp;(3)<br>$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{(l+1)}}{\partial b<em>{i}^{(l)}}$&emsp;&emsp;&emsp;(4)<br>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta<em>{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。<br>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$可得：<br>$\delta_{i}^{(n<em>l)}=-(y</em>{i}-a_{i}^{(n<em>l)})f’(z</em>{i}^{(n<em>l)})$<br>$\delta</em>{i}^{(l)}=(\sum<em>{j=1}^{s</em>{l+1}}W<em>{ji}^{(l)}\delta</em>{j}^{(l+1)})f’(z_{i}^{(l)})$<br>通过以上第一式可以求出第$n<em>l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：<br>$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\delta <em>{i}^{(l+1)}a</em>{j}^{(l)}$&emsp;&emsp;&emsp;(5)<br>$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\delta</em>{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)<br>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。</li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">-机器学习</a></li></ul>
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-深度学习笔记：稀疏自编码器（1）————神经元与神经网络"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">深度学习笔记：稀疏自编码器（1）————神经元与神经网络</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" class="article-date">
+	  <time datetime="2017-04-29T15:38:52.000Z" itemprop="datePublished">April 29, 2017</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见<a href="http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">UFLDL教程</a>，看完教程之后再来看本文可能会更加清晰。</p>
+<h2 id="0-本文中使用的符号一览及本文中的一些约定"><a href="#0-本文中使用的符号一览及本文中的一些约定" class="headerlink" title="0. 本文中使用的符号一览及本文中的一些约定"></a>0. 本文中使用的符号一览及本文中的一些约定</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>输入值向量，为$n$维</td>
+</tr>
+<tr>
+<td>$x_i$</td>
+<td>第$i$个输入值</td>
+</tr>
+<tr>
+<td>$f()$</td>
+<td>神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$</td>
+</tr>
+<tr>
+<td>$W_{ij}^{(l)}$</td>
+<td>神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值</td>
+</tr>
+<tr>
+<td>$b_i^{(l)}$</td>
+<td>第$l+1$层第$i$个神经元输入的偏置项</td>
+</tr>
+<tr>
+<td>$n_l$</td>
+<td>神经网络的总层数</td>
+</tr>
+<tr>
+<td>$L_l$</td>
+<td>第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$</td>
+</tr>
+<tr>
+<td>$s_l$</td>
+<td>第$l$层的节点数（不包括偏置单元）</td>
+</tr>
+<tr>
+<td>$a_i^{l}$</td>
+<td>第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$</td>
+</tr>
+<tr>
+<td>$z_i^{(l)}$</td>
+<td>第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z_i^{(l)})$</td>
+</tr>
+<tr>
+<td>$h_{W,b}(x)$</td>
+<td>输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
+<h2 id="1-神经元"><a href="#1-神经元" class="headerlink" title="1. 神经元"></a>1. 神经元</h2><h3 id="1-1-神经元定义"><a href="#1-1-神经元定义" class="headerlink" title="1.1 神经元定义"></a>1.1 神经元定义</h3><p>&emsp;&emsp;神经元是以$x$为输入，$h_{W,b}$为输出的运算单元，如图所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png" alt="此处输入图片的描述"></p>
+<h3 id="1-2-激活函数"><a href="#1-2-激活函数" class="headerlink" title="1.2 激活函数"></a>1.2 激活函数</h3><p>&emsp;&emsp;通常在神经元中输出值为0表示神经元被激活，输出为1表示神经元被抑制，而计算输出值所用的函数则被称为“激活函数”。本文中所用的激活函数为sigmoid函数：$f(z)=\frac{1}{1+e^{(-z)}}$，其定义域为$(-\infty,+\infty)$，值域为$(0,1)$。以上图神经元为例，假设第$i$个输入值与神经元连线上的权重为$w_1$，输入值偏置项为$b<em>1$，在单个神经元中，有$h</em>{W,b}(x)=f(x_1w_1+x_2w_2+x_3w_3+b_1)$。观察可以发现，单个神经元就是一个<strong>逻辑回归</strong>模型。</p>
+<h2 id="2-神经网络"><a href="#2-神经网络" class="headerlink" title="2. 神经网络"></a>2. 神经网络</h2><h3 id="2-1-神经网络定义"><a href="#2-1-神经网络定义" class="headerlink" title="2.1 神经网络定义"></a>2.1 神经网络定义</h3><p>&emsp;&emsp;神经网络就是将多个神经元连在一起，前一层神经元的输出就是后一层神经元的输入，下图是一个三层神经网络：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png" alt="此处输入图片的描述"><br>以上图为例，最左边一层为<strong>输入层</strong>，中间一层为<strong>隐藏层</strong>，最右边一层为<strong>输出层</strong>。</p>
+<h3 id="2-2-前向传播"><a href="#2-2-前向传播" class="headerlink" title="2.2 前向传播"></a>2.2 前向传播</h3><p>&emsp;&emsp;前向传播就是使用输入值$x$通过神经网络计算出输出值$h_{W,b}(x)$的过程。以上图神经网络为例，前向传播中每一个神经元输入输出过程如下：<br>令$z_i^{(l)}$表示第$l$层第$i$个神经元的输入值，有<br>$z<em>i^{(l+1)}=W</em>{i1}^{(l)}x<em>1+W</em>{i2}^{(l)}x<em>2+W</em>{i3}^{(l)}x_3+b_i^{(l)}$ （这里其实是一个<strong>线性回归</strong>模型）<br>$a_i^{(l)}=f(z<em>i^{(l)})$<br>$h</em>{W,b}(x)=a_1^{(3)}$</p>
+<h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z<em>3)]$<br>则上图神经网络中的前向传播过程可表示为：<br>$z^{(2)}=W^{(1)}x+b^{(1)}$<br>$a^{(2)}=f(z^{(2)})$<br>$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$<br>$h</em>{W,b}(x)=f(z^{(3)})$<br>下面以$z^{(2)}=W^{(1)}x+b^{(1)}$为例，展开一下具体的矩阵表示，其他式子略：<br>$\begin{pmatrix}z_1^{(2)}\ z_2^{(2)}\ z<em>3^{(2)}\end{pmatrix}=\begin{pmatrix}W</em>{11}^{(1)}&amp; W<em>{12}^{(1)} &amp; W</em>{13}^{(1)}\ W<em>{21}^{(1)}&amp; W</em>{22}^{(1)} &amp; W<em>{23}^{(1)}\ W</em>{31}^{(1)}&amp; W<em>{32}^{(1)} &amp; W</em>{33}^{(1)} \end{pmatrix} \begin{pmatrix} x_1\ x_2\ x_3 \end{pmatrix}+ \begin{pmatrix}b_1^{(1)} \ b_2^{(1)}\ b_3^{(1)} \end{pmatrix}$<br>最终，神经网络前向传播过程可表示为：<br>$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$<br>$a^{(l+1)}=f(z^{(l+1)})$</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-Java对象的序列化和反序列化"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2017/04/29/Java对象的序列化和反序列化/">Java对象的序列化和反序列化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2017/04/29/Java对象的序列化和反序列化/" class="article-date">
+	  <time datetime="2017-04-29T15:34:46.000Z" itemprop="datePublished">April 29, 2017</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-压缩感知算法原理"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -375,8 +749,8 @@ visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2017/04/06/压缩感知算法原理/">压缩感知算法原理</a></h6>
-              <span>April 6, 2017</span>
+              <h6 style="margin: 0;"><a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a></h6>
+              <span>April 29, 2017</span>
             </div>
 
           </li>
@@ -387,8 +761,8 @@ visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</a></h6>
-              <span>April 1, 2017</span>
+              <h6 style="margin: 0;"><a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/">深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习</a></h6>
+              <span>April 29, 2017</span>
             </div>
 
           </li>
@@ -399,8 +773,44 @@ visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/">Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</a></h6>
-              <span>April 1, 2017</span>
+              <h6 style="margin: 0;"><a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</a></h6>
+              <span>April 29, 2017</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">深度学习笔记：稀疏自编码器（2）——反向传导</a></h6>
+              <span>April 29, 2017</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">深度学习笔记：稀疏自编码器（1）————神经元与神经网络</a></h6>
+              <span>April 29, 2017</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2017/04/29/Java对象的序列化和反序列化/">Java对象的序列化和反序列化</a></h6>
+              <span>April 29, 2017</span>
             </div>
 
           </li>
@@ -417,7 +827,7 @@ visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a>
+      <a href="/tags/机器学习/" style="font-size: 10px;">-机器学习</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
     </div>
   </div>
 
@@ -427,7 +837,7 @@ visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如
     <h3 class="widget-title">Archiv</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">9</span></li></ul>
     </div>
   </div>
 
