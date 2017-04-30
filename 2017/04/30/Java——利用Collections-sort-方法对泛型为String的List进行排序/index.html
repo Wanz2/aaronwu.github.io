@@ -3,39 +3,37 @@
 <head>
   <meta charset="utf-8">
   
-  <title>java——利用collections.sort()方法对泛型为string的list进行排序 | Aaron Wu</title>
+  <title>Aaron Wu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Java" />
   
   
   
-  
-  <meta name="description" content="练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
+  <meta name="description" content="title: Java——利用Collections.sort()方法对泛型为String的List进行排序date: 2017-04-30 13:23:10
+tags: Java练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
 
 创建完List之后，往其中添加十条随机字符串  
 每条字符串的长度为10以内的随机整数  
-每条字符串的每个字符都为随机生成的字符，字符可以重复  
-每条随机字符串不可重复">
+每条字符串的每个字符都">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java——利用Collections.sort()方法对泛型为String的List进行排序">
+<meta property="og:title" content="Aaron Wu">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/30/Java——利用Collections-sort-方法对泛型为String的List进行排序/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
+<meta property="og:description" content="title: Java——利用Collections.sort()方法对泛型为String的List进行排序date: 2017-04-30 13:23:10
+tags: Java练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
 
 创建完List之后，往其中添加十条随机字符串  
 每条字符串的长度为10以内的随机整数  
-每条字符串的每个字符都为随机生成的字符，字符可以重复  
-每条随机字符串不可重复">
-<meta property="og:updated_time" content="2017-04-30T05:31:02.000Z">
+每条字符串的每个字符都">
+<meta property="og:updated_time" content="2017-04-30T05:32:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java——利用Collections.sort()方法对泛型为String的List进行排序">
-<meta name="twitter:description" content="练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
+<meta name="twitter:title" content="Aaron Wu">
+<meta name="twitter:description" content="title: Java——利用Collections.sort()方法对泛型为String的List进行排序date: 2017-04-30 13:23:10
+tags: Java练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
 
 创建完List之后，往其中添加十条随机字符串  
 每条字符串的长度为10以内的随机整数  
-每条字符串的每个字符都为随机生成的字符，字符可以重复  
-每条随机字符串不可重复">
+每条字符串的每个字符都">
   
     <link rel="alternate" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
   
@@ -71,7 +69,7 @@ var themeMenus = {};
 
   themeMenus["/archives"] = "Archives"; 
 
-  themeMenus["/categories"] = "Kategorien"; 
+  themeMenus["/categories"] = "Categorías"; 
 
   themeMenus["/about"] = "About"; 
 
@@ -104,7 +102,7 @@ var themeMenus = {};
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Kategorien</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categorías</a> </li>
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
                     
@@ -129,16 +127,6 @@ var themeMenus = {};
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" class="article-title" itemprop="name">
-      Java——利用Collections.sort()方法对泛型为String的List进行排序
-    </h1>
-  
-
-      </header>
-    
     <div class="article-meta">
       
 	Posted on <a href="/2017/04/30/Java——利用Collections-sort-方法对泛型为String的List进行排序/" class="article-date">
@@ -153,7 +141,9 @@ var themeMenus = {};
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  </p>
+        <hr>
+<p>title: Java——利用Collections.sort()方法对泛型为String的List进行排序<br>date: 2017-04-30 13:23:10</p>
+<h2 id="tags-Java"><a href="#tags-Java" class="headerlink" title="tags: Java"></a>tags: Java</h2><p>练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  </p>
 <ol>
 <li>创建完List<string>之后，往其中添加十条随机字符串  </string></li>
 <li>每条字符串的长度为10以内的随机整数  </li>
@@ -161,6 +151,7 @@ var themeMenus = {};
 <li>每条随机字符串不可重复  </li>
 </ol>
 <a id="more"></a>
+<p>&emsp;&emsp;以下是实现代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.Collections;</div><div class="line">import java.util.List;</div><div class="line">import java.util.Random;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by Wenan Wu on 2016/11/16 0016.</div><div class="line"> */</div><div class="line">public class Exercise6_5 &#123;</div><div class="line">    /**</div><div class="line">     * 练习：利用Collections.sort()方法对泛型为String的List进行排序：</div><div class="line">     * 1.创建完list&lt;String&gt;之后，往其中添加十条随机字符串</div><div class="line">     * 2.每条字符串的长度为10以内的随机整数</div><div class="line">     * 3.每条字符串的每个字符都为随机生成的字符，字符可以重复</div><div class="line">     * 4.每条随机字符串不可重复</div><div class="line">     */</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 随机生成长度为10以内整数的字符串方法</div><div class="line">     */</div><div class="line">    public String getRandomString() &#123;</div><div class="line">        String base = &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;;</div><div class="line">        Random random = new Random();</div><div class="line">        StringBuilder sb = new StringBuilder();</div><div class="line">        int length; // 字符串长度值</div><div class="line">        do &#123; //确保字符串长度不为0</div><div class="line">            length = random.nextInt(10);</div><div class="line">        &#125; while (length==0);</div><div class="line">        for (int i = 0; i &lt; length; i++) &#123;</div><div class="line">            int number = random.nextInt(base.length());</div><div class="line">            sb.append(base.charAt(number));</div><div class="line">        &#125;</div><div class="line">        return sb.toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 测试字符串排序</div><div class="line">     */</div><div class="line">    public void testSort() &#123;</div><div class="line">        Exercise6_5 ex1 = new Exercise6_5();</div><div class="line">        List&lt;String&gt; stringList = new ArrayList&lt;String&gt;();</div><div class="line">        String string;</div><div class="line">        for (int i = 0; i &lt; 10; i++) &#123;//确保List中没有重复字符串</div><div class="line">            do &#123;</div><div class="line">                string = ex1.getRandomString();</div><div class="line">            &#125;while (stringList.contains(string));</div><div class="line">            stringList.add(string);</div><div class="line">            System.out.println(&quot;增加的字符串为：&quot; + string);</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;------------排序前----------&quot;);</div><div class="line">        for (String s :</div><div class="line">                stringList) &#123;</div><div class="line">            System.out.println(&quot;元素：&quot; + s);</div><div class="line">        &#125;</div><div class="line">        Collections.sort(stringList);</div><div class="line">        System.out.println(&quot;---------排序后---------&quot;);</div><div class="line">        for (String s :</div><div class="line">                stringList) &#123;</div><div class="line">            System.out.println(&quot;元素：&quot; + s);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Exercise6_5 ex = new Exercise6_5();</div><div class="line">        ex.testSort();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
@@ -168,9 +159,6 @@ var themeMenus = {};
     <footer class="entry-meta entry-footer">
       
       
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-
       
         
 	<div id="comment">
@@ -204,7 +192,7 @@ var themeMenus = {};
   
   
     <a href="/2017/04/30/Java——重写equals-方法/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Viejo</strong>
       <div class="article-nav-title">Java——重写equals()方法</div>
     </a>
   
@@ -219,7 +207,7 @@ var themeMenus = {};
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav">None</ol>
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Java"><span class="nav-number">1.</span> <span class="nav-text">tags: Java</span></a></li></ol>
     
     </div>
   </aside>
