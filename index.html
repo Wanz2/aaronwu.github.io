@@ -50,7 +50,7 @@ var themeMenus = {};
 
   themeMenus["/archives"] = "Archives"; 
 
-  themeMenus["/categories"] = "Kategorien"; 
+  themeMenus["/categories"] = "Categories"; 
 
   themeMenus["/about"] = "About"; 
 
@@ -83,7 +83,7 @@ var themeMenus = {};
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Kategorien</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
                     
@@ -130,13 +130,24 @@ var themeMenus = {};
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>练习:利用Collections.sort()方法对泛型为String的List进行排序，要求：</p>
-<pre><code>1. 创建完List&lt;String&gt;之后，往其中添加十条随机字符串
+        
+
+          
+            <div class="entry-summary" style="margin-left:0;">
+            练习:利用Collections.sort()方法对泛型为String的List进行排序，要求：
+1. 创建完List&lt;String&gt;之后，往其中添加十条随机字符串
 2. 每条字符串的长度为10以内的随机整数
 3. 每条字符串的每个字符都为随机生成的字符，字符可以重复
 4. 每条随机字符串不可重复
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.Collections;</div><div class="line">import java.util.List;</div><div class="line">import java.util.Random;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by Wenan Wu on 2016/11/16 0016.</div><div class="line"> */</div><div class="line">public class Exercise6_5 &#123;</div><div class="line">    /**</div><div class="line">     * 练习：利用Collections.sort()方法对泛型为String的List进行排序：</div><div class="line">     * 1.创建完list&lt;String&gt;之后，往其中添加十条随机字符串</div><div class="line">     * 2.每条字符串的长度为10以内的随机整数</div><div class="line">     * 3.每条字符串的每个字符都为随机生成的字符，字符可以重复</div><div class="line">     * 4.每条随机字符串不可重复</div><div class="line">     */</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 随机生成长度为10以内整数的字符串方法</div><div class="line">     */</div><div class="line">    public String getRandomString() &#123;</div><div class="line">        String base = &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;;</div><div class="line">        Random random = new Random();</div><div class="line">        StringBuilder sb = new StringBuilder();</div><div class="line">        int length; // 字符串长度值</div><div class="line">        do &#123; //确保字符串长度不为0</div><div class="line">            length = random.nextInt(10);</div><div class="line">        &#125; while (length==0);</div><div class="line">        for (int i = 0; i &lt; length; i++) &#123;</div><div class="line">            int number = random.nextInt(base.length());</div><div class="line">            sb.append(base.charAt(number));</div><div class="line">        &#125;</div><div class="line">        return sb.toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    /**</div><div class="line">     * 测试字符串排序</div><div class="line">     */</div><div class="line">    public void testSort() &#123;</div><div class="line">        Exercise6_5 ex1 = new Exercise6_5();</div><div class="line">        List&lt;String&gt; stringList = new ArrayList&lt;String&gt;();</div><div class="line">        String string;</div><div class="line">        for (int i = 0; i &lt; 10; i++) &#123;//确保List中没有重复字符串</div><div class="line">            do &#123;</div><div class="line">                string = ex1.getRandomString();</div><div class="line">            &#125;while (stringList.contains(string));</div><div class="line">            stringList.add(string);</div><div class="line">            System.out.println(&quot;增加的字符串为：&quot; + string);</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;------------排序前----------&quot;);</div><div class="line">        for (String s :</div><div class="line">                stringList) &#123;</div><div class="line">            System.out.println(&quot;元素：&quot; + s);</div><div class="line">        &#125;</div><div class="line">        Collections.sort(stringList);</div><div class="line">        System.out.println(&quot;---------排序后---------&quot;);</div><div class="line">        for (String s :</div><div class="line">                stringList) &#123;</div><div class="line">            System.out.println(&quot;元素：&quot; + s);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Exercise6_5 ex = new Exercise6_5();</div><div class="line">        ex.testSort();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869import java.util.ArrayList;import java.util.Collections;impor...
+          
+
+        
+          <p class="article-more-link">
+            <a href="/2017/04/30/Java——利用Collections-sort-方法对泛型为String的List进行排序/#more">Continue Reading →</a>
+          </p>
+        </div>
       
     </div>
     <footer class="entry-meta entry-footer">
@@ -187,7 +198,8 @@ var themeMenus = {};
     return (this == obj);
 }
 这里很简单地返回了两个对象的地址是否相等。但在通常的使用中，我们希望能够比较两个对象中间的内容，因此我们在自己的类中也可以重写equals方法。下面是笔者自己定义了Course类并重写了equals方法：&emsp;&emsp;Course类包含两个成员变量id和name，笔者希望通过Course类实例的id来判断两个实例是否相等，若id相等，则两个实例相等。
-1234567891011121314...
+
+123456789101112131...
           
 
         
@@ -507,7 +519,7 @@ $b_i^...
 <!-- Table of Contents -->
 
   
-    <article id="post-Java对象的序列化和反序列化"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-Java——对象的序列化和反序列化"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -515,7 +527,7 @@ $b_i^...
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2017/04/29/Java对象的序列化和反序列化/">Java——对象的序列化和反序列化</a>
+      <a class="article-title" href="/2017/04/29/Java——对象的序列化和反序列化/">Java——对象的序列化和反序列化</a>
     </h1>
   
 
@@ -523,7 +535,7 @@ $b_i^...
     
     <div class="article-meta">
       
-	Posted on <a href="/2017/04/29/Java对象的序列化和反序列化/" class="article-date">
+	Posted on <a href="/2017/04/29/Java——对象的序列化和反序列化/" class="article-date">
 	  <time datetime="2017-04-29T15:34:46.000Z" itemprop="datePublished">April 29, 2017</time>
 	</a>
 
@@ -531,19 +543,23 @@ $b_i^...
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#0. 前言<br>&emsp;&emsp;最近在学习Java I/O部分的时候，遇到了对象的序列化和反序列化问题，在此做一些笔记，帮助自己熟悉。<br>&emsp;&emsp;什么是对象序列化和反序列化？《Thinking in Java》中的解释是这样的：  </p>
-<blockquote>
-<p>Java的<em>对象序列化</em>将那些实现了Serializable接口的对象转换成一个字节序列，并能够在以后将这个字节序列完全恢复为原来的对象。  </p>
-</blockquote>
-<p>&emsp;&emsp;这就是序列化和反序列化的基本内涵。由于Java中的文件是一个一个字节组成的字节序列，因此序列化就是将一个对象转换成Byte序列；而反序列化就是讲Byte序列转换为一个对象。序列化可以将对象保存到文件中，我们也可以将序列化之后的对象通过网络传输，这可以弥补不同操作系统中数据可能表示的不同。</p>
-<p>#1. 基本操作<br>&emsp;&emsp;对象序列化和反序列化其实很简单，有两个关注点：  </p>
-<ol>
-<li>对象必须实现序列化接口Serializable，否则将出现异常。该接口中没有任何方法，只提供了一个标准。  </li>
-<li>使用序列化流<strong>ObjectOutputStream</strong>和反序列化流<strong>ObjectInputStream</strong>。</li>
-</ol>
-<p>&emsp;&emsp;以下为序列化和反序列化的一个示例：  </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.Serializable;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> String gender;</div><div class="line"></div><div class="line">    <span class="comment">//该元素不会进行jvm默认的序列化，也可以自己完成这个元素的序列化</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> age;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, String gender, <span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>();</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.gender = gender;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getGender</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> gender;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGender</span><span class="params">(String gender)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.gender = gender;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Person&#123;"</span> +</div><div class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</div><div class="line">                <span class="string">", gender='"</span> + gender + <span class="string">'\''</span> +</div><div class="line">                <span class="string">", age="</span> + age +</div><div class="line">                <span class="string">'&#125;'</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">```  </div><div class="line"> </div><div class="line">&amp;emsp;&amp;emsp;下面的类实现了基本的序列化和反序列化过程：  </div><div class="line"></div><div class="line"></div><div class="line">```java</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 序列化和反序列化demo</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectSeriaDemo1</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</div><div class="line">        File file = <span class="keyword">new</span> File(<span class="string">"/Users/wuwenan/Work/SerializationTest.txt"</span>);</div><div class="line">        <span class="keyword">if</span>(!file.exists())&#123;</div><div class="line">            file.createNewFile();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//1.对象的序列化</span></div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(file));</div><div class="line">        Person stu = <span class="keyword">new</span> Person(<span class="string">"Aaron Wu"</span>, <span class="string">"male"</span>, <span class="number">23</span>);</div><div class="line">        oos.writeObject(stu);<span class="comment">//writebject()方法是调用自被序列化的对象中的writeObject()方法</span></div><div class="line">        oos.flush();</div><div class="line">        oos.close();</div><div class="line">        <span class="comment">//2.对象的反序列化</span></div><div class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(file));</div><div class="line">        Person stu1 = (Person) ois.readObject();</div><div class="line">        System.out.println(stu1);</div><div class="line">        ois.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
 
+          
+            <div class="entry-summary" style="margin-left:0;">
+            #0. 前言&emsp;&emsp;最近在学习Java I/O部分的时候，遇到了对象的序列化和反序列化问题，在此做一些笔记，帮助自己熟悉。&emsp;&emsp;什么是对象序列化和反序列化？《Thinking in Java》中的解释是这样的：  
+
+Java的对象序列化将那些实现了Serializable接口的对象转换成一个字节序列，并能够在以后将这个字节序列完全恢复为原来的对象。  
+
+
+&emsp;&emsp;这就是序列化和反序列化的基本内涵。由于Java中的文件是一个一个字节组成的字节序列，因此序列化就是将一个对象转换成Byte序列；而反序列化就是讲Byte序列转换为一个对象。序列化可以将对象保存到文件中，我们也可以将序列化之后的对象通过网络传输，这可以弥补不同操作系统中数据可...
+          
+
+        
+          <p class="article-more-link">
+            <a href="/2017/04/29/Java——对象的序列化和反序列化/#more">Continue Reading →</a>
+          </p>
+        </div>
       
     </div>
     <footer class="entry-meta entry-footer">
@@ -731,7 +747,7 @@ Windows主机中配置Xshell工具以远程控制虚拟系统
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">weiter</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next</a>
   </nav>
 
 </section>
@@ -769,7 +785,7 @@ Windows主机中配置Xshell工具以远程控制虚拟系统
     
   <div class="widget_athemes_tabs">
     <ul id="widget-tab" class="clearfix widget-tab-nav">
-      <li class="active"><a>letzter Beitrag</a></li>
+      <li class="active"><a>Recent Posts</a></li>
     </ul>
     <div class="widget">
       <ul>
@@ -865,7 +881,7 @@ Windows主机中配置Xshell工具以远程控制虚拟系统
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">11</span></li></ul>
