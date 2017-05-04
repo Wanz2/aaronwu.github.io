@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>jdbc执行sql语句的两种方式 | Aaron Wu</title>
+  <title>java——jdbc执行sql语句的两种方式 | Aaron Wu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="keywords" content="Java" />
@@ -13,13 +13,13 @@
   
   <meta name="description" content="&amp;emsp;&amp;emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JDBC执行SQL语句的两种方式">
+<meta property="og:title" content="Java——JDBC执行SQL语句的两种方式">
 <meta property="og:url" content="https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
-<meta property="og:updated_time" content="2017-05-04T17:15:27.000Z">
+<meta property="og:updated_time" content="2017-05-04T17:31:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JDBC执行SQL语句的两种方式">
+<meta name="twitter:title" content="Java——JDBC执行SQL语句的两种方式">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
   
     <link rel="alternate" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -56,7 +56,7 @@ var themeMenus = {};
 
   themeMenus["/archives"] = "Archives"; 
 
-  themeMenus["/categories"] = "Kategorien"; 
+  themeMenus["/categories"] = "Categories"; 
 
   themeMenus["/about"] = "About"; 
 
@@ -89,7 +89,7 @@ var themeMenus = {};
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Kategorien</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
                     
                       <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
                     
@@ -118,7 +118,7 @@ var themeMenus = {};
         
   
     <h1 class="thumb" class="article-title" itemprop="name">
-      JDBC执行SQL语句的两种方式
+      Java——JDBC执行SQL语句的两种方式
     </h1>
   
 
@@ -140,7 +140,7 @@ var themeMenus = {};
       
         <p>&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  </p>
 <a id="more"></a>
-<p>&emsp;&emsp;使用JDBC前首先要在项目中导入数据库驱动jar包，本文使用的是MySQL，IDE使用的是Intellij IDEA，导入驱动的过程在此不赘述。<br>&emsp;&emsp;使用JDBC执行SQL语句共分为两步：<br>&emsp;&emsp;&emsp;&emsp;1. 获得连接类Connection对象<br>&emsp;&emsp;&emsp;&emsp;2. 获得语句对象<br>&emsp;&emsp;&emsp;&emsp;3. 执行语句<br>&emsp;&emsp;其中使用PreparedStatment对象执行SQL语句更为灵活，可以传入参数。本文编写了一个查询数据库的示例。 </p>
+<p>&emsp;&emsp;使用JDBC前首先要在项目中导入数据库驱动jar包，本文使用的是MySQL，IDE使用的是Intellij IDEA，导入驱动的过程在此不赘述。<br>&emsp;&emsp;使用JDBC执行SQL语句共分为三步：<br>&emsp;&emsp;&emsp;&emsp;1. 获得连接类Connection对象<br>&emsp;&emsp;&emsp;&emsp;2. 获得语句对象<br>&emsp;&emsp;&emsp;&emsp;3. 执行语句<br>&emsp;&emsp;其中使用PreparedStatment对象执行SQL语句更为灵活，可以传入参数。本文编写了一个查询数据库的示例。 </p>
 <p>&emsp;&emsp;示例数据库脚本为：  </p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`student_table`</span> (</div><div class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</div><div class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">45</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  <span class="string">`sex`</span> <span class="built_in">varchar</span>(<span class="number">5</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</div><div class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> AUTO_INCREMENT=<span class="number">3</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;示例代码共有四个类：<br>&emsp;&emsp;&emsp;&emsp;<em> DBUtil.java 用来获取数据库的连接<br>&emsp;&emsp;&emsp;&emsp;</em> DAO.java 操作数据模型<br>&emsp;&emsp;&emsp;&emsp;<em> Student.java 实体类<br>&emsp;&emsp;&emsp;&emsp;</em> Test.java 测试查询结果  </p>
@@ -190,7 +190,7 @@ var themeMenus = {};
   
   
     <a href="/2017/04/30/Java——利用Collections.sort()对List排序/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Java——利用Collections.sort()对泛型为String的List排序</div>
     </a>
   
