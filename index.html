@@ -253,12 +253,8 @@ var themeMenus = {};
           
             <div class="entry-summary" style="margin-left:0;">
             &emsp;&emsp;在Java中，自定义类默认继承Object类，因此也继承了Object中的equals方法，Object类中的equals方法定义如下：
- public boolean equals(Object obj) {
-    return (this == obj);
-}
-这里很简单地返回了两个对象的地址是否相等。但在通常的使用中，我们希望能够比较两个对象中间的内容，因此我们在自己的类中也可以重写equals方法。下面是笔者自己定义了Course类并重写了equals方法：&emsp;&emsp;Course类包含两个成员变量id和name，笔者希望通过Course类实例的id来判断两个实例是否相等，若id相等，则两个实例相等。
-
-123456789101112131...
+123 public boolean equals(Object obj) &#123;    return (this == obj);&#125;
+&emsp;&emsp;这里很简单地返回了两个对象的地址是否相等。但在通常的使用中，我们希望能够比较两个对象中间的内容，因此我们在自己的类中也可以重写equals方法。下面是笔者自己定义了Course类并重写了equals方法：&emsp;&emsp;Course类包含两个成员变量id和name，笔者希望通过Course类实例的id来判断两个实例是否相等，若id相等，则两个实例...
           
 
         
