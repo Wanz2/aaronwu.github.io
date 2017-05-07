@@ -75,112 +75,42 @@
     <div id="container">
       <div id="main">
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置" itemprop="url">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
-		
-  <p class="article-time">
-    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>&emsp;&emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：</p>
-<ol>
-<li>VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</li>
-<li>Windows主机中配置Xshell工具以远程控制虚拟系统
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-  <div class="article-tags">
   
-  <span></span> <a href="/tags/VMWare/">VMWare</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置" itemprop="url">
+  
+    <h1 itemprop="name">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</h1>
     
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
+     
+       <p itemprop="description" >一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通</p>
+      
     
-      <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/" title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置" itemprop="url">Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
-		
-  <p class="article-time">
-    <time datetime="2017-03-31T19:27:21.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
+    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished">2017-04-01</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/" title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置" itemprop="url">
+  
+    <h1 itemprop="name">Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</h1>
     
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h1><h3 id="windows-10-64位-专业版（非必须）"><a href="#windows-10-64位-专业版（非必须）" class="headerlink" title="windows 10 64位 专业版（非必须）"></a>windows 10 64位 专业版（非必须）</h3><h3 id="visual-studio-2013（墙裂推荐此版本）"><a href="#visual-studio-2013（墙裂推荐此版本）" class="headerlink" title="visual studio 2013（墙裂推荐此版本）"></a>visual studio 2013（墙裂推荐此版本）</h3><ol>
-<li>笔者使用的操作系统为win10 64位，在其他版本的64位windows系统上应该同样可行。</li>
-<li>visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如下：<br>a. 打开vs2013，点击“工具”-“扩展和更新”<br>b. 在弹出的对话框中点击“联机”，在右上角搜索框中搜索NuGet，在搜索结果中“NuGet Package Manager”项上面的“下载”，开始下载NuGet，下载完后进行安装<br>c. 安装完后重启vs2013，重启后点击“工具”-“扩展和更新”，选择“已安装”，可以看到NuGet Package Manager已经安装好了。
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
+     
+       <p itemprop="description" >一、环境准备windows 10 64位 专业版（非必须）visual studio 2013（墙裂推荐此版本）
+笔者使用的操作系统为win10 64位，在其他版本的64位windows系统上应该同样可行。
+visual studio 2013（以下简称vs2013）中需要安装N</p>
+      
+    
+    <time datetime="2017-03-31T19:27:21.000Z" itemprop="datePublished">2017-04-01</time>
+  </a>
+</section>
 
 
 
@@ -188,7 +118,7 @@
 
 
 
-  <nav id="page-nav" class="clearfix">
+  <nav id="page-nav" class="clearfix unexpand">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
 
@@ -235,31 +165,12 @@
         
           <li>
             
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            	<a href="https://qinjiangbo.com" target="_blank" title="心灵港">心灵港</a>
             
           </li>
         
     </ul>
 </div>
-
-  
-
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
-</div>
-
-  <div class="weiboshow">
-  <p class="asidetitle">新浪微博</p>
-    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=b3593ceb&dpc=1"></iframe>
-</div>
-
 
 </aside>
 </div>
@@ -273,13 +184,11 @@
 	
 	
 	<section class="info">
-		<p> Hello ,I&#39;m Larry Page in Google. <br/>
-			This is my blog,believe it or not.</p>
+		<p> Hello ,I&#39;m Aaron Wu in WHU <br/>
+			This is my blog.</p>
 	</section>
 	 
 	<div class="social-font" class="clearfix">
-		
-		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
 		
 		
 		
