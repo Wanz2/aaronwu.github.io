@@ -1,26 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    
-
-    
-
-    
+  <!-- content-Type -->
+<meta charset="utf-8">
 
 
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="language" content="en">
+<meta name="robots" content="all">
 
-    <meta charset="utf-8">
-    
-    
-    
-    <title>Java——JDBC执行SQL语句的两种方式 | Aaron Wu | Strive for excellence, not perfection.</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="Java">
-    <meta name="description" content="&amp;emsp;&amp;emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
+
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+<meta name="author" content="TongchengQiu, TongchengQiu@gmail.com">
+<meta name="reply-to" content="TongchengQiu@gmail.com">
+<meta name="owner" content="TongchengQiu">
+
+
+
+
+<meta name="google-site-verification" content="xxxxxxxxxx" />
+
+
+
+
+<meta name="baidu-site-verification" content="xxxxxxxxxx" />
+
+
+
+
+<meta name="description" content="Aaron Wu" />
+
+
+
+
+<meta name="keywords" content="Java," />
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java——JDBC执行SQL语句的两种方式">
 <meta property="og:url" content="https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/index.html">
@@ -30,158 +58,147 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——JDBC执行SQL语句的两种方式">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.0.2" />
+
+
+
+
+<link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+
+<link href="http://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.0.2"/>
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  bp.src = '//push.zhanzhang.baidu.com/push.js';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+  <title> Java——JDBC执行SQL语句的两种方式 </title>
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxxxxxxxxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxxxxxxxxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
 </head>
+<body lang="">
 
-<body>
-    <div id="loading" class="active"></div>
-
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+  <!--[if lte IE 9]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Aaron Wu</h5>
-          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
-        </hgroup>
-      </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                Archives
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/yscoder" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="http://www.weibo.com/ysweb" target="_blank" >
-                <i class="icon icon-lg icon-weibo"></i>
-                Weibo
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/custom"  >
-                <i class="icon icon-lg icon-link"></i>
-                测试
-              </a>
-            </li>
-        
-      </ul>
-    </div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Java——JDBC执行SQL语句的两种方式</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Java——JDBC执行SQL语句的两种方式</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-05-04T15:36:23.000Z" itemprop="datePublished" class="page-time">
-  2017-05-04
-</time>
+<![endif]-->
 
 
-            
-        </h5>
-    </div>
+  <div class="another-theme layout">
 
     
+<header class="header" id="header">
 
+  <div class="header-cont">
+    <div class="text-area">
+      
+        <h1 class="title" data-text="Java——JDBC执行SQL语句的两种方式"> Java——JDBC执行SQL语句的两种方式 </h1>
 
-</header>
-
-
-<div class="container body-wrap">
-    
-<article id="post-Java——JDBC执行SQL语句的两种方式"
-  class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">Java——JDBC执行SQL语句的两种方式</h1>
+        
         <div class="post-meta">
-            <time class="post-time" title="2017-05-04 23:36:23" datetime="2017-05-04T15:36:23.000Z"  itemprop="datePublished">2017-05-04</time>
+          <div class="post-time">
+            Veröffentlicht am
+            <time  datetime="2017-05-04T23:36:23+08:00" content="2017-05-04">
+              2017-05-04
+            </time>
+          </div>
 
+          
+
+          
             
-
-
+              <span class="post-comments-count">
+                <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/04/Java——JDBC执行SQL语句的两种方式/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-            
-
+          
         </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <p>&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  </p>
+        
+      
+    </div>
+    <!-- Navigation -->
+    
+    <nav class="navigation clearfix" id="navigation">
+      
+        
+        <a class="nav-link" href="/" rel="section">
+          Startseite
+        </a>
+      
+        
+        <a class="nav-link" href="/categories" rel="section">
+          Kategorien
+        </a>
+      
+        
+        <a class="nav-link" href="/tags" rel="section">
+          Tags
+        </a>
+      
+        
+        <a class="nav-link" href="/about" rel="section">
+          Über
+        </a>
+      
+    </nav>
+    
+  </div>
+  <div class="mask"></div>
+</header>
+
+
+    <main class="container">
+
+      
+
+  <article class="post-article post-type-normal post" itemscope>
+
+  <div class="post-body">
+
+    <div class="content markdown-body"><p>&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  </p>
 <a id="more"></a>
 <p>&emsp;&emsp;使用JDBC前首先要在项目中导入数据库驱动jar包，本文使用的是MySQL，IDE使用的是Intellij IDEA，导入驱动的过程在此不赘述。<br>&emsp;&emsp;使用JDBC执行SQL语句共分为三步：<br>&emsp;&emsp;&emsp;&emsp;1. 获得连接类Connection对象<br>&emsp;&emsp;&emsp;&emsp;2. 获得语句对象<br>&emsp;&emsp;&emsp;&emsp;3. 执行语句<br>&emsp;&emsp;其中使用PreparedStatment对象执行SQL语句更为灵活，可以传入参数。本文编写了一个查询数据库的示例。 </p>
 <p>&emsp;&emsp;示例数据库脚本为：  </p>
@@ -191,295 +208,167 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.Connection;</div><div class="line"><span class="keyword">import</span> java.sql.DriverManager;</div><div class="line"><span class="keyword">import</span> java.sql.SQLException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 数据库连接类</div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBUtil</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">//设置数据库连接URL</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String URL = <span class="string">"jdbc:mysql://127.0.0.1:3306/student"</span>;</div><div class="line">    <span class="comment">//设置用户名</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String USER = <span class="string">"root"</span>;</div><div class="line">    <span class="comment">//设置密码</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String PASSWORD = <span class="string">"123456"</span>;</div><div class="line"></div><div class="line">    <span class="comment">//创建数据库连接对象</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Connection connection = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">static</span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">//使用反射将数据库驱动程序加载进环境</span></div><div class="line">            Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</div><div class="line">            <span class="comment">//获取数据库连接</span></div><div class="line">            connection = DriverManager.getConnection(URL, USER, PASSWORD);</div><div class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 通过类返回数据库连接</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> connection;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * （模型层）操作数据模型</div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DAO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 方法一：使用Statment对象执行sql语句</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     * <span class="doctag">@throws</span> SQLException</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">statmentQuery</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        <span class="comment">//获得数据库连接</span></div><div class="line">        Connection connection = DBUtil.getConnection();</div><div class="line">        <span class="comment">//创建sql语句</span></div><div class="line">        String sql = <span class="string">"SELECT * FROM student_table"</span>;</div><div class="line">        <span class="comment">//获取Statment对象</span></div><div class="line">        Statement statement = connection.createStatement();</div><div class="line">        <span class="comment">//打印出查询语句</span></div><div class="line">        System.out.println(sql);</div><div class="line">        <span class="comment">//执行sql语句并获得结果集</span></div><div class="line">        ResultSet resultSet = statement.executeQuery(sql);</div><div class="line">        <span class="comment">//将查询结果映射到实体对象</span></div><div class="line">        Student student = mapEntity(resultSet);</div><div class="line">        <span class="keyword">return</span> student;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 方法二：通过PreparedStatment对象执行sql语句，可以进行参数的传递</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     * <span class="doctag">@throws</span> SQLException</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">preparedStatmentQuery</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        <span class="comment">//获得数据库连接</span></div><div class="line">        Connection connection = DBUtil.getConnection();</div><div class="line">        <span class="comment">//创建sql语句，使用?作为占位符</span></div><div class="line">        String sql = <span class="string">"SELECT * FROM student_table WHERE id = ? AND name = ?"</span>;</div><div class="line">        <span class="comment">//创建预编译查询语句对象</span></div><div class="line">        PreparedStatement pstmt = connection.prepareStatement(sql);</div><div class="line">        <span class="comment">//给预编译查询语句对象传入参数</span></div><div class="line">        pstmt.setInt(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line">        pstmt.setString(<span class="number">2</span>, <span class="string">"桐人"</span>);</div><div class="line">        <span class="comment">//打印出查询语句</span></div><div class="line">        System.out.println(sql);</div><div class="line">        <span class="comment">//执行预编译查询语句</span></div><div class="line">        ResultSet resultSet = pstmt.executeQuery();</div><div class="line">        <span class="comment">//将查询结果映射到实体对象</span></div><div class="line">        Student student = mapEntity(resultSet);</div><div class="line">        <span class="keyword">return</span> student;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 将查询结果映射到实体对象</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> resultSet</div><div class="line">     * <span class="doctag">@throws</span> SQLException</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">private</span> Student <span class="title">mapEntity</span><span class="params">(ResultSet resultSet)</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        Student tempStudent = <span class="keyword">new</span> Student();</div><div class="line">        <span class="keyword">if</span> (resultSet.next()) &#123;</div><div class="line">            tempStudent = <span class="keyword">new</span> Student();</div><div class="line">            tempStudent.setId(resultSet.getInt(<span class="string">"id"</span>));</div><div class="line">            tempStudent.setName(resultSet.getString(<span class="string">"name"</span>));</div><div class="line">            tempStudent.setSex(resultSet.getString(<span class="string">"sex"</span>));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> tempStudent;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * （模型层）实体类</div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Integer id;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> String sex;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSex</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> sex;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(String sex)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.sex = sex;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Student&#123;"</span> +</div><div class="line">                <span class="string">"id="</span> + id +</div><div class="line">                <span class="string">", name='"</span> + name + <span class="string">'\''</span> +</div><div class="line">                <span class="string">", sex='"</span> + sex + <span class="string">'\''</span> +</div><div class="line">                <span class="string">'&#125;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.SQLException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        DAO dao = <span class="keyword">new</span> DAO();</div><div class="line">        System.out.println(<span class="string">"使用Statment对象执行sql语句："</span>);</div><div class="line">        System.out.println(dao.statmentQuery());</div><div class="line">        System.out.println(<span class="string">"=================="</span>);</div><div class="line">        System.out.println(<span class="string">"使用PreparedStatment对象执行查询语句："</span>);</div><div class="line">        System.out.println(dao.preparedStatmentQuery());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        </div>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.SQLException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        DAO dao = <span class="keyword">new</span> DAO();</div><div class="line">        System.out.println(<span class="string">"使用Statment对象执行sql语句："</span>);</div><div class="line">        System.out.println(dao.statmentQuery());</div><div class="line">        System.out.println(<span class="string">"=================="</span>);</div><div class="line">        System.out.println(<span class="string">"使用PreparedStatment对象执行查询语句："</span>);</div><div class="line">        System.out.println(dao.preparedStatmentQuery());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></div>
 
-        <blockquote class="post-copyright">
-    <div class="content">
-        
-<span class="post-time">
-    Last updated: <time datetime="2017-05-04T17:31:10.000Z" itemprop="dateUpdated">2017-05-05 01:31:10</time>
-</span><br>
-
-
-        
-        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/" target="_blank" rel="external">https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/</a>
-        
+    <div class="post-sidebar">
+  <div class="toggle-btn" id="toggle-btn">
+    <i class="fa fa-reorder"></i>
+  </div>
+  <section class="post-toc-wrap" id="post-sidebar">
+    <h2 class="toc-title">内容目录</h2>
+    <div class="post-toc">
+      
+      
+        <p class="post-toc-empty">Dieser Artikel hat kein Inhaltsverzeichnis</p>
+      
     </div>
-    <footer>
-        <a href="https://wanz2.github.io">
-            <img src="/img/avatar.jpg" alt="Aaron Wu">
-            Aaron Wu
-        </a>
-    </footer>
-</blockquote>
-
-        
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+  </section>
 </div>
 
 
+  </div>
 
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
+  <footer class="post-footer">
     
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/&title=《Java——JDBC执行SQL语句的两种方式》 — Aaron Wu&pic=https://wanz2.github.io/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/&title=《Java——JDBC执行SQL语句的两种方式》 — Aaron Wu&source=&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  " data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java——JDBC执行SQL语句的两种方式》 — Aaron Wu&url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/&via=https://wanz2.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
+      <div class="post-tags">
+        
+          <a href="/tags#Java" rel="tag">#Java</a>
+        
+      </div>
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">Java——对象的序列化与反序列化（1）</h4>
-      </a>
-    </div>
-  
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/04/30/Java——利用Collections.sort()对List排序/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Java——利用Collections.sort()对泛型为String的List排序</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
     
+  <style>
+    .donation {
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .donation .text {
+      color: #333;
+      font-size: .8rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .donation .text:hover {
+      color: rgb(63,134,181);
+    }
+    .donation .img-box {
+      transition: all .3s;
+      width: 0;
+      height: 0;
+      margin: 1rem auto;
+      overflow: hidden;
+    }
+    .donation .img-box img {
+      width: 100%;
+      height: 100%;
+    }
+    .donation #donation {
+      display: none;
+    }
+    .donation #donation:checked + .img-box {
+      width: 16rem;
+      height: 16rem;
+    }
+  </style>
+  <div class="donation">
+    <label class="text" for="donation">
+      如果你觉得文章对你有帮助，并且想为我买一杯咖啡，点这里～
+    </label>
+    <input type="checkbox" name="donation" id="donation">
+    <div class="img-box">
+      <img src="/img/donation.png" alt="donation" />
+    </div>
+  </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  </footer>
 
 </article>
 
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        谢谢大爷~
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <ul class="reward-items">
-        
-        <li>
-            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
-            <p>微信</p>
-        </li>
-        
-
-        
-        <li>
-            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
-            <p>支付宝</p>
-        </li>
-        
-    </ul>
-</div>
 
 
 
-</div>
-
-        <footer class="footer">
-    <div class="top">
-        
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/04/Java——JDBC执行SQL语句的两种方式/"
+           data-title="Java——JDBC执行SQL语句的两种方式" data-url="https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/">
+      </div>
+    
+  </div>
 
 
-        <p>
-            
-            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p>
-            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
-            <span>Aaron Wu &copy; 2015 - 2017</span>
-        </p>
-    </div>
-</footer>
+
 
     </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+    <footer class="footer clearfix">
+  <div class="copyright" >
+    <span>Copyright</span>
+    
+    &copy;  2015-
+    <span itemprop="copyrightYear">2017</span>
+    <span class="author" itemprop="copyrightHolder">Aaron Wu</span>
+  </div>
+
+  <div class="info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+      <span id="showDays" class="show-days"></span>
+      <script>
+      var birthDay = new Date('10/04/2015');
+      var now = new Date();
+      var duration = now.getTime() - birthDay.getTime();
+      var total= Math.floor(duration / (1000 * 60 * 60 * 24));
+      document.getElementById("showDays").innerHTML = "本站已运行 "+total+" 天";
+      </script>
+      ---
+    
+    <span id="busuanzi_container_site_pv">
+        总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+  </div>
+
+  <div class="my-theme">
+    Theme by <a href="//qiutc.me">qiutc</a> | <iframe style="margin-left: 5px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=TongchengQiu&amp;repo=hexo-theme-another&amp;type=star&amp;count=true"></iframe>
+  </div>
+
+</footer>
 
 
+  </div>
 
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/&title=《Java——JDBC执行SQL语句的两种方式》 — Aaron Wu&pic=https://wanz2.github.io/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/&title=《Java——JDBC执行SQL语句的两种方式》 — Aaron Wu&source=&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  " data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java——JDBC执行SQL语句的两种方式》 — Aaron Wu&url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/&via=https://wanz2.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/" alt="微信分享二维码">
-</div>
+  <div class="back-top-btn" id="back-top-btn"><i class="fa fa-chevron-up"></i></div>
 
 
 
 
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
+  
+    
+  
 
-
-</script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"xxxxxxxxxx"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
 
 
 
 
 
 
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '死鬼去哪里了！';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '(つェ⊂)咦!又好了!';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
-</script>
-
+<script type="text/javascript" src="/js/motto.min.js?v=0.0.2"></script>
+<script type="text/javascript" src="/js/main.js?v=0.0.2"></script>
 
 
 </body>

@@ -1,26 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    
-
-    
-
-    
+  <!-- content-Type -->
+<meta charset="utf-8">
 
 
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="language" content="en">
+<meta name="robots" content="all">
 
-    <meta charset="utf-8">
-    
-    
-    
-    <title>压缩感知算法原理 | Aaron Wu | Strive for excellence, not perfection.</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="图像处理">
-    <meta name="description" content="&amp;emsp;&amp;emsp;本文是笔者在学习压缩感知算法之后的总结和整理。">
+
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+<meta name="author" content="TongchengQiu, TongchengQiu@gmail.com">
+<meta name="reply-to" content="TongchengQiu@gmail.com">
+<meta name="owner" content="TongchengQiu">
+
+
+
+
+<meta name="google-site-verification" content="xxxxxxxxxx" />
+
+
+
+
+<meta name="baidu-site-verification" content="xxxxxxxxxx" />
+
+
+
+
+<meta name="description" content="Aaron Wu" />
+
+
+
+
+<meta name="keywords" content="图像处理," />
+
+
+<meta name="description" content="&amp;emsp;&amp;emsp;本文是笔者在学习压缩感知算法之后的总结和整理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="压缩感知算法原理">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/06/压缩感知算法原理/index.html">
@@ -33,165 +61,147 @@
 <meta name="twitter:title" content="压缩感知算法原理">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是笔者在学习压缩感知算法之后的总结和整理。">
 <meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.0.2" />
+
+
+
+
+<link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+
+<link href="http://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.0.2"/>
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  bp.src = '//push.zhanzhang.baidu.com/push.js';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+  <title> 压缩感知算法原理 </title>
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxxxxxxxxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxxxxxxxxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
 </head>
+<body lang="">
 
-<body>
-    <div id="loading" class="active"></div>
-
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+  <!--[if lte IE 9]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Aaron Wu</h5>
-          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
-        </hgroup>
-      </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                Archives
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/yscoder" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="http://www.weibo.com/ysweb" target="_blank" >
-                <i class="icon icon-lg icon-weibo"></i>
-                Weibo
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/custom"  >
-                <i class="icon icon-lg icon-link"></i>
-                测试
-              </a>
-            </li>
-        
-      </ul>
-    </div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">压缩感知算法原理</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">压缩感知算法原理</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-04-06T15:30:03.000Z" itemprop="datePublished" class="page-time">
-  2017-04-06
-</time>
+<![endif]-->
 
 
-            
-        </h5>
-    </div>
+  <div class="another-theme layout">
 
     
+<header class="header" id="header">
 
+  <div class="header-cont">
+    <div class="text-area">
+      
+        <h1 class="title" data-text="压缩感知算法原理"> 压缩感知算法原理 </h1>
 
-</header>
-
-
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-本文中使用的符号一览"><span class="post-toc-number">1.</span> <span class="post-toc-text">1. 本文中使用的符号一览</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#传统正交变换中："><span class="post-toc-number">1.1.</span> <span class="post-toc-text">传统正交变换中：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#压缩感知算法中："><span class="post-toc-number">1.2.</span> <span class="post-toc-text">压缩感知算法中：</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-压缩感知算法目的"><span class="post-toc-number">2.</span> <span class="post-toc-text">2. 压缩感知算法目的</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-采集策略"><span class="post-toc-number">3.</span> <span class="post-toc-text">3. 采集策略</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-传统解决思路——正交变换"><span class="post-toc-number">4.</span> <span class="post-toc-text">4. 传统解决思路——正交变换</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-1-步骤"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">4.1 步骤</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-2-编码解码策略"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">4.2 编码解码策略</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-3-压缩误差分析"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">4.3 压缩误差分析</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-新的思路——压缩传感"><span class="post-toc-number">5.</span> <span class="post-toc-text">5. 新的思路——压缩传感</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-1-压缩传感思想："><span class="post-toc-number">5.1.</span> <span class="post-toc-text">5.1 压缩传感思想：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-2-根据以上分析，可以得出编码解码策略"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">5.2 根据以上分析，可以得出编码解码策略</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-3-观测矩阵-Phi-需要满足的性质"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">5.3 观测矩阵$\Phi$需要满足的性质</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-4-如何解决4-1中提出的优化问题"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">5.4 如何解决4.1中提出的优化问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"><span class="post-toc-number">5.4.1.</span> <span class="post-toc-text">5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><span class="post-toc-number">5.4.2.</span> <span class="post-toc-text">5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</span></a></li></ol></li></ol></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-压缩感知算法原理"
-  class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">压缩感知算法原理</h1>
+        
         <div class="post-meta">
-            <time class="post-time" title="2017-04-06 23:30:03" datetime="2017-04-06T15:30:03.000Z"  itemprop="datePublished">2017-04-06</time>
+          <div class="post-time">
+            Veröffentlicht am
+            <time  datetime="2017-04-06T23:30:03+08:00" content="2017-04-06">
+              2017-04-06
+            </time>
+          </div>
 
+          
+
+          
             
-
-
+              <span class="post-comments-count">
+                <a href="/2017/04/06/压缩感知算法原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/06/压缩感知算法原理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-            
-
+          
         </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <p>&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  </p>
+        
+      
+    </div>
+    <!-- Navigation -->
+    
+    <nav class="navigation clearfix" id="navigation">
+      
+        
+        <a class="nav-link" href="/" rel="section">
+          Startseite
+        </a>
+      
+        
+        <a class="nav-link" href="/categories" rel="section">
+          Kategorien
+        </a>
+      
+        
+        <a class="nav-link" href="/tags" rel="section">
+          Tags
+        </a>
+      
+        
+        <a class="nav-link" href="/about" rel="section">
+          Über
+        </a>
+      
+    </nav>
+    
+  </div>
+  <div class="mask"></div>
+</header>
+
+
+    <main class="container">
+
+      
+
+  <article class="post-article post-type-normal post" itemscope>
+
+  <div class="post-body">
+
+    <div class="content markdown-body"><p>&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  </p>
 <a id="more"></a>
 <h2 id="1-本文中使用的符号一览"><a href="#1-本文中使用的符号一览" class="headerlink" title="1. 本文中使用的符号一览"></a>1. 本文中使用的符号一览</h2><h3 id="传统正交变换中："><a href="#传统正交变换中：" class="headerlink" title="传统正交变换中："></a>传统正交变换中：</h3><table>
 <thead>
@@ -297,295 +307,167 @@
 <li><a href="http://blog.csdn.net/abcjennifer/article/details/7748833" target="_blank" rel="external">http://blog.csdn.net/abcjennifer/article/details/7748833</a></li>
 <li>《“压缩传感”引论》.沙威.香港大学</li>
 </ol>
+</div>
 
-        </div>
-
-        <blockquote class="post-copyright">
-    <div class="content">
-        
-<span class="post-time">
-    Last updated: <time datetime="2017-05-07T11:15:48.000Z" itemprop="dateUpdated">2017-05-07 19:15:48</time>
-</span><br>
-
-
-        
-        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2017/04/06/压缩感知算法原理/" target="_blank" rel="external">https://wanz2.github.io/2017/04/06/压缩感知算法原理/</a>
-        
+    <div class="post-sidebar">
+  <div class="toggle-btn" id="toggle-btn">
+    <i class="fa fa-reorder"></i>
+  </div>
+  <section class="post-toc-wrap" id="post-sidebar">
+    <h2 class="toc-title">内容目录</h2>
+    <div class="post-toc">
+      
+      
+        <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-本文中使用的符号一览"><span class="nav-text">1. 本文中使用的符号一览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#传统正交变换中："><span class="nav-text">传统正交变换中：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩感知算法中："><span class="nav-text">压缩感知算法中：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-压缩感知算法目的"><span class="nav-text">2. 压缩感知算法目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-采集策略"><span class="nav-text">3. 采集策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-传统解决思路——正交变换"><span class="nav-text">4. 传统解决思路——正交变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-步骤"><span class="nav-text">4.1 步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-编码解码策略"><span class="nav-text">4.2 编码解码策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-压缩误差分析"><span class="nav-text">4.3 压缩误差分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-新的思路——压缩传感"><span class="nav-text">5. 新的思路——压缩传感</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-压缩传感思想："><span class="nav-text">5.1 压缩传感思想：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-根据以上分析，可以得出编码解码策略"><span class="nav-text">5.2 根据以上分析，可以得出编码解码策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-观测矩阵-Phi-需要满足的性质"><span class="nav-text">5.3 观测矩阵$\Phi$需要满足的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-如何解决4-1中提出的优化问题"><span class="nav-text">5.4 如何解决4.1中提出的优化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"><span class="nav-text">5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><span class="nav-text">5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</span></a></li></ol></li></ol></li></ol></div>
+      
     </div>
-    <footer>
-        <a href="https://wanz2.github.io">
-            <img src="/img/avatar.jpg" alt="Aaron Wu">
-            Aaron Wu
-        </a>
-    </footer>
-</blockquote>
-
-        
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+  </section>
 </div>
 
 
+  </div>
 
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/图像处理/">图像处理</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
+  <footer class="post-footer">
     
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/&title=《压缩感知算法原理》 — Aaron Wu&pic=https://wanz2.github.io/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/&title=《压缩感知算法原理》 — Aaron Wu&source=&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  " data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wanz2.github.io/2017/04/06/压缩感知算法原理/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《压缩感知算法原理》 — Aaron Wu&url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/&via=https://wanz2.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
+      <div class="post-tags">
+        
+          <a href="/tags#图像处理" rel="tag">#图像处理</a>
+        
+      </div>
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">深度学习笔记：稀疏自编码器（1）————神经元与神经网络</h4>
-      </a>
-    </div>
-  
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
     
+  <style>
+    .donation {
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .donation .text {
+      color: #333;
+      font-size: .8rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .donation .text:hover {
+      color: rgb(63,134,181);
+    }
+    .donation .img-box {
+      transition: all .3s;
+      width: 0;
+      height: 0;
+      margin: 1rem auto;
+      overflow: hidden;
+    }
+    .donation .img-box img {
+      width: 100%;
+      height: 100%;
+    }
+    .donation #donation {
+      display: none;
+    }
+    .donation #donation:checked + .img-box {
+      width: 16rem;
+      height: 16rem;
+    }
+  </style>
+  <div class="donation">
+    <label class="text" for="donation">
+      如果你觉得文章对你有帮助，并且想为我买一杯咖啡，点这里～
+    </label>
+    <input type="checkbox" name="donation" id="donation">
+    <div class="img-box">
+      <img src="/img/donation.png" alt="donation" />
+    </div>
+  </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+  </footer>
 
 </article>
 
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        谢谢大爷~
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <ul class="reward-items">
-        
-        <li>
-            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
-            <p>微信</p>
-        </li>
-        
-
-        
-        <li>
-            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
-            <p>支付宝</p>
-        </li>
-        
-    </ul>
-</div>
 
 
 
-</div>
-
-        <footer class="footer">
-    <div class="top">
-        
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
+      
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/06/压缩感知算法原理/"
+           data-title="压缩感知算法原理" data-url="https://wanz2.github.io/2017/04/06/压缩感知算法原理/">
+      </div>
+    
+  </div>
 
 
-        <p>
-            
-            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p>
-            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
-            <span>Aaron Wu &copy; 2015 - 2017</span>
-        </p>
-    </div>
-</footer>
+
 
     </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+    <footer class="footer clearfix">
+  <div class="copyright" >
+    <span>Copyright</span>
+    
+    &copy;  2015-
+    <span itemprop="copyrightYear">2017</span>
+    <span class="author" itemprop="copyrightHolder">Aaron Wu</span>
+  </div>
+
+  <div class="info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+      <span id="showDays" class="show-days"></span>
+      <script>
+      var birthDay = new Date('10/04/2015');
+      var now = new Date();
+      var duration = now.getTime() - birthDay.getTime();
+      var total= Math.floor(duration / (1000 * 60 * 60 * 24));
+      document.getElementById("showDays").innerHTML = "本站已运行 "+total+" 天";
+      </script>
+      ---
+    
+    <span id="busuanzi_container_site_pv">
+        总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+  </div>
+
+  <div class="my-theme">
+    Theme by <a href="//qiutc.me">qiutc</a> | <iframe style="margin-left: 5px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=TongchengQiu&amp;repo=hexo-theme-another&amp;type=star&amp;count=true"></iframe>
+  </div>
+
+</footer>
 
 
+  </div>
 
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/&title=《压缩感知算法原理》 — Aaron Wu&pic=https://wanz2.github.io/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/&title=《压缩感知算法原理》 — Aaron Wu&source=&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  " data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://wanz2.github.io/2017/04/06/压缩感知算法原理/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《压缩感知算法原理》 — Aaron Wu&url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/&via=https://wanz2.github.io" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://wanz2.github.io/2017/04/06/压缩感知算法原理/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://wanz2.github.io/2017/04/06/压缩感知算法原理/" alt="微信分享二维码">
-</div>
+  <div class="back-top-btn" id="back-top-btn"><i class="fa fa-chevron-up"></i></div>
 
 
 
 
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
+  
+    
+  
 
-
-</script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"xxxxxxxxxx"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
 
 
 
 
 
 
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '死鬼去哪里了！';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '(つェ⊂)咦!又好了!';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
-</script>
-
+<script type="text/javascript" src="/js/motto.min.js?v=0.0.2"></script>
+<script type="text/javascript" src="/js/main.js?v=0.0.2"></script>
 
 
 </body>
