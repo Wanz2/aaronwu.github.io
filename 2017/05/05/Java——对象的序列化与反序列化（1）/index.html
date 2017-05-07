@@ -1,10 +1,10 @@
 
  <!DOCTYPE HTML>
-<html >
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   
-    <title>Java——对象的序列化与反序列化（1） | Aaron Wu</title>
+    <title>Java——对象的序列化与反序列化（1） | Aaron Wu的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java——对象的序列化与反序列化（1）">
 <meta property="og:url" content="https://wanz2.github.io/2017/05/05/Java——对象的序列化与反序列化（1）/index.html">
-<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:site_name" content="Aaron Wu的个人博客">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;关于序列化和反序列化将要写两篇博客，第一篇介绍基本序列化与反序列化方法，第二篇将介绍如何自己实现元素的序列化与反序列化问题。">
 <meta property="og:updated_time" content="2017-05-07T13:50:13.000Z">
 <meta name="twitter:card" content="summary">
@@ -23,7 +23,7 @@
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;关于序列化和反序列化将要写两篇博客，第一篇介绍基本序列化与反序列化方法，第二篇将介绍如何自己实现元素的序列化与反序列化问题。">
 
     
-    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu的个人博客" type="application/atom+xml">
     
     
     <link rel="icon" href="/img/favicon.ico">
@@ -41,14 +41,14 @@
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="Aaron Wu" title="Aaron Wu"/></a>
+				<a href="/"><img src="/img/logo.png" alt="Aaron Wu的个人博客" title="Aaron Wu的个人博客"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h1 class="site-name"><a href="/" title="Aaron Wu的个人博客">Aaron Wu的个人博客</a></h1>
 				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -68,7 +68,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:wanz2.github.io">
 					</form>
 					
@@ -91,14 +91,14 @@
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-05T02:03:26.000Z" itemprop="datePublished"> Published 2017-05-05</time>
+    <time datetime="2017-05-05T02:03:26.000Z" itemprop="datePublished"> 发表于 2017-05-05</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作"><span class="toc-number">2.</span> <span class="toc-text">基本操作</span></a></li></ol>
 		
@@ -130,7 +130,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/05/05/Java——对象的序列化与反序列化（1）/" data-title="Java——对象的序列化与反序列化（1） | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/05/05/Java——对象的序列化与反序列化（1）/" data-title="Java——对象的序列化与反序列化（1） | Aaron Wu的个人博客" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -157,24 +157,24 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本操作"><span class="toc-number">2.</span> <span class="toc-text">基本操作</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -199,7 +199,7 @@
 
   
   <div class="tagcloudlist">
-    <p class="asidetitle">Tag Cloud</p>
+    <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
        <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
     </div>
@@ -208,13 +208,13 @@
 
   
   <div class="archiveslist">
-    <p class="asidetitle"><a href="/archives">Archives</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">10</span></li></ul>
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">10</span></li></ul>
   </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -448,7 +448,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

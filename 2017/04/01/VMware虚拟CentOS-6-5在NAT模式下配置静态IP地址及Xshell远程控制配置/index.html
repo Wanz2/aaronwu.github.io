@@ -1,10 +1,10 @@
 
  <!DOCTYPE HTML>
-<html >
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   
-    <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu</title>
+    <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
@@ -17,7 +17,7 @@ VM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/index.html">
-<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:site_name" content="Aaron Wu的个人博客">
 <meta property="og:description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
 
 VM">
@@ -41,7 +41,7 @@ VM">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
 
     
-    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu的个人博客" type="application/atom+xml">
     
     
     <link rel="icon" href="/img/favicon.ico">
@@ -59,14 +59,14 @@ VM">
 <div>
 		
 			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="Aaron Wu" title="Aaron Wu"/></a>
+				<a href="/"><img src="/img/logo.png" alt="Aaron Wu的个人博客" title="Aaron Wu的个人博客"/></a>
 			</div>
 			
 			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h1 class="site-name"><a href="/" title="Aaron Wu的个人博客">Aaron Wu的个人博客</a></h1>
 				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -86,7 +86,7 @@ VM">
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:wanz2.github.io">
 					</form>
 					
@@ -109,14 +109,14 @@ VM">
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished"> Published 2017-04-01</time>
+    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
 		
@@ -165,7 +165,7 @@ VM">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu的个人博客" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -200,24 +200,24 @@ VM">
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -242,7 +242,7 @@ VM">
 
   
   <div class="tagcloudlist">
-    <p class="asidetitle">Tag Cloud</p>
+    <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
        <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
     </div>
@@ -251,13 +251,13 @@ VM">
 
   
   <div class="archiveslist">
-    <p class="asidetitle"><a href="/archives">Archives</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">10</span></li></ul>
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">10</span></li></ul>
   </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -491,7 +491,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
