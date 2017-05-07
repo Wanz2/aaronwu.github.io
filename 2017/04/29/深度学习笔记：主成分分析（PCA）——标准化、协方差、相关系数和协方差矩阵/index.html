@@ -11,16 +11,16 @@
     
 
     
-    <meta name="description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
+    <meta name="description" content="&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
-<meta property="og:updated_time" content="2017-05-07T11:09:48.000Z">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
+<meta property="og:updated_time" content="2017-05-07T12:54:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
-<meta name="twitter:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -96,11 +96,11 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><span class="toc-number">1.</span> <span class="toc-text">深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">2.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">3.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">3.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">4.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">5.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="toc-number">6.</span> <span class="toc-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="toc-number">5.</span> <span class="toc-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  </p>
+		<p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  </p>
 <a id="more"></a>
 <p>#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念</p>
 <h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|</p>
@@ -189,7 +189,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><span class="toc-number">1.</span> <span class="toc-text">深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">2.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">3.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">3.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">4.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">5.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="toc-number">6.</span> <span class="toc-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="toc-number">5.</span> <span class="toc-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol>
  
   </div>
 
@@ -216,11 +216,11 @@
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/VMWare/" title="VMWare">VMWare<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/VMWare/" title="VMWare">VMWare<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 		</ul>
