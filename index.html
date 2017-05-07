@@ -1,693 +1,481 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<!DOCTYPE HTML>
+<html class="no-js" lang="zh-CN">
+<!--
+//                            _ooOoo_
+//                           o8888888o
+//                           88" . "88
+//                           (| -_- |)
+//                            O\ = /O
+//                        ____/`---'\____
+//                      .   ' \\| |// `.
+//                       / \\||| : |||// \
+//                     / _||||| -:- |||||- \
+//                       | | \\\ - /// | |
+//                     | \_| ''\---/'' | |
+//                      \ .-\__ `-` ___/-. /
+//                   ___`. .' /--.--\ `. . __
+//                ."" '< `.___\_<|>_/___.' >'"".
+//               | | : `- \`.;`\ _ /`;.`/ - ` : | |
+//                 \ \ `-. \_ __\ /__ _/ .-` / /
+//         ======`-.____`-.___\_____/___.-`____.-'======
+//                            `=---='
+//                 拦截插件累计拦截逗比攻击"1381438"次！
+//         .............................................
+//                  佛祖保佑             永无BUG
+//          佛曰:
+//                  写字楼里写字间，写字间里程序员；
+//                  程序人员写程序，又拿程序换酒钱。
+//                  酒醒只在网上坐，酒醉还来网下眠；
+//                  酒醉酒醒日复日，网上网下年复年。
+//                  但愿老死电脑间，不愿鞠躬老板前；
+//                  奔驰宝马贵者趣，公交自行程序员。
+//                  别人笑我忒疯癫，我笑自己命太贱；
+//                  不见满街漂亮妹，哪个归得程序员？
+-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Aaron Wu">
-    <meta name="keyword" content="undefined">
-    <meta name="theme-color" content="#600090">
-    <meta name="msapplication-navbutton-color" content="#600090">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
-    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
-    <link rel="alternate" type="application/atom+xml" title="Aaron Wu" href="/atom.xml">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
-    <title>
-        
-        undefined
-        
-    </title>
+    <!--[if lte IE 9]>
+<meta http-equiv="refresh" content="0;url=https://wanz2.github.io/warn.html">
+<![endif]-->
+<meta charset="utf-8">
 
-    <link rel="canonical" href="https://wanz2.github.io/">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+<meta http-equiv="mobile-agent" content="format=html5; url=https://wanz2.github.io">
+<meta name="author" content="Aaron Wu">
+<link rel="stylesheet" href="/css/SimpleStyle.min.css">
 
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="shortcut icon" href="/images/favicon.png">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/blog-style.css">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+<title>Aaron Wu - Strive for excellence, not perfection.</title>
+
+<meta name="keywords" content="undefined">
+
+<meta name="description " content="Aaron Wu">
 </head>
-
-<style>
-
-    header.intro-header {
-        background-image: url('undefined')
-    }
-</style>
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="" class="animated fadeIn">
-<!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
-" data-ishome = "true" >
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    Aaron Wu
-                </span>
-                's Blog
-            </a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <!-- /.navbar-collapse -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-					
-					
-                </ul>
+<body>
+<div id="nav">
+    <nav class="nav-menu">
+        <a class="site-name current" href="/" title="说">说</a>
+        <a class="site-index current" href="/"><i class="fa fa-home"></i><span>Home</span></a>
+        <a href="/archives" title="Archives"><i class="fa fa-archives"></i><span>Archives</span></a>
+        <a href="/tags" title="Tags"><i class="fa fa-tags"></i><span>Tags</span></a>
+        <a href="/video" title="Video"><i class="fa fa-video-camera"></i><span>Video</span></a>
+        <a href="/rss" title="RSS Feed"><i class="fa fa-rss"></i><span>RSS Feed</span></a>
+        <a href="/help" title="Help"><i class="fa fa-question-circle"></i><span>Help</span></a>
+    </nav>
+</div>
+<div class="nav-user">
+    <a class="btn-search" href="#"><i class="fa fa-search"></i></a>
+    <a class="btn-read-mode" href="#"><i class="fa fa-sun-o"></i></a>
+    <a class="btn-weixin-mp" href="javascript:"><i class="fa fa-weixin"></i></a>
+</div>
+<div id="wrapper" class="clearfix">
+    <div id="body">
+        <div class="main" id="main">
+            <div id="cover">
+    <div class="cover-img"></div>
+    <div class="cover-info">
+        <img class="avatar" width="72" src="/images/favicon.png" alt="avatar" />
+        <h1>说IT</h1>
+        <h3>交流技术，畅谈人文</h3>
+        <p>一个关注技术与人文的IT博客</p>
+        <div class="cover-sns">
+            <div class="btn btn-weixin">
+                <a class="" href="javascript:"><i class="fa fa-weixin"></i></a>
+                <div class="qrcode"><img src="/images/weixin-qrcode.png" alt="weixinQrcode" /></div>
+                <div class="qrcode-arrow"></div>
+            </div>
+            <div class="btn btn-weibo">
+                <a href="https://weibo.com/tangkunyin" target="_blank" rel="nofollow"><i class="fa fa-weibo"></i></a>
+            </div>
+            <div class="btn btn-facebook">
+                <a href="https://fackbook.com/tangkunyin"  target="_blank" rel="nofollow"><i class="fa fa-facebook"></i></a>
+            </div>
+            <div class="btn btn-github">
+                <a href="https://github.com/tangkunyin"  target="_blank" rel="nofollow"><i class="fa fa-github"></i></a>
             </div>
         </div>
     </div>
-    <!-- /.container -->
-</nav>
+</div>
+            <div class="page-title">
+    <ul>
+        <li class="active">
+            <a href="/" data-name="最近文章">最近</a>
+        </li>
+        
+        <li class="">
+            <a href="/categories/tech" data-name="技术">技术</a>
+        </li>
+        
+        <li class="">
+            <a href="/categories/humanity" data-name="人文">人文</a>
+        </li>
+        
+        <li class="">
+            <a href="/categories/resource" data-name="资源">资源</a>
+        </li>
+        
+        <li class="page-search">
+    <form id="search" class="search-form">
+        <label for="s" class="sr-only">Input Search key Words Here</label>
+        <input class="search-field" type="text" name="s" class="text" placeholder="Input Search key Words Here" />
+        <button type="submit" class="search-form-submit" title="Search"><i class="fa fa-search"></i></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
 <script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
-
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
-    }
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
 </script>
+</li>
 
-<!-- Main Content -->
-
-
-<style>
-
-    .custom-haojen-container .post-preview:nth-of-type(1),
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
-        text-align: center;
-        background-repeat: no-repeat;
-        border-radius: 3px;
-        background-size: cover;
-        padding: 0;
-        height: 300px;
-        display: table;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.16);
-    }
-
-    /*去掉诗歌的背景图片*/
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
-        background-image: none !important;
-        background-color: rgba(255, 248, 220, 0.5);
-    }
-
-    .custom-haojen-container .post-preview:nth-child(1) h2,
-    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
-    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
-        letter-spacing: 1px;
-        color: #fff;
-        margin-top: 0;
-        padding-left: 60px;
-        padding-right: 60px;
-    }
-
-    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
-        font-size: .9em;
-        font-weight: 300;
-        margin-top: 0;
-    }
-
-    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
-        letter-spacing: 6px;
-        font-size: 18px;
-        font-family: unset;
-        font-weight: 400;
-        color: rgba(0, 0, 0, .75)
-    }
-
-    /*不显示摘要*/
-    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
-        display: none
-    }
-
-    /*只第一个显示背景图片*/
-    .custom-haojen-container .post-preview:not(:nth-child(1)) {
-        background-image: none !important;
-    }
-
-    /*第一个分界线去掉*/
-    .custom-haojen-container hr:nth-of-type(1) {
-        display: none;
-    }
-
-    /*主题*/
-    .custom-haojen-container .post-preview:nth-of-type(1) > a {
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-    /*诗词标题*/
-    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-        font-size: 35px;
-        font-family: STKaiti;
-        color: rgba(0, 0, 0, .8);
-    }
-
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
-        color: #0e2231;
-    }
-
-    @media (max-width: 768px) {
-        .custom-haojen-container .post-preview:nth-child(1) {
-            height: 240px;
-        }
-
-        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-            font-size: 28px !important;
-            margin-top: 0;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-            font-size: 18px;
-            font-weight: 400;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .custom-haojen-container .post-preview:nth-of-type(1) > a {
-            padding: 20px
-        }
-    }
-
-    /*手机屏幕*/
-    @media (max-width: 400px) {
-        .custom-haojen-container .post-preview:nth-child(1) {
-            height: 195px;
-        }
-
-        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-            font-size: 20px !important;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-            font-size: 16px;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) a {
-            padding: 30px 20px;
-        }
-    }
-</style>
-
-<!-- Page Header -->
-<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
-    <div class="row">
-        <header class="intro-header">
-            <div class="container">
-                <div class="site-heading text-center">
-                    <div class="about-me">
-                        <!--移动端头部显示-->
-                        <img src="undefined"/>
-                        <h5><a href="/about/">Aaron Wu</a></h5>
-                        <p>undefined</p>
-                    </div>
-                </div>
-            </div>
-        </header>
-    </div>
+    </ul>
 </div>
-<!-- Main Content -->
-<div class="container custom-haojen-container">
-    <!-- Post Container -->
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
-            <!-- Main Content -->
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/">
-        <h2 class="post-title">
-            Java——对象的序列化与反序列化（1）
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-05-05
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;最近在学习Java I/O部分的时候，遇到了对象的序列化和反序列化问题，在此做一些笔记，帮助自己熟悉。关于序列化和反序列化将要写两篇博客，第一篇介绍基本序列化与反序列化方法，第二篇将介绍如何自己实现元素的序列化与反序列化问题。  
-
-概念&emsp;&emsp;什么是对象..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/">
-        <h2 class="post-title">
-            Java——JDBC执行SQL语句的两种方式
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-05-04
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  
-
-&emsp;&emsp;使用JDBC前首先要在项目中导入数据库驱动jar包，本文使用的是MySQL，IDE使用的是Intellij IDEA，导..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/30/Java——利用Collections.sort()对List排序/">
-        <h2 class="post-title">
-            Java——利用Collections.sort()对泛型为String的List排序
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-30
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;本文利用Collections.sort()对泛型为String的List排序  
-
-练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
-
-创建完List之后，往其中添加十条随机字符串  
-每条字符串的长度为10以内的随机..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/30/Java——重写equals-方法/">
-        <h2 class="post-title">
-            Java——重写equals()方法
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-30
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;在Java中，自定义类默认继承Object类，因此也继承了Object中的equals方法，Object类中的equals方法定义如下：
-123 public boolean equals(Object obj) &#123;    return (this == obj..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">
-        <h2 class="post-title">
-            深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-29
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  
-
-#1. 概率论中的标准化、协方差、相关系数和协..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/">
-        <h2 class="post-title">
-            深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-29
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见Exercise:Sparse Autoencoder，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。
-1234567891011121314151617181920212223242526272..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">
-        <h2 class="post-title">
-            深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-29
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。
-
-0.本文中使用的符号&emsp;&emsp;本文中使用的符号大体与上一篇文..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">
-        <h2 class="post-title">
-            深度学习笔记：稀疏自编码器（2）——反向传导
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-29
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。  
-
-0.本文中所使用的符号和一些约定本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">
-        <h2 class="post-title">
-            深度学习笔记：稀疏自编码器（1）————神经元与神经网络
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-29
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见UFLDL教程，看完教程之后再来看本文可能..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2017/04/06/压缩感知算法原理/">
-        <h2 class="post-title">
-            压缩感知算法原理
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-06
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                &emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  
-
-1. 本文中使用的符号一览传统正交变换中：
-
-
-符号
-维度
-描述
-
-
-
-
-$x$
-$R^{N\times 1}$
-原始信号
-
-
-$y$
-$R^{N\times 1}$
-压缩后的信号，不稀疏
-
-
-$\hat{y}$
-$R..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-
-<!-- 翻页 pager -->
-
-<ul class="pager">
+<div class="main-inner">
+    
+    <!-- 首页默认取最最新文章集 -->
     
     
-    <li class="next">
-        <a href="/page/2/">Older Posts &rarr;</a>
-    </li>
+<article class="post">
     
-</ul>
-
-
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-05-05
         </div>
-        <!-- Sidebar Container -->
-        <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
-
-            <!-- About Me -->
-            <section class="visible-md visible-lg" style="padding: 0 18px">
-                <div class="short-about">
-                    <!--侧边栏头像-->
-                    
-                    <h5><a href="/about/">Aaron Wu</a></h5>
-                    
-                    <hr>
-                    <!-- SNS Link 社交 -->
-                    <ul class="list-inline">
-                        
-                        
-                        
-
-                        
-
-                        
-
-                        
-
-                        
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Featured Tags  标签 -->
+        <a class="post-title" href="/2017/05/05/Java——对象的序列化与反序列化（1）/" target="_blank" title="Java——对象的序列化与反序列化（1）">Java——对象的序列化与反序列化（1）</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
             
-
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/Java/" target="_blank">Java</a>
             
-
         </div>
     </div>
+    <div class="post-desc">
+        Java——对象的序列化与反序列化（1）
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-05-04
+        </div>
+        <a class="post-title" href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/" target="_blank" title="Java——JDBC执行SQL语句的两种方式">Java——JDBC执行SQL语句的两种方式</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/Java/" target="_blank">Java</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        Java——JDBC执行SQL语句的两种方式
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-30
+        </div>
+        <a class="post-title" href="/2017/04/30/Java——利用Collections.sort()对List排序/" target="_blank" title="Java——利用Collections.sort()对泛型为String的List排序">Java——利用Collections.sort()对泛型为String的List排序</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/Java/" target="_blank">Java</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        Java——利用Collections.sort()对泛型为String的List排序
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-30
+        </div>
+        <a class="post-title" href="/2017/04/30/Java——重写equals-方法/" target="_blank" title="Java——重写equals()方法">Java——重写equals()方法</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/Java/" target="_blank">Java</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        Java——重写equals()方法
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-29
+        </div>
+        <a class="post-title" href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" target="_blank" title="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/机器学习/" target="_blank">机器学习</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-29
+        </div>
+        <a class="post-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" target="_blank" title="深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习">深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/机器学习/" target="_blank">机器学习</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-29
+        </div>
+        <a class="post-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" target="_blank" title="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/机器学习/" target="_blank">机器学习</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-29
+        </div>
+        <a class="post-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" target="_blank" title="深度学习笔记：稀疏自编码器（2）——反向传导">深度学习笔记：稀疏自编码器（2）——反向传导</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/机器学习/" target="_blank">机器学习</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        深度学习笔记：稀疏自编码器（2）——反向传导
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-29
+        </div>
+        <a class="post-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" target="_blank" title="深度学习笔记：稀疏自编码器（1）————神经元与神经网络">深度学习笔记：稀疏自编码器（1）————神经元与神经网络</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/机器学习/" target="_blank">机器学习</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        深度学习笔记：稀疏自编码器（1）————神经元与神经网络
+    </div>
+</article>
+
+
+
+    
+    
+<article class="post">
+    
+    <div class="post-header">
+        <div class="post-meta">
+            <a href="undefined" target="_blank">
+                <strong>undefined</strong>
+            </a>
+            <em>·</em>2017-04-06
+        </div>
+        <a class="post-title" href="/2017/04/06/压缩感知算法原理/" target="_blank" title="压缩感知算法原理">压缩感知算法原理</a>
+        <div class="post-meta">
+            <a href="/tags" target="_blank"><i class="fa fa-tags"></i></a>
+            
+                <em>·</em>
+                <a href="https://wanz2.github.io/tags/图像处理/" target="_blank">图像处理</a>
+            
+        </div>
+    </div>
+    <div class="post-desc">
+        压缩感知算法原理
+    </div>
+</article>
+
+
+
+    
+    
+</div>
+<!-- 分页开始 -->
+
+<div id="btn-pager">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next</a>
 </div>
 
-<!-- Footer -->
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
-                <br>
-                <ul class="list-inline text-center">
-                
-                
-                
 
-                
-
-                
-
-                
-
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; Aaron Wu 2017
-                    <br>
-                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
-                    <br>
-                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
-                </p>
-
-            </div>
-        </div>
+        </div><!-- end #main-->
+    </div><!-- end #body -->
+    <footer class="footer">
+    <div class="footer-inner">
+        <p>
+            <a href="/about"  title="About">About</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/help" title="Help" >Help</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/video" title="Video">Video</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <!-- 自定义链接 -->
+            <a href="/links" title="友情链接">友情链接</a>&nbsp;&nbsp<em>·</em>&nbsp;&nbsp
+            <a href="/app" title="App下载">App下载</a>
+        </p>
+        <p>
+            本站点采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>，已建立<a href="/timeline" id="siteBuildingTime"></a>天<br/>
+            ©2017 基于<a href="http://hexo.io" target="_blank">Hexo</a>搭建
+            ，主题&nbsp<a href="https://github.com/tangkunyin/hexo-theme-jsimple" target="_blank">JSimple</a>
+            ，作者<a href="https://www.tangkunyin" target="_blank">唐先森</a>
+            ，感谢<a href="https://coding.net/register?key=bcace447-fa41-4579-9783-86fdf0f723e2" target="_blank">Coding</a>提供免费优质的强力驱动
+        </p>
+        
     </div>
 </footer>
-
-<!-- jQuery -->
-<script src="/js/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/js/blog.js"></script>
-
-<!-- async load function -->
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<script src="/js/InsightSearch.js"></script>
+<script src="/js/SimpleCore.js"></script>
+</div>
+<div class="fixed-btn">
+    <a class="btn-gotop" href="javascript:"> <i class="fa fa-angle-up"></i></a>
+</div>
 <script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
+    $(function () {
+        SimpleCore.init({
+            buildingTime: '08/20/2014',
+            current: $('.post-tags').length > 0 ? 'post' : 'archive',
+            customImg: '/images/weixin-mp.png'
+        });
+    });
 </script>
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-<!-- Google Analytics -->
-
-
-
-<!-- Baidu Tongji -->
-
-
-<!-- swiftype -->
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install','undefined','2.0.0');
-</script>
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-<!--wechat title img-->
-<img class="wechat-title-img" src="undefined">
 </body>
-
 </html>
