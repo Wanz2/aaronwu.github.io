@@ -1,100 +1,174 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>深度学习笔记：稀疏自编码器（3）——稀疏自编码算法 | Aaron Wu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
-<meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/index.html">
-<meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/ab2e3ac6ec9172f9b2d9b8d3542158dc.png">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F">
-<meta property="og:updated_time" content="2017-05-07T11:10:42.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。">
-<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png">
-  
-    <link rel="alternate" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
+<html lang="en">
 
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword" content="undefined">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="Aaron Wu" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        深度学习笔记：稀疏自编码器（3）——稀疏自编码算法｜undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Aaron Wu</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Strive for excellence, not perfection.</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wanz2.github.io"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-深度学习笔记：稀疏自编码器（3）——稀疏自编码算法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" class="article-date">
-  <time datetime="2017-04-29T15:43:53.000Z" itemprop="datePublished">2017-04-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
-    </h1>
-  
+<style>
 
-      </header>
+    header.intro-header {
+        background-image: url('undefined')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Aaron Wu
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>&emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。</p>
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</h1>
+                    
+                    <span class="meta">
+                         作者 Aaron Wu
+                        <span>
+                          日期 2017-04-29
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#机器学习"
+                           title="机器学习">机器学习</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>&emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。</p>
 <a id="more"></a>
 <h2 id="0-本文中使用的符号"><a href="#0-本文中使用的符号" class="headerlink" title="0.本文中使用的符号"></a>0.本文中使用的符号</h2><p>&emsp;&emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号<br>|符号|描述|<br>|—|—|<br>|$m$|样本总数|<br>|$a<em>{j}^{(2)}$|第2层第$j$个神经元的激活度|<br>|$a</em>{j}^{(2)}(x)$|在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度|<br>|$\hat{\rho<em>{j}}$|$\hat{\rho</em>{j}}=\frac{1}{m}\sum<em>{i=1}^{m}[a</em>{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度|<br>|$\rho$|表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制|<br>|$s<em>2$|第2层（隐藏层）神经元的数量|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|</p>
 <h2 id="1-什么是稀疏自编码器"><a href="#1-什么是稀疏自编码器" class="headerlink" title="1.什么是稀疏自编码器"></a>1.什么是稀疏自编码器</h2><p>&emsp;&emsp;先上图：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png" alt="此处输入图片的描述"><br>&emsp;&emsp;上图为有一个隐藏层的稀疏自编码器示意图。稀疏自编码器为非监督学习，其所使用的样本集${x^{(1)},x^{(2)},…,x^{(m)}}$为没有类别标记的样本，我们希望令输出值$h_{W,b}(x)$与输入值$x$近似相等。</p>
@@ -114,138 +188,159 @@
 <hr>
 <p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：<br><img src="http://odnk9as2f.bkt.clouddn.com/ab2e3ac6ec9172f9b2d9b8d3542158dc.png" alt="此处输入图片的描述"><br>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述"><br>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在<img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述">中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
 
-      
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" data-toggle="tooltip" data-placement="top"
+                           title="深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" data-toggle="tooltip" data-placement="top"
+                           title="深度学习笔记：稀疏自编码器（2）——反向传导">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中使用的符号"><span class="toc-text">0.本文中使用的符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-什么是稀疏自编码器"><span class="toc-text">1.什么是稀疏自编码器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-为什么要用稀疏自编码器"><span class="toc-text">2.为什么要用稀疏自编码器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-稀疏性限制"><span class="toc-text">3.稀疏性限制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1稀疏性"><span class="toc-text">3.1稀疏性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2如何限制隐藏层稀疏性"><span class="toc-text">3.2如何限制隐藏层稀疏性</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
     </div>
-    <footer class="article-footer">
-      <a data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" data-id="cj2elsw9i000i0j0v1byigl5g" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">深度学习笔记：稀疏自编码器（2）——反向传导</div>
-    </a>
-  
-</nav>
-
-  
 </article>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VMWare/">VMWare</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/图像处理/">图像处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
     </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/">Java——对象的序列化与反序列化（1）</a>
-          </li>
-        
-          <li>
-            <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/">Java——JDBC执行SQL语句的两种方式</a>
-          </li>
-        
-          <li>
-            <a href="/2017/04/30/Java——利用Collections.sort()对List排序/">Java——利用Collections.sort()对泛型为String的List排序</a>
-          </li>
-        
-          <li>
-            <a href="/2017/04/30/Java——重写equals-方法/">Java——重写equals()方法</a>
-          </li>
-        
-          <li>
-            <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 Aaron Wu<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<!-- Baidu Tongji -->
 
 
-<script src="/js/script.js"></script>
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
 
-  </div>
+  _st('install','undefined','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="undefined">
 </body>
+
 </html>
