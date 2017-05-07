@@ -121,7 +121,7 @@ body {
   background: #ddd;
   font-family: "Helvetica Neue", "Helvetica", "Microsoft YaHei", "WenQuanYi Micro Hei", Arial, sans-serif;
   font-size: 100%;
-  color: #817c7c;
+  color: #3f4446;
   line-height: 1.5;
   min-height: 100vh;
   display: -webkit-flex;
@@ -161,7 +161,7 @@ sub {
 }
 a {
   text-decoration: none;
-  color: #817c7c;
+  color: #3f4446;
 }
 a:hover,
 a:focus {
@@ -646,10 +646,10 @@ header nav ul li a:hover {
   line-height: 2;
 }
 #main section.post a p {
-  color: #817c7c;
+  color: #3f4446;
 }
 #main section.post a time {
-  color: #817c7c;
+  color: #3f4446;
   display: block;
   margin: 0.5em 0;
   font-size: 0.9em;
@@ -684,7 +684,7 @@ header nav ul li a:hover {
   padding: 6px 15px;
   border-radius: 15px;
   background: #ddd;
-  color: #817c7c;
+  color: #3f4446;
   text-decoration: none;
 }
 #main article.post-expand .article-more-link a:hover {
@@ -1235,7 +1235,7 @@ footer.article-footer {
   font-size: 1.2em;
   font-family: "FontAwesome";
   text-align: center;
-  color: #817c7c;
+  color: #3f4446;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 1.5em;
@@ -1532,7 +1532,7 @@ section.comment {
 }
 #toc.toc-aside strong {
   padding: 0.3em 0;
-  color: #817c7c;
+  color: #3f4446;
 }
 #toc.toc-aside:hover {
   -webkit-transition: opacity 0.3s ease-out;
