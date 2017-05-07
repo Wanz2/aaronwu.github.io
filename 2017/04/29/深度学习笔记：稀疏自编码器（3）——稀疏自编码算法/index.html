@@ -5,23 +5,20 @@
   
   <title>深度学习笔记：稀疏自编码器（3）——稀疏自编码算法 | Aaron Wu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。
-0.本文中使用的符号&amp;emsp;&amp;emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号|符号|描述||—|—||$m$|样本总数||$a{j}">
+  <meta name="description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。
-0.本文中使用的符号&amp;emsp;&amp;emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号|符号|描述||—|—||$m$|样本总数||$a{j}">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/ab2e3ac6ec9172f9b2d9b8d3542158dc.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F">
-<meta property="og:updated_time" content="2017-04-29T15:50:43.000Z">
+<meta property="og:updated_time" content="2017-05-07T11:10:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。
-0.本文中使用的符号&amp;emsp;&amp;emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号|符号|描述||—|—||$m$|样本总数||$a{j}">
+<meta name="twitter:description" content="&amp;emsp;&amp;emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。">
 <meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png">
   
     <link rel="alternate" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -66,7 +63,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wanz2.github.io"></form>
@@ -98,7 +95,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>&emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。</p>
-<h2 id="0-本文中使用的符号"><a href="#0-本文中使用的符号" class="headerlink" title="0.本文中使用的符号"></a>0.本文中使用的符号</h2><p>&emsp;&emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号<br>|符号|描述|<br>|—|—|<br>|$m$|样本总数|<br>|$a<em>{j}^{(2)}$|第2层第$j$个神经元的激活度|<br>|$a</em>{j}^{(2)}(x)$|在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度|<br>|$\hat{\rho<em>{j}}$|$\hat{\rho</em>{j}}=\frac{1}{m}\sum<em>{i=1}^{m}[a</em>{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度|<br>|$\rho$|表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制|<br>|$s<em>2$|第2层（隐藏层）神经元的数量|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|<br><a id="more"></a></p>
+<a id="more"></a>
+<h2 id="0-本文中使用的符号"><a href="#0-本文中使用的符号" class="headerlink" title="0.本文中使用的符号"></a>0.本文中使用的符号</h2><p>&emsp;&emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号<br>|符号|描述|<br>|—|—|<br>|$m$|样本总数|<br>|$a<em>{j}^{(2)}$|第2层第$j$个神经元的激活度|<br>|$a</em>{j}^{(2)}(x)$|在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度|<br>|$\hat{\rho<em>{j}}$|$\hat{\rho</em>{j}}=\frac{1}{m}\sum<em>{i=1}^{m}[a</em>{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度|<br>|$\rho$|表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制|<br>|$s<em>2$|第2层（隐藏层）神经元的数量|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|</p>
 <h2 id="1-什么是稀疏自编码器"><a href="#1-什么是稀疏自编码器" class="headerlink" title="1.什么是稀疏自编码器"></a>1.什么是稀疏自编码器</h2><p>&emsp;&emsp;先上图：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png" alt="此处输入图片的描述"><br>&emsp;&emsp;上图为有一个隐藏层的稀疏自编码器示意图。稀疏自编码器为非监督学习，其所使用的样本集${x^{(1)},x^{(2)},…,x^{(m)}}$为没有类别标记的样本，我们希望令输出值$h_{W,b}(x)$与输入值$x$近似相等。</p>
 <h2 id="2-为什么要用稀疏自编码器"><a href="#2-为什么要用稀疏自编码器" class="headerlink" title="2.为什么要用稀疏自编码器"></a>2.为什么要用稀疏自编码器</h2><p>&emsp;&emsp;由于为数据人工增加类别标记是一个非常麻烦的过程，我们希望机器能够自己学习到样本中的一些重要特征。通过对隐藏层施加一些限制，能够使得它在恶劣的环境下学习到能最好表达样本的特征，并能有效地对样本进行降维。这种限制可以是对隐藏层稀疏性的限制。</p>
 <h2 id="3-稀疏性限制"><a href="#3-稀疏性限制" class="headerlink" title="3.稀疏性限制"></a>3.稀疏性限制</h2><h3 id="3-1稀疏性"><a href="#3-1稀疏性" class="headerlink" title="3.1稀疏性"></a>3.1稀疏性</h3><p>&emsp;&emsp;当使用sigmoid函数作为激活函数时，若神经元输出值为1，则可认为其被激活，若神经元输出值为0，则可认为其被抑制（使用tanh函数时，代表激活和抑制的值分别为1和-1）。稀疏性限制就是要保证大多数神经元输出为0，即被抑制的状态。</p>
@@ -119,7 +117,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" data-id="cj2elgrnf000jgb0v3ra9z44r" class="article-share-link">Share</a>
+      <a data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" data-id="cj2ell810000kll0vtglesb0x" class="article-share-link">Delen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
@@ -131,7 +129,7 @@
 <nav id="article-nav">
   
     <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">Nieuwer</strong>
       <div class="article-nav-title">
         
           深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
@@ -141,7 +139,7 @@
   
   
     <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ouder</strong>
       <div class="article-nav-title">深度学习笔记：稀疏自编码器（2）——反向传导</div>
     </a>
   
@@ -159,7 +157,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Labels</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VMWare/">VMWare</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/图像处理/">图像处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
     </div>
@@ -178,7 +176,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archieven</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
     </div>
@@ -188,7 +186,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Recente berichten</h3>
     <div class="widget">
       <ul>
         

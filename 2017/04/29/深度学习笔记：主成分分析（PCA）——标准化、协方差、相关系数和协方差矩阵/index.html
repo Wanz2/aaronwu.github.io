@@ -5,22 +5,16 @@
   
   <title>深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵 | Aaron Wu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。
-#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念
-1.1 随机变量的部分数字特征&amp;emsp;&amp;emsp;假设有二维随机向量$(X,Y)$|数字特征">
+  <meta name="description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。
-#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念
-1.1 随机变量的部分数字特征&amp;emsp;&amp;emsp;假设有二维随机向量$(X,Y)$|数字特征">
-<meta property="og:updated_time" content="2017-04-29T15:51:00.000Z">
+<meta property="og:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
+<meta property="og:updated_time" content="2017-05-07T11:09:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
-<meta name="twitter:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。
-#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念
-1.1 随机变量的部分数字特征&amp;emsp;&amp;emsp;假设有二维随机向量$(X,Y)$|数字特征">
+<meta name="twitter:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
   
     <link rel="alternate" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
   
@@ -64,7 +58,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wanz2.github.io"></form>
@@ -95,9 +89,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。</p>
+        <h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  </p>
+<a id="more"></a>
 <p>#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念</p>
-<h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|<br><a id="more"></a></p>
+<h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|</p>
 <h2 id="1-2-随机变量的标准化"><a href="#1-2-随机变量的标准化" class="headerlink" title="1.2 随机变量的标准化"></a>1.2 随机变量的标准化</h2><h3 id="1-2-1-为什么要对随机变量进行标准化处理"><a href="#1-2-1-为什么要对随机变量进行标准化处理" class="headerlink" title="1.2.1 为什么要对随机变量进行标准化处理"></a>1.2.1 为什么要对随机变量进行标准化处理</h3><p>&emsp;&emsp;随机变量的标准化，包含以下两点：</p>
 <ol>
 <li>将随机变量的分布中心$E(X)$移至原点，不使分布中心偏左或偏右</li>
@@ -130,7 +125,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" data-id="cj2elgrn8000agb0vbfgfo3uk" class="article-share-link">Share</a>
+      <a data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" data-id="cj2ell80w000dll0vkhjiht2q" class="article-share-link">Delen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
@@ -142,7 +137,7 @@
 <nav id="article-nav">
   
     <a href="/2017/04/30/Java——重写equals-方法/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">Nieuwer</strong>
       <div class="article-nav-title">
         
           Java——重写equals()方法
@@ -152,7 +147,7 @@
   
   
     <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ouder</strong>
       <div class="article-nav-title">深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习</div>
     </a>
   
@@ -170,7 +165,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Labels</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VMWare/">VMWare</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/图像处理/">图像处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
     </div>
@@ -189,7 +184,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archieven</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
     </div>
@@ -199,7 +194,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Recente berichten</h3>
     <div class="widget">
       <ul>
         
