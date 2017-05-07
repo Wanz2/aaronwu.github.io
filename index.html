@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('/undefined') 
+            /*config*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="site-heading">
+                        <h1>Aaron Wu</h1>
+                        <!--<hr class="small">-->
+                        <span class="subheading">Strive for excellence, not perfection.</span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/">
+        <h2 class="post-title">
+            Java——对象的序列化与反序列化（1）
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;最近在学习Java I/O部分的时候，遇到了对象的序列化和反序列化问题，在此做一些笔记，帮助自己熟悉。关于序列化和反序列化将要写两篇博客，第一篇介绍基本序列化与反序列化方法，第二篇将介绍如何自己实现元素的序列化与反序列化问题。  
+
+概念&emsp;&emsp;什么是对象序列化和反序列化？《Thinking in Java》中的解释是这样的：  
+
+Java的对象序列......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-05-05
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/">
+        <h2 class="post-title">
+            Java——JDBC执行SQL语句的两种方式
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  
+
+&emsp;&emsp;使用JDBC前首先要在项目中导入数据库驱动jar包，本文使用的是MySQL，IDE使用的是Intellij IDEA，导入驱动的过程在此不赘述。&emsp;&emsp;使用JDBC执行SQL语句共分为三步：&emsp;......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-05-04
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/30/Java——利用Collections.sort()对List排序/">
+        <h2 class="post-title">
+            Java——利用Collections.sort()对泛型为String的List排序
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;本文利用Collections.sort()对泛型为String的List排序  
+
+练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  
+
+创建完List之后，往其中添加十条随机字符串  
+每条字符串的长度为10以内的随机整数  
+每条字符串的每个字符都为随机生成的字符，字符可以重复  
+每条随机字符串不可重复  
+
+......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-30
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/30/Java——重写equals-方法/">
+        <h2 class="post-title">
+            Java——重写equals()方法
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;在Java中，自定义类默认继承Object类，因此也继承了Object中的equals方法，Object类中的equals方法定义如下：
+123 public boolean equals(Object obj) &#123;    return (this == obj);&#125;
+&emsp;&emsp;这里很简单地返回了两个对象的地址是否相等。但在通常的使用......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-30
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">
+        <h2 class="post-title">
+            深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  
+
+#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念
+1.1 随机变量的部分数字特征&emsp;&emsp;假设有二维随机向量$(X,Y)......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-29
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/">
+        <h2 class="post-title">
+            深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见Exercise:Sparse Autoencoder，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-29
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">
+        <h2 class="post-title">
+            深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。
+
+0.本文中使用的符号&emsp;&emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号|符号|描述||—|—||$m$|样本总数||$......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-29
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">
+        <h2 class="post-title">
+            深度学习笔记：稀疏自编码器（2）——反向传导
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。  
+
+0.本文中所使用的符号和一些约定本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$其他符号：|符号|描述||—|—||$(x^{(j)},y^{(......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-29
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">
+        <h2 class="post-title">
+            深度学习笔记：稀疏自编码器（1）————神经元与神经网络
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见UFLDL教程，看完教程之后再来看本文可能会更加清晰。  
+
+0. 本文中使用的符号一览及本文中的一些约定
+
+
+符号
+描述
+
+
+
+
+$x$
+......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-29
+        </p>
+    
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/04/06/压缩感知算法原理/">
+        <h2 class="post-title">
+            压缩感知算法原理
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            &emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  
+
+1. 本文中使用的符号一览传统正交变换中：
+
+
+符号
+维度
+描述
+
+
+
+
+$x$
+$R^{N\times 1}$
+原始信号
+
+
+$y$
+$R^{N\times 1}$
+压缩后的信号，不稀疏
+
+
+$\hat{y}$
+$R^{N\times 1}$
+由$y$中$K$个分量放在对应位置构成，其余位置为0，是$K$-稀疏的......
+        </div>
+    </a>
+    
+        <p class="post-meta">
+            Posted by Aaron Wu on
+            2017-04-06
+        </p>
+    
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
+    
+</ul>
+
+
+
+                <!-- 如果开启评论功能 -->
+                
+            </div>
+
+          <!-- Sidebar Container -->
+<div class="
+    col-lg-3 col-lg-offset-0
+    col-md-3 col-md-offset-0
+    col-sm-12
+    col-xs-12
+    sidebar-container
+">
+    
+        <!-- Featured Tags -->
+
+        <hr>
+    
+        <!-- Short About -->
+<section class="visible-md visible-lg">
+    <h5><a href="/about/">ABOUT ME</a></h5>
+    <div class="short-about">
+
+        
+
+        
+
+        <!-- SNS Link -->
+        <ul class="list-inline">
+            
+            
+            
+
+            
+
+            
+
+            
+            
+            
+            
+        </ul>
+    </div>
+</section>
+        <hr>
+    
+        
+  <h5>RECENT POSTS</h3>
+  <div class="widget">
+    <ul>
+      
+        <li>
+          <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/">Java——对象的序列化与反序列化（1）</a>
+        </li>
+      
+        <li>
+          <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/">Java——JDBC执行SQL语句的两种方式</a>
+        </li>
+      
+        <li>
+          <a href="/2017/04/30/Java——利用Collections.sort()对List排序/">Java——利用Collections.sort()对泛型为String的List排序</a>
+        </li>
+      
+        <li>
+          <a href="/2017/04/30/Java——重写equals-方法/">Java——重写equals()方法</a>
+        </li>
+      
+        <li>
+          <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a>
+        </li>
+      
+    </ul>
+  </div>
+
+        <hr>
+    
+        <!-- Friends Blog -->
+
+        <hr>
+    
+</div>
+
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          深度学习笔记：稀疏自编码器（2）——反向传导 - undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('undefined')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+                            
+                        </div>
+                        <h1>深度学习笔记：稀疏自编码器（2）——反向传导</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Aaron Wu on
+                            2017-04-29
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。  </p>
+<a id="more"></a>
+<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>其他符号：<br>|符号|描述|<br>|—|—|<br>|$(x^{(j)},y^{(j)})$|第$j$个样本|<br>|$m$|样本总数|<br>|$(x,y)$|单个样本|<br>|$x<em>i$|第$i$个输入值|<br>|$f()$|神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$|<br>|$W</em>{ij}^{(l)}$|神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值|<br>|$b_i^{(l)}$|第$l+1$层第$i$个神经元输入的偏置项|<br>|$n_l$|神经网络的总层数|<br>|$L_l$|第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$|<br>|$s_l$|第$l$层的节点数（不包括偏置单元）|<br>|$a_i^{l}$|第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$|<br>|$z_i^{(l)}$|第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z<em>i^{(l)})$|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
+<h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：<br>$J(W,b;x,y)=\frac{1}{2}|h<em>{w,b}(x)-y|^{2}$<br>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：<br>$J(W,b)<br>=[\frac{1}{m}\sum</em>{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum<em>{l=1}^{n</em>{l}-1}\sum<em>{i=1}^{s</em>{l}}\sum<em>{j=1}^{s</em>{l+1}}(W<em>{ji}^{(l)})^{2}$<br>&emsp;&emsp;&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum</em>{i=1}^{m}(\frac{1}{2}|h<em>{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum</em>{l=1}^{n<em>{l}-1}\sum</em>{i=1}^{s<em>{l}}\sum</em>{j=1}^{s<em>{l+1}}(W</em>{ji}^{(l)})^{2}$<br>其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性</p>
+<h2 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2.梯度下降"></a>2.梯度下降</h2><p>&emsp;&emsp;为了优化代价函数，要进行以下几步：</p>
+<ol>
+<li>初始化每一个参数$W_{ij}^{(l)}$和$b_i^{(l)}$为很小的接近零的随机值</li>
+<li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：<br>$W<em>{ij}^{(l)}=W</em>{ij}^{(l)}-\alpha\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)$<br>$b</em>{i}^{(l)}=b<em>{i}^{(l)}-\alpha\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b)$<br>其中$\alpha$是学习速率。<br>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。<h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2>&emsp;&emsp;我们将求偏导的项单独拿出来看：<br>$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W</em>{ij}^{(l)}$&emsp;&emsp;&emsp;(1)<br>$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)<br>&emsp;<br>&emsp;&emsp;显然，求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$。<br>&emsp;&emsp;由于：<br>$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{l+1}}{\partial W<em>{ij}^{l}}$&emsp;&emsp;&emsp;(3)<br>$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{(l+1)}}{\partial b<em>{i}^{(l)}}$&emsp;&emsp;&emsp;(4)<br>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta<em>{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。<br>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$可得：<br>$\delta_{i}^{(n<em>l)}=-(y</em>{i}-a_{i}^{(n<em>l)})f’(z</em>{i}^{(n<em>l)})$<br>$\delta</em>{i}^{(l)}=(\sum<em>{j=1}^{s</em>{l+1}}W<em>{ji}^{(l)}\delta</em>{j}^{(l+1)})f’(z_{i}^{(l)})$<br>通过以上第一式可以求出第$n<em>l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：<br>$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\delta <em>{i}^{(l+1)}a</em>{j}^{(l)}$&emsp;&emsp;&emsp;(5)<br>$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\delta</em>{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)<br>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。</li>
+</ol>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" data-toggle="tooltip" data-placement="top" title="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" data-toggle="tooltip" data-placement="top" title="深度学习笔记：稀疏自编码器（1）————神经元与神经网络">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

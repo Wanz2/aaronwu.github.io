@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          深度学习笔记：稀疏自编码器（1）————神经元与神经网络 - undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('undefined')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+                            
+                        </div>
+                        <h1>深度学习笔记：稀疏自编码器（1）————神经元与神经网络</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Aaron Wu on
+                            2017-04-29
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>&emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见<a href="http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">UFLDL教程</a>，看完教程之后再来看本文可能会更加清晰。  </p>
+<a id="more"></a>
+<h2 id="0-本文中使用的符号一览及本文中的一些约定"><a href="#0-本文中使用的符号一览及本文中的一些约定" class="headerlink" title="0. 本文中使用的符号一览及本文中的一些约定"></a>0. 本文中使用的符号一览及本文中的一些约定</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>输入值向量，为$n$维</td>
+</tr>
+<tr>
+<td>$x_i$</td>
+<td>第$i$个输入值</td>
+</tr>
+<tr>
+<td>$f()$</td>
+<td>神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$</td>
+</tr>
+<tr>
+<td>$W_{ij}^{(l)}$</td>
+<td>神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值</td>
+</tr>
+<tr>
+<td>$b_i^{(l)}$</td>
+<td>第$l+1$层第$i$个神经元输入的偏置项</td>
+</tr>
+<tr>
+<td>$n_l$</td>
+<td>神经网络的总层数</td>
+</tr>
+<tr>
+<td>$L_l$</td>
+<td>第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$</td>
+</tr>
+<tr>
+<td>$s_l$</td>
+<td>第$l$层的节点数（不包括偏置单元）</td>
+</tr>
+<tr>
+<td>$a_i^{l}$</td>
+<td>第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$</td>
+</tr>
+<tr>
+<td>$z_i^{(l)}$</td>
+<td>第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z_i^{(l)})$</td>
+</tr>
+<tr>
+<td>$h_{W,b}(x)$</td>
+<td>输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
+<h2 id="1-神经元"><a href="#1-神经元" class="headerlink" title="1. 神经元"></a>1. 神经元</h2><h3 id="1-1-神经元定义"><a href="#1-1-神经元定义" class="headerlink" title="1.1 神经元定义"></a>1.1 神经元定义</h3><p>&emsp;&emsp;神经元是以$x$为输入，$h_{W,b}$为输出的运算单元，如图所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png" alt="此处输入图片的描述"></p>
+<h3 id="1-2-激活函数"><a href="#1-2-激活函数" class="headerlink" title="1.2 激活函数"></a>1.2 激活函数</h3><p>&emsp;&emsp;通常在神经元中输出值为0表示神经元被激活，输出为1表示神经元被抑制，而计算输出值所用的函数则被称为“激活函数”。本文中所用的激活函数为sigmoid函数：$f(z)=\frac{1}{1+e^{(-z)}}$，其定义域为$(-\infty,+\infty)$，值域为$(0,1)$。以上图神经元为例，假设第$i$个输入值与神经元连线上的权重为$w_1$，输入值偏置项为$b<em>1$，在单个神经元中，有$h</em>{W,b}(x)=f(x_1w_1+x_2w_2+x_3w_3+b_1)$。观察可以发现，单个神经元就是一个<strong>逻辑回归</strong>模型。</p>
+<h2 id="2-神经网络"><a href="#2-神经网络" class="headerlink" title="2. 神经网络"></a>2. 神经网络</h2><h3 id="2-1-神经网络定义"><a href="#2-1-神经网络定义" class="headerlink" title="2.1 神经网络定义"></a>2.1 神经网络定义</h3><p>&emsp;&emsp;神经网络就是将多个神经元连在一起，前一层神经元的输出就是后一层神经元的输入，下图是一个三层神经网络：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png" alt="此处输入图片的描述"><br>以上图为例，最左边一层为<strong>输入层</strong>，中间一层为<strong>隐藏层</strong>，最右边一层为<strong>输出层</strong>。</p>
+<h3 id="2-2-前向传播"><a href="#2-2-前向传播" class="headerlink" title="2.2 前向传播"></a>2.2 前向传播</h3><p>&emsp;&emsp;前向传播就是使用输入值$x$通过神经网络计算出输出值$h_{W,b}(x)$的过程。以上图神经网络为例，前向传播中每一个神经元输入输出过程如下：<br>令$z_i^{(l)}$表示第$l$层第$i$个神经元的输入值，有<br>$z<em>i^{(l+1)}=W</em>{i1}^{(l)}x<em>1+W</em>{i2}^{(l)}x<em>2+W</em>{i3}^{(l)}x_3+b_i^{(l)}$ （这里其实是一个<strong>线性回归</strong>模型）<br>$a_i^{(l)}=f(z<em>i^{(l)})$<br>$h</em>{W,b}(x)=a_1^{(3)}$</p>
+<h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z<em>3)]$<br>则上图神经网络中的前向传播过程可表示为：<br>$z^{(2)}=W^{(1)}x+b^{(1)}$<br>$a^{(2)}=f(z^{(2)})$<br>$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$<br>$h</em>{W,b}(x)=f(z^{(3)})$<br>下面以$z^{(2)}=W^{(1)}x+b^{(1)}$为例，展开一下具体的矩阵表示，其他式子略：<br>$\begin{pmatrix}z_1^{(2)}\ z_2^{(2)}\ z<em>3^{(2)}\end{pmatrix}=\begin{pmatrix}W</em>{11}^{(1)}&amp; W<em>{12}^{(1)} &amp; W</em>{13}^{(1)}\ W<em>{21}^{(1)}&amp; W</em>{22}^{(1)} &amp; W<em>{23}^{(1)}\ W</em>{31}^{(1)}&amp; W<em>{32}^{(1)} &amp; W</em>{33}^{(1)} \end{pmatrix} \begin{pmatrix} x_1\ x_2\ x_3 \end{pmatrix}+ \begin{pmatrix}b_1^{(1)} \ b_2^{(1)}\ b_3^{(1)} \end{pmatrix}$<br>最终，神经网络前向传播过程可表示为：<br>$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$<br>$a^{(l+1)}=f(z^{(l+1)})$</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" data-toggle="tooltip" data-placement="top" title="深度学习笔记：稀疏自编码器（2）——反向传导">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/06/压缩感知算法原理/" data-toggle="tooltip" data-placement="top" title="压缩感知算法原理">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

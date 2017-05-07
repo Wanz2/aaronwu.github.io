@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 - undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('undefined')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#VMWare" title="VMWare">VMWare</a>
+                            
+                        </div>
+                        <h1>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Aaron Wu on
+                            2017-04-01
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>&emsp;&emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：</p>
+<ol>
+<li>VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</li>
+<li>Windows主机中配置Xshell工具以远程控制虚拟系统<a id="more"></a>
+</li>
+</ol>
+<h1 id="二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><a href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置" class="headerlink" title="二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置"></a>二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</h1><ol>
+<li>在VMware中配置NAT网络模式<br> 1.1 在虚拟机设置中将网络适配器设置为NAT模式<br><img src="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500" alt=""><br> 1.2 在VMware工具栏点击“编辑”-“虚拟网络编辑器”，在弹出的窗口中选择“更改设置”<br><img src="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500" alt=""><br> 1.3 在弹出的窗口中选择VMnet8，并将其VMnet信息选择为NAT模式，点击“NAT设置”<br><img src="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500" alt=""><br> 1.4 在弹出的窗口中，记住“网关IP”，之后配置IP地址会用到。在“端口转发”中选择“添加”<br><img src="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500" alt=""><br> 1.5 在弹出的窗口中进行如下配置，其中主机端口可以自行设定，推荐设定值范围在10000和65535之间；虚拟机IP地址的前三位与上一步中网关地址的前三位相同，表示网段，虚拟机IP地址的最后一位可自行设定；虚拟机端口设置为22，为SSH协议的默认接口；“描述”选项可自行设定。设定结束后选择“确定”，在上一级窗口中选择“应用”并确定，至此VMware中的NAT网络配置结束。<br><img src="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500" alt=""></li>
+<li>在CentOS中配置静态IP地址<br> 2.1 打开CentOS，输入<pre><code>  `ifconfig`
+查看网卡信息，注意信息中的网卡名：
+</code></pre><img src="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500" alt=""><pre><code>上图中“eth0”即为网卡名，表示第一块网卡
+</code></pre> 2.2 静态IP地址配置主要用到以下三个文件：<pre><code>  `/etc/sysconfig/network-scripts/ifcfg-eth0`
+  `/etc/sysconfig/network`
+  `/etc/resolv.conf`
+注意：第一个文件名中的“ifcfg-eth0”可能有所不同，实际使用时根据上一步中查看的网卡名进行设置
+</code></pre> 2.3 首先编辑<code>/etc/sysconfig/network</code>，配置如下：<br><img src="http://img.blog.csdn.net/20161015045435665?imageView/2/w/500" alt=""><pre><code>其中GATEWAY即为之前查看到的网关地址
+</code></pre> 2.4 其次编辑<code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>，若找不到该文件，则说明网卡eth0尚未启动，则可以创建该文件并配置如下：<br><img src="http://img.blog.csdn.net/20161015045508291?imageView/2/w/500" alt=""><pre><code>其中IP地址为之前在NAT设置中配置的IP地址，NETMASK为子网掩码，GATEWAY即默认网关地址
+注意：DNS1和DNS2必须填写，若不填写则无法进行域名解析，其中DNS1与GATEWAY地址相同，而DNS2则可选择常用的DNS服务器地址，这里使用的8.8.8.8是谷歌的DNS服务器
+</code></pre> 2.5 上一步配置完成后，系统会在<code>/etc/resolv.conf</code>文件中自动写入DNS服务器地址，如图：<br><img src="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500" alt=""><br> 2.6 配置完成后输入命令<code>service network restart</code>重启网络服务，至此静态IP配置完成，虚拟CentOS的IP地址为192.168.81.23</li>
+<li>打开ssh服务<br> 3.1 在配置Xshell前，要在系统中打开ssh服务，输入如下命令<br> 打开ssh服务：<code>service sshd start</code><br> 设置开机运行ssh：<code>chkconfig sshd on</code></li>
+</ol>
+<h1 id="三、配置Xshell工具"><a href="#三、配置Xshell工具" class="headerlink" title="三、配置Xshell工具"></a>三、配置Xshell工具</h1><ol>
+<li>打开Xshell工具，选择“文件”-“新建”，在弹出窗口选择“连接”，作如下配置：<br><img src="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500" alt=""><br> a. 协议选择SSH<br> b. 由于已经将主机的10023端口映射为虚拟机的22号端口，因此主机设置为127.0.0.1，端口号设置为步骤1.5中设置的“主机端口号”，即10023</li>
+<li>在“用户身份验证”中输入登录用帐号密码：<br><img src="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500" alt=""></li>
+<li>配置成功，点击连接即可接入虚拟系统</li>
+</ol>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/06/压缩感知算法原理/" data-toggle="tooltip" data-placement="top" title="压缩感知算法原理">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/" data-toggle="tooltip" data-placement="top" title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

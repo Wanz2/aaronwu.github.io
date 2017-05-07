@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          压缩感知算法原理 - undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/06/压缩感知算法原理/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('undefined')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#图像处理" title="图像处理">图像处理</a>
+                            
+                        </div>
+                        <h1>压缩感知算法原理</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Aaron Wu on
+                            2017-04-06
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  </p>
+<a id="more"></a>
+<h2 id="1-本文中使用的符号一览"><a href="#1-本文中使用的符号一览" class="headerlink" title="1. 本文中使用的符号一览"></a>1. 本文中使用的符号一览</h2><h3 id="传统正交变换中："><a href="#传统正交变换中：" class="headerlink" title="传统正交变换中："></a>传统正交变换中：</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>$R^{N\times 1}$</td>
+<td>原始信号</td>
+</tr>
+<tr>
+<td>$y$</td>
+<td>$R^{N\times 1}$</td>
+<td>压缩后的信号，不稀疏</td>
+</tr>
+<tr>
+<td>$\hat{y}$</td>
+<td>$R^{N\times 1}$</td>
+<td>由$y$中$K$个分量放在对应位置构成，其余位置为0，是$K$-稀疏的</td>
+</tr>
+</tbody>
+</table>
+<h3 id="压缩感知算法中："><a href="#压缩感知算法中：" class="headerlink" title="压缩感知算法中："></a>压缩感知算法中：</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>$R^{N\times 1}$</td>
+<td>原始信号</td>
+</tr>
+<tr>
+<td>$y$</td>
+<td>$R^{M\times 1}$</td>
+<td>压缩感知的<strong>观测向量</strong>，是$x$的$M$个线性度量</td>
+</tr>
+<tr>
+<td>$s$</td>
+<td>$R^{N\times 1}$</td>
+<td>信号$x$在$\Psi$域的稀疏表示，是$K$-稀疏的</td>
+</tr>
+<tr>
+<td>$\Psi$</td>
+<td>$C^{N\times N}$</td>
+<td><strong>稀疏矩阵</strong>，为正交变换矩阵</td>
+</tr>
+<tr>
+<td>$\Psi^\mathrm{H}$</td>
+<td>$C^{N\times N}$</td>
+<td>正交变换矩阵$\Psi$的转置矩阵</td>
+</tr>
+<tr>
+<td>$\Phi$</td>
+<td>$R^{M\times N}$</td>
+<td>称为<strong>测量矩阵</strong>，有$M\ll N$</td>
+</tr>
+<tr>
+<td>$T$</td>
+<td>$R^{M\times N}$</td>
+<td>$T=\Phi\Psi^\mathrm{H}$，称为<strong>传感矩阵</strong></td>
+</tr>
+<tr>
+<td>$\delta$</td>
+<td>$1\times 1$</td>
+<td>一个较小的正的常数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-压缩感知算法目的"><a href="#2-压缩感知算法目的" class="headerlink" title="2. 压缩感知算法目的"></a>2. 压缩感知算法目的</h2><p>&emsp;&emsp;压缩感知算法的目的是采集很少一部分数据，并希望从中“解压缩”出大量信息，达到恢复原信号的效果</p>
+<h2 id="3-采集策略"><a href="#3-采集策略" class="headerlink" title="3. 采集策略"></a>3. 采集策略</h2><p>&emsp;&emsp;a. 少量的采集到的数据包含了原信号的全局信息<br>&emsp;&emsp;b. 存在一种算法能够从这些少量的数据中还原出原先的信息来</p>
+<h2 id="4-传统解决思路——正交变换"><a href="#4-传统解决思路——正交变换" class="headerlink" title="4. 传统解决思路——正交变换"></a>4. 传统解决思路——正交变换</h2><h3 id="4-1-步骤"><a href="#4-1-步骤" class="headerlink" title="4.1 步骤"></a>4.1 步骤</h3><ol>
+<li>对于原始信号$x\in R^{N\times 1}$，可以通过正交变换来进行压缩，正变换：$y=\Psi x$，反变换$x=\Psi^\mathrm{H}y$。<br>这里$\Psi$是正交矩阵，有$\Psi\Psi^\mathrm{H}=\Psi^\mathrm{H}\Psi=I$，亦即$\Psi^\mathrm{H}=\Psi^\mathrm{-1}$，$\Psi\in C^{N\times N}$，$I$是单位矩阵。</li>
+<li>对于$y\in C^{N\times 1}$，能量较$x$集中，本质上去除了$x$中的相关性。因此，我们只保留$K$个较大分量，而把其他$N-K$个置为零，通过反变换，我们能够近乎完美的重建原始信号 ，具有这样性质的信号被称为$K$“稀疏”的。</li>
+</ol>
+<h3 id="4-2-编码解码策略"><a href="#4-2-编码解码策略" class="headerlink" title="4.2 编码解码策略"></a>4.2 编码解码策略</h3><p>&emsp;&emsp;编码：构造$\Psi $，做正变换$y=\Psi x$，保留$y$中最重要的$K$个分量和其对应位置。<br>&emsp;&emsp;解码：把$K$个分量放回到对应位置，其他位置填上0，构造$\Psi^\mathrm{H}$，反变换$\hat{x}=\Psi^\mathrm{H} \hat{y}$。</p>
+<h3 id="4-3-压缩误差分析"><a href="#4-3-压缩误差分析" class="headerlink" title="4.3 压缩误差分析"></a>4.3 压缩误差分析</h3><p>&emsp;&emsp;显然，我们希望$|x-\hat{x}|_2=|y-\hat{y}|_2\leq \delta$，$\delta$是一个小的常数。<br>&emsp;&emsp;但更有效的是利用<font style="color:red;">相对误差</font> $\frac{|y-\hat{y}|_2}{|y|_2}\leq\delta$。</p>
+<h2 id="5-新的思路——压缩传感"><a href="#5-新的思路——压缩传感" class="headerlink" title="5. 新的思路——压缩传感"></a>5. 新的思路——压缩传感</h2><h3 id="5-1-压缩传感思想："><a href="#5-1-压缩传感思想：" class="headerlink" title="5.1 压缩传感思想："></a>5.1 压缩传感思想：</h3><p>&emsp;&emsp;对于信号，$x\in R^{N\times 1}$，我们可以找到它的$M$个线性测量（Linear Measurement，意即降维后的信号为$M$维），$y=\Phi x，\Phi\in R^{M\times N}$。</p>
+<p>&emsp;&emsp;$\Phi$中的每一行看作一个传感器，它与信号相乘，拾取了信号的一部分信息。拥有了这$M$个测量（即$y$）和$\Phi$，我们就可以近乎完美的重构原始信号了。</p>
+<p>&emsp;&emsp;<strong>那么已知$y$和$\Phi$如何重构信号？这是一个最优化问题，根据以下式子:</strong></p>
+  <p align="center">目标函数$min|s|_0$，且满足等式约束    $\Phi\Psi^\mathrm{H}s=y$<br>或者可以写成<br>$min|y-\Phi\Psi^\mathrm{H}s|_2+\lambda|s|_0$</p>
+
+<p>可以求得$s$。<br>&emsp;&emsp;因为$\Phi\Psi^\mathrm{H}s=\Phi\hat{x}=y$，所以$\hat{x}=\Psi^\mathrm{H}s$，这里就是传统方法正交变换中用$s$恢复$x$的方法，这里的$s$是K-sparse的。</p>
+<h3 id="5-2-根据以上分析，可以得出编码解码策略"><a href="#5-2-根据以上分析，可以得出编码解码策略" class="headerlink" title="5.2 根据以上分析，可以得出编码解码策略"></a>5.2 根据以上分析，可以得出编码解码策略</h3><p>&emsp;&emsp;编码：针对原始信号$x$构造$\Phi$，生成测量$y=\Phi x$，保留$y$。<br>&emsp;&emsp;解码：构造同样的$\Phi$，构造<font style="color:red">任一种正交变换$\Psi^\mathrm{H}$</font>，根据$y$重构$x$。</p>
+<hr>
+<p>&emsp;&emsp;到这里，我们已经知道通过$y$恢复$x$的大致步骤，那么具体怎样操作呢？有这样三个关键问题：<br>&emsp;&emsp;(1) 观测矩阵$\Phi$的选择需要满足什么性质？<br>&emsp;&emsp;(2) 如何最优化本文4.1中 $min|y-\Phi\Psi^\mathrm{H}s|_2+\lambda|s|_0$ 这个函数以求出$s$呢？<br>&emsp;&emsp;下文将针对上述两个问题进行分析</p>
+<hr>
+<h3 id="5-3-观测矩阵-Phi-需要满足的性质"><a href="#5-3-观测矩阵-Phi-需要满足的性质" class="headerlink" title="5.3 观测矩阵$\Phi$需要满足的性质"></a>5.3 观测矩阵$\Phi$需要满足的性质</h3><p>&emsp;&emsp;1. 随机性。$\Phi$可以是高斯分布的白噪声矩阵，或伯努利分布的$\pm1$矩阵。<br>&emsp;&emsp;2. 使线性测量有稳定的能量性质，即满足$1-\delta\leq\frac{|\Phi\Psi^\mathrm{H}s|_2}{|s|_2}\leq1+\delta$，也就是它要保持$K$个重要分量的长度。<br>&emsp;&emsp;3. 实际运用中，对$\Phi$的维度有要求，$y$的长度一般是重要分量长度的4倍，才能近乎完美重构。即$M\approx4K$或者$M\geq Klog_2(\frac{N}{K})$。</p>
+<h3 id="5-4-如何解决4-1中提出的优化问题"><a href="#5-4-如何解决4-1中提出的优化问题" class="headerlink" title="5.4 如何解决4.1中提出的优化问题"></a>5.4 如何解决4.1中提出的优化问题</h3><p>&emsp;&emsp;对于$min|y-\Phi\Psi^\mathrm{H}s|_2+\lambda|s|_0$ 的优化，其中的0-范数优化问题是NP难问题，因此我们必须要换成1-范数进行优化，而1-范数优化是一个凸优化问题。</p>
+<h4 id="5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"><a href="#5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？" class="headerlink" title="5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"></a>5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？</h4><p>&emsp;&emsp;我们把问题放到二维空间来看：<br>&emsp;&emsp;在二维空间里，假设$s$有两个分量$(s_1,s_2)$，则假设$y$为1维向量，也就是一个数。<br>&emsp;&emsp;假设我们使用2-范数那么根据文章思路，令$T=\Phi\Psi^\mathrm{H}$，则有$y=Ts$。<br>&emsp;&emsp;<strong>那么问题就变成了在满足等式约束$y=Ts$的情况下，求$|s|_2$的最小值。</strong><br>&emsp;&emsp;$y=Ts$是二维空间中的一个超平面，为了简化，在2-D问题中看作一条直线；而$|s|_2^2=s_1^2+s_2^2$，即为半径为$|s|_2$的圆，要求该圆半径的最小值。直线和圆的关系在二维空间中如图所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90" alt="此处输入图片的描述"><br>我们将圆的半径逐渐增大，直到与$y=Ts$相切时，有$|s|_2^2$最小，此时圆与直线的交点坐标即为$s$的两个分量值，此时的$s$几乎不可能是稀疏的。<br>&emsp;&emsp;因此我们考虑$\hat{y}$的1-范数，那么问题变成了在满足$y=Ts$的情况下，求$|s|_1$的最小值。$|s|_1=|s_1|+|s_2|$，该函数在二维空间中的图如下所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/L1.png?imageView/2/w/300/q/90" alt="此处输入图片的描述"><br>我们将菱形边长从原点开始逐渐增大，直到与直线$y=Ts$相切位置，菱形与直线的交点即为$s$的两个分量值，此时有很大可能性该交点在坐标轴上，因此所求$s$很可能是稀疏的。</p>
+<h4 id="5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><a href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法" class="headerlink" title="5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"></a>5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</h4><p>&emsp;&emsp;对于$y=Ts$,由于$s$是$K$稀疏的，我们要找其$K$个分量，这$K$个分量系数的绝对值应该比其他$N-K$个分量的系数大得多。<br>&emsp;&emsp;我们先假设$K=1$，此时唯一非零元素$s_q$在$s$中对应的位置在$q$。则$Ts$就是恢复矩阵$T$的第$q$列$T_q$与$s$中的非零元素$s_q$的乘积，即$T_qs_q=y_q$，且$\frac{|y-y_q|_2}{|y|_2}&lt;\delta$。换句话说，$T$的第$q$列与$y$的相似程度最高，即$|<t_q,y>|=|T_q^\mathrm{H}y|&gt;&gt;|T_r^\mathrm{H}y|=|<t_r,y>|, r\neq q$。所以，我们只要计算恢复矩阵$T$的所有列与$y$的内积，找到内积绝对值最大的那列就行了，该列对应的位置就是$q$。根据最小二乘法，$s_q=(T_q^\mathrm{H}T_q)^{-1}T_q^\mathrm{H}y$，就是使$|y-T_qs_q|_2$最小的那个$s_q$。此时余量$r_n=y-\frac{<t_q,y>}{<t_q,t_q>}T_q$，始终同$T<em>q$正交，很像施密特正交化方法。<br>&emsp;&emsp;当$K=2$，则$s$有两个非零元素$s</em>{q1}$和$s<em>{q2}$，其在$s$中的位置分别为$q1$和$q2$。则$T$的第$q1$和$q2$列与$y$的相似程度最高。我们要找到使$|y-(T</em>{q2},T<em>{q1})\begin{pmatrix} s</em>{q2}\ s_{q1} \end{pmatrix}|<em>2$最小的那个$\begin{pmatrix} s</em>{q2}\ s<em>{q1} \end{pmatrix}$。这里$T</em>{q1}$是我们第一次找到的那一列，$T_{q2}$是我们要重新找的那一列。此时我们找到两个在变换域最关键的元素和其在$s$中对应的位置了。令$T<em>q=(T</em>{q2},T_{q1})$，余量$r_n$又一次被写为$r_n=y-\frac{<t_q,y>}{<t_q,t_q>}T_q$。<br>&emsp;&emsp;当$K&gt;1$时，类似上面的步骤，迭代找到变换域中$K$个最重要的分量。正交匹配的迭代次数$m\geq K$，实际上操作只要满足$\frac{|r_n|_2}{|y|_2}&lt;\delta$，迭代就可以中止了。</t_q,t_q></t_q,y></t_q,t_q></t_q,y></t_r,y></t_q,y></p>
+<p>  主要参考：</p>
+<ol>
+<li><a href="http://blog.csdn.net/abcjennifer/article/details/7748833" target="_blank" rel="external">http://blog.csdn.net/abcjennifer/article/details/7748833</a></li>
+<li>《“压缩传感”引论》.沙威.香港大学</li>
+</ol>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" data-toggle="tooltip" data-placement="top" title="深度学习笔记：稀疏自编码器（1）————神经元与神经网络">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-toggle="tooltip" data-placement="top" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

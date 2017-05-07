@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          深度学习笔记：稀疏自编码器（3）——稀疏自编码算法 - undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('undefined')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
+                            
+                        </div>
+                        <h1>深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Aaron Wu on
+                            2017-04-29
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>&emsp;&emsp;有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。稀疏自编码器属于非监督学习，主要通过尝试学习一个$h_{W,b}(x)\approx x$的函数，来提取输入值$x$中的特征。</p>
+<a id="more"></a>
+<h2 id="0-本文中使用的符号"><a href="#0-本文中使用的符号" class="headerlink" title="0.本文中使用的符号"></a>0.本文中使用的符号</h2><p>&emsp;&emsp;本文中使用的符号大体与上一篇文章相同，在此仅列出一些新增加的符号和需要注意的符号<br>|符号|描述|<br>|—|—|<br>|$m$|样本总数|<br>|$a<em>{j}^{(2)}$|第2层第$j$个神经元的激活度|<br>|$a</em>{j}^{(2)}(x)$|在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度|<br>|$\hat{\rho<em>{j}}$|$\hat{\rho</em>{j}}=\frac{1}{m}\sum<em>{i=1}^{m}[a</em>{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度|<br>|$\rho$|表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制|<br>|$s<em>2$|第2层（隐藏层）神经元的数量|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|</p>
+<h2 id="1-什么是稀疏自编码器"><a href="#1-什么是稀疏自编码器" class="headerlink" title="1.什么是稀疏自编码器"></a>1.什么是稀疏自编码器</h2><p>&emsp;&emsp;先上图：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png" alt="此处输入图片的描述"><br>&emsp;&emsp;上图为有一个隐藏层的稀疏自编码器示意图。稀疏自编码器为非监督学习，其所使用的样本集${x^{(1)},x^{(2)},…,x^{(m)}}$为没有类别标记的样本，我们希望令输出值$h_{W,b}(x)$与输入值$x$近似相等。</p>
+<h2 id="2-为什么要用稀疏自编码器"><a href="#2-为什么要用稀疏自编码器" class="headerlink" title="2.为什么要用稀疏自编码器"></a>2.为什么要用稀疏自编码器</h2><p>&emsp;&emsp;由于为数据人工增加类别标记是一个非常麻烦的过程，我们希望机器能够自己学习到样本中的一些重要特征。通过对隐藏层施加一些限制，能够使得它在恶劣的环境下学习到能最好表达样本的特征，并能有效地对样本进行降维。这种限制可以是对隐藏层稀疏性的限制。</p>
+<h2 id="3-稀疏性限制"><a href="#3-稀疏性限制" class="headerlink" title="3.稀疏性限制"></a>3.稀疏性限制</h2><h3 id="3-1稀疏性"><a href="#3-1稀疏性" class="headerlink" title="3.1稀疏性"></a>3.1稀疏性</h3><p>&emsp;&emsp;当使用sigmoid函数作为激活函数时，若神经元输出值为1，则可认为其被激活，若神经元输出值为0，则可认为其被抑制（使用tanh函数时，代表激活和抑制的值分别为1和-1）。稀疏性限制就是要保证大多数神经元输出为0，即被抑制的状态。</p>
+<h3 id="3-2如何限制隐藏层稀疏性"><a href="#3-2如何限制隐藏层稀疏性" class="headerlink" title="3.2如何限制隐藏层稀疏性"></a>3.2如何限制隐藏层稀疏性</h3><p>&emsp;&emsp;在本文开始所给出的稀疏自编码网络中，为了限制隐藏结点稀疏性，可以进行如下表示：</p>
+<ol>
+<li>使用$a_{j}^{(2)}$表示第2层第$j$个神经元的激活度。</li>
+<li>使用$a_{j}^{(2)}(x)$表示在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度。</li>
+<li>使用$\hat{\rho<em>{j}}=\frac{1}{m}\sum</em>{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度。</li>
+<li>使用$\rho$表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制。<br>&emsp;&emsp;我们希望$\hat{\rho_{j}}$和$\rho$越接近越好，因此我们要对这两者有显著差异的情况进行惩罚，惩罚使用KL散度。</li>
+</ol>
+<hr>
+<p><strong>PS. 什么是KL散度？</strong><br>&emsp;&emsp;KL散度又称相对熵，是对两个概率分布P和Q差异的非对称性度量，非对称性意味着$D(P|Q)\neq D(Q|P)$，$D(P|Q)$表示用概率分布$Q$来拟合概率分布$P$时所产生的信息损耗。其定义为：<br>给定随机变量$s$，若为<br>离散型随机变量：$D(P|Q)=\sum(p(i)log(\frac{p(i)}{q(i)}))$，此处p和q表示随机变量的分布律，$p(i)$表示随机变量$s$取$i$的概率<br>连续型随机变量：$D(P|Q)=\int p(s)log(\frac{p(s)}{q(s)})d(s)$，此处$p$和$q$表示随机变量$s$的概率密度<br>&emsp;&emsp;KL散度的性质是，当$P=Q$时值为0，随着$P$和$Q$差异增大而递增。</p>
+<hr>
+<p>&emsp;&emsp;在这里，我们是要用$\hat{\rho<em>j}$去逼近$\rho$，这里的KL散度是：<br>$\sum</em>{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)=\sum</em>{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}<em>j}$<br>&emsp;&emsp;于是我们在代价函数中加入这一惩罚因子，代价函数就变成：<br>$J</em>{sparse}(W,b)=J(W,b)+\beta \sum_{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)$<br>&emsp;&emsp;代价函数改变了，在反向传导时残差公式也要做出相应的改变，之前隐藏层第$i$个结点残差为：<br>$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)})f’(z<em>{i}^{(2)})$<br>现在应该将其换成：<br>$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}<em>i}))f’(z</em>{i}^{(2)})$</p>
+<hr>
+<p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：<br><img src="http://odnk9as2f.bkt.clouddn.com/ab2e3ac6ec9172f9b2d9b8d3542158dc.png" alt="此处输入图片的描述"><br>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述"><br>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在<img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述">中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/" data-toggle="tooltip" data-placement="top" title="深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" data-toggle="tooltip" data-placement="top" title="深度学习笔记：稀疏自编码器（2）——反向传导">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

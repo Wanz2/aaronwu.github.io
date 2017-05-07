@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aaron Wu">
+    <meta name="keyword"  content="undefined">
+    <link rel="shortcut icon" href="/img/ironman-draw.png">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置 - undefined
+        
+    </title>
+
+    <link rel="canonical" href="https://wanz2.github.io/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('undefined')
+            /*post*/
+        
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                        </div>
+                        <h1>Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</h1>
+                        <h2 class="subheading"></h2>
+                        <span class="meta">
+                            Posted by Aaron Wu on
+                            2017-04-01
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aaron Wu</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h1><h3 id="windows-10-64位-专业版（非必须）"><a href="#windows-10-64位-专业版（非必须）" class="headerlink" title="windows 10 64位 专业版（非必须）"></a>windows 10 64位 专业版（非必须）</h3><h3 id="visual-studio-2013（墙裂推荐此版本）"><a href="#visual-studio-2013（墙裂推荐此版本）" class="headerlink" title="visual studio 2013（墙裂推荐此版本）"></a>visual studio 2013（墙裂推荐此版本）</h3><ol>
+<li>笔者使用的操作系统为win10 64位，在其他版本的64位windows系统上应该同样可行。</li>
+<li>visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如下：<br>a. 打开vs2013，点击“工具”-“扩展和更新”<br>b. 在弹出的对话框中点击“联机”，在右上角搜索框中搜索NuGet，在搜索结果中“NuGet Package Manager”项上面的“下载”，开始下载NuGet，下载完后进行安装<br>c. 安装完后重启vs2013，重启后点击“工具”-“扩展和更新”，选择“已安装”，可以看到NuGet Package Manager已经安装好了。<a id="more"></a>  
+</li>
+</ol>
+<h1 id="二、配置步骤"><a href="#二、配置步骤" class="headerlink" title="二、配置步骤"></a>二、配置步骤</h1><ol>
+<li><p>下载代码<br>从<a href="https://github.com/Microsoft/caffe" target="_blank" rel="external">https://github.com/Microsoft/caffe</a><br>得到文件“caffe-master.zip”<br>或从<a href="https://github.com/BVLC/caffe/tree/windows" target="_blank" rel="external">https://github.com/BVLC/caffe/tree/windows</a><br>得到文件“caffe-windows.zip”<br>二者的配置步骤相同，均能编译成功，本文以源码“caffe-master.zip”为例</p>
+</li>
+<li><p>解压后进入如下路径：\caffe-master\windows 之后的操作均在该目录下进行，因此之后省略\caffe-master的路径</p>
+</li>
+<li><p>在\windows目录下复制文件 CommonSettings.props.example(应该会以副本形式出现CommonSettings.props - 副本.example),并将该副本改名为CommonSettings.props。(请确认显示文件扩展名这个选项已生效)</p>
+</li>
+<li><p>用vs（或其他编辑器）打开CommonSettings.props，将第7行<code>CpuOnlyBuild</code>标签中的值改为true，将第8行<code>UseCuDNN</code>标签中的值改为false，更改完毕后保存并退出。<br>（这两步是将caffe的GPU版本关闭，仅使用CPU版本。由于打开GPU会出现其他错误，作为初学者，我们先从CPU版本开始，等熟悉caffe之后再深入研究GPU版本）</p>
+</li>
+<li><p>用vs打开\windows下的Caffe.sln，可以看到该解决方案中共有16个项目，请注意核对。（若下载的源码为BVLC的“caffe-windows.zip”，则该解决方案中只有15个项目，所缺少的项目为“caffe.managed”，但经过笔者测试，在编译时并没有影响）右击“解决方案‘Caffe’”，选择“属性”，将“配置属性”-“配置”修改成Release和x64，如下图所示<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe1.png?imageView/2/w/500" alt="这里写图片描述"><br>（这一步是使用Release来进行编译，若用Debug，则之后每次都要打开vs，会不方便）<br>注意：在上图顶部工具栏中的“解决方案配置”和“解决方案平台”框，若你的vs2013中将这两个框在工具栏中显示，则要在工具栏中将配置改成Release和x64，否则直接右击“解决方案Caffe”来更改配置是无效的。</p>
+</li>
+<li><p>右击解决方案中的libcaffe项目，选择“属性”，在打开的属性页中选择“C/C++”-“常规”，将“将警告视为错误”设为“否”，如下图所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe2.png?imageView/2/w/500" alt="这里写图片描述"></p>
+</li>
+<li><p>右击“libcaffe”项目，选择“生成”，之后是一段时间的等待。<br>注意：点击“生成”后会出现如下图的窗口，此时vs正在使用NuGet对caffe的一些依赖文件进行自动还原<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe3.png?imageView/2/w/500" alt="这里写图片描述"><br>还原成功后，会在caffe-master的同级目录生成文件夹NugetPackages。</p>
+</li>
+<li><p>右击“解决方案Caffe”，选择“生成解决方案”，之后又是一段时间的等待</p>
+</li>
+<li><p>等待过后生成成功，到此windows下的caffe配置完成，此时在\caffe-master目录下会生成Build文件夹，即为我们编译成功的文件夹，而\caffe-master\Build\x64\Release目录下则会有我们编译出的caffe.exe执行文件，到此caffe配置完成。</p>
+</li>
+</ol>
+<p>主要参考</p>
+<ol>
+<li><a href="http://www.cnblogs.com/yixuan-xu/p/5858595.html" target="_blank" rel="external">http://www.cnblogs.com/yixuan-xu/p/5858595.html</a></li>
+<li><a href="http://m.blog.csdn.net/article/details?id=51355143" target="_blank" rel="external">http://m.blog.csdn.net/article/details?id=51355143</a></li>
+<li><a href="http://blog.csdn.net/qq_14845119/article/details/52415090" target="_blank" rel="external">http://blog.csdn.net/qq_14845119/article/details/52415090</a></li>
+</ol>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-toggle="tooltip" data-placement="top" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Aaron Wu 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    re-Ported by <a href="http://beantech.org">BeanTech</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=YenYuHsuan&repo=hexo-theme-beantech&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://wanz2.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="https://wanz2.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
