@@ -1,17 +1,54 @@
-
- <!DOCTYPE HTML>
-<html >
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  
-    <title>深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵 | Aaron Wu</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="Aaron Wu">
-    
+  <!-- content-Type -->
+<meta charset="utf-8">
 
-    
-    <meta name="description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
+
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="language" content="en">
+<meta name="robots" content="all">
+
+
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<meta content="email=no" name="format-detection">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+<meta name="author" content="TongchengQiu, TongchengQiu@gmail.com">
+<meta name="reply-to" content="TongchengQiu@gmail.com">
+<meta name="owner" content="TongchengQiu">
+
+
+
+
+<meta name="google-site-verification" content="xxxxxxxxxx" />
+
+
+
+
+<meta name="baidu-site-verification" content="xxxxxxxxxx" />
+
+
+
+
+<meta name="description" content="Aaron Wu" />
+
+
+
+
+<meta name="keywords" content="机器学习," />
+
+
+<meta name="description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/index.html">
@@ -22,85 +59,146 @@
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta name="twitter:description" content="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵&amp;emsp;&amp;emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    <link rel="stylesheet" href="/css/style.css">
-</head>
 
-  <body>
-    <header>
-      
-<div>
-		
-			<div id="imglogo">
-				<a href="/"><img src="/img/logo.png" alt="Aaron Wu" title="Aaron Wu"/></a>
-			</div>
-			
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
-				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/">Home</a></li>
-					
-						<li><a href="/archives">Archives</a></li>
-					
-						<li><a href="/about">About</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:wanz2.github.io">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.0.2" />
+
+
+
+
+<link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+
+
+<link href="http://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.0.2"/>
+
+
+<script>
+(function(){
+  var bp = document.createElement('script');
+  bp.src = '//push.zhanzhang.baidu.com/push.js';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+  <title> 深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵 </title>
   
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxxxxxxxxx', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?xxxxxxxxxx";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+</head>
+<body lang="">
+
+  <!--[if lte IE 9]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+
+  <div class="another-theme layout">
+
     
-      <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" title="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵" itemprop="url">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-29T15:47:45.000Z" itemprop="datePublished"> Published 2017-04-29</time>
+<header class="header" id="header">
+
+  <div class="header-cont">
+    <div class="text-area">
+      
+        <h1 class="title" data-text="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵"> 深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵 </h1>
+
+        
+        <div class="post-meta">
+          <div class="post-time">
+            Posted on
+            <time  datetime="2017-04-29T23:47:45+08:00" content="2017-04-29">
+              2017-04-29
+            </time>
+          </div>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+        </div>
+        
+      
+    </div>
+    <!-- Navigation -->
     
-  </p>
+    <nav class="navigation clearfix" id="navigation">
+      
+        
+        <a class="nav-link" href="/" rel="section">
+          Home
+        </a>
+      
+        
+        <a class="nav-link" href="/categories" rel="section">
+          Categories
+        </a>
+      
+        
+        <a class="nav-link" href="/tags" rel="section">
+          Tags
+        </a>
+      
+        
+        <a class="nav-link" href="/about" rel="section">
+          About
+        </a>
+      
+    </nav>
+    
+  </div>
+  <div class="mask"></div>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><span class="toc-number">1.</span> <span class="toc-text">深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">2.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">3.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">3.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">4.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">5.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="toc-number">6.</span> <span class="toc-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol>
-		
-		</div>
-		
-		<h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  </p>
+
+
+    <main class="container">
+
+      
+
+  <article class="post-article post-type-normal post" itemscope>
+
+  <div class="post-body">
+
+    <div class="content markdown-body"><h2 id="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><a href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵" class="headerlink" title="深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"></a>深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</h2><p>&emsp;&emsp;笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。  </p>
 <a id="more"></a>
 <p>#1. 概率论中的标准化、协方差、相关系数和协方差矩阵概念</p>
 <h2 id="1-1-随机变量的部分数字特征"><a href="#1-1-随机变量的部分数字特征" class="headerlink" title="1.1 随机变量的部分数字特征"></a>1.1 随机变量的部分数字特征</h2><p>&emsp;&emsp;假设有二维随机向量$(X,Y)$<br>|数字特征|意义|描述|<br>|—|—|—|<br>|$E(X)$|数学期望|反映$X$的平均值|<br>|$D(X)$|方差|反映$X$与平均值偏离的程度|<br>|$Cov(X,Y)$|协方差|等于$E((X-E(X))(Y-E(Y)))$，若为0，则说明$X$$Y$独立|<br>|$\rho或\rho _{XY}$|相关系数（就是随机变量<strong>标准化</strong>后的协方差）|等于$\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$|</p>
@@ -132,370 +230,168 @@
 <li>武大版《概率论与数理统计》，齐民友主编。</li>
 <li><a href="http://pinkyjie.com/2010/08/31/covariance/" target="_blank" rel="external">浅谈协方差矩阵</a></li>
 </ol>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
+</div>
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/机器学习/">机器学习</a>
+    <div class="post-sidebar">
+  <div class="toggle-btn" id="toggle-btn">
+    <i class="fa fa-reorder"></i>
   </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/" data-title="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵 | Aaron Wu" data-tsina="null" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2017/04/30/Java——重写equals-方法/" title="Java——重写equals()方法">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Java——重写equals()方法</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/"  title="深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习">
- <strong>下一篇：</strong><br/> 
- <span>深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><span class="toc-number">1.</span> <span class="toc-text">深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">2.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">3.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">3.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">4.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">5.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="toc-number">6.</span> <span class="toc-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol>
- 
-  </div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
-
-  
-
-
-  
-
-  
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>5</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Java/" title="Java">Java<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/VMWare/" title="VMWare">VMWare<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-  <div class="linkslist">
-  <p class="asidetitle">Links</p>
-    <ul>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
-        
-          <li>
-            
-            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
-            
-          </li>
-        
-    </ul>
-</div>
-
-  
-
-
-  <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-  <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
-    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=b3593ceb&dpc=1"></iframe>
-</div>
-
-
-</aside>
-</div>
-    </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> Hello ,I&#39;m Larry Page in Google. <br/>
-			This is my blog,believe it or not.</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</div>
-			
-		
-
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
-		
-		<a href="/about" target="_blank" title="Aaron Wu">Aaron Wu</a>
-		
-		
-		</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-  
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
+  <section class="post-toc-wrap" id="post-sidebar">
+    <h2 class="toc-title">内容目录</h2>
+    <div class="post-toc">
       
-      $('#toc.toc-aside').css('display', 'none');
+      
+        <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵"><span class="nav-text">深度学习笔记：主成分分析（PCA）（1）——标准化、协方差、相关系数和协方差矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-随机变量的部分数字特征"><span class="nav-text">1.1 随机变量的部分数字特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-随机变量的标准化"><span class="nav-text">1.2 随机变量的标准化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="nav-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-如何进行标准化处理"><span class="nav-text">1.2 如何进行标准化处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-相关系数的意义"><span class="nav-text">1.3 相关系数的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为-X-1-cdots-X-n-的协方差矩阵。"><span class="nav-text">为$(X_1,\cdots,X_n)$的协方差矩阵。</span></a></li></ol></div>
+      
+    </div>
+  </section>
+</div>
+
+
+  </div>
+
+  <footer class="post-footer">
+    
+      <div class="post-tags">
         
+          <a href="/tags#机器学习" rel="tag">#机器学习</a>
+        
+      </div>
+    
+    
+  <style>
+    .donation {
+      width: 100%;
+      margin-top: 2rem;
     }
-  });
-});
-</script>
+    .donation .text {
+      color: #333;
+      font-size: .8rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .donation .text:hover {
+      color: rgb(63,134,181);
+    }
+    .donation .img-box {
+      transition: all .3s;
+      width: 0;
+      height: 0;
+      margin: 1rem auto;
+      overflow: hidden;
+    }
+    .donation .img-box img {
+      width: 100%;
+      height: 100%;
+    }
+    .donation #donation {
+      display: none;
+    }
+    .donation #donation:checked + .img-box {
+      width: 16rem;
+      height: 16rem;
+    }
+  </style>
+  <div class="donation">
+    <label class="text" for="donation">
+      如果你觉得文章对你有帮助，并且想为我买一杯咖啡，点这里～
+    </label>
+    <input type="checkbox" name="donation" id="donation">
+    <div class="img-box">
+      <img src="/img/donation.png" alt="donation" />
+    </div>
+  </div>
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
 
+  </footer>
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
+</article>
 
 
 
 
+      
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/"
+           data-title="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵" data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">
+      </div>
+    
+  </div>
+
+
+
+
+    </main>
+
+    <footer class="footer clearfix">
+  <div class="copyright" >
+    <span>Copyright</span>
+    
+    &copy;  2015-
+    <span itemprop="copyrightYear">2017</span>
+    <span class="author" itemprop="copyrightHolder">Aaron Wu</span>
+  </div>
+
+  <div class="info">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+      <span id="showDays" class="show-days"></span>
+      <script>
+      var birthDay = new Date('10/04/2015');
+      var now = new Date();
+      var duration = now.getTime() - birthDay.getTime();
+      var total= Math.floor(duration / (1000 * 60 * 60 * 24));
+      document.getElementById("showDays").innerHTML = "本站已运行 "+total+" 天";
+      </script>
+      ---
+    
+    <span id="busuanzi_container_site_pv">
+        总访问量<span id="busuanzi_value_site_pv"></span>次
+    </span>
+  </div>
+
+  <div class="my-theme">
+    Theme by <a href="//qiutc.me">qiutc</a> | <iframe style="margin-left: 5px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=TongchengQiu&amp;repo=hexo-theme-another&amp;type=star&amp;count=true"></iframe>
+  </div>
+
+</footer>
+
+
+  </div>
+
+  <div class="back-top-btn" id="back-top-btn"><i class="fa fa-chevron-up"></i></div>
 
 
 
 
 
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
-  }
-}); 
-</script>
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"xxxxxxxxxx"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
 
 
 
-<!-- Analytics Begin -->
 
 
 
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
+<script type="text/javascript" src="/js/motto.min.js?v=0.0.2"></script>
+<script type="text/javascript" src="/js/main.js?v=0.0.2"></script>
 
 
-
-<!-- Analytics End -->
-
-<!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-
-<!-- MathJax End -->
-
-<!-- Tiny_search Begin -->
-
-<!-- Tiny_search End -->
-
-  </body>
+</body>
 </html>
