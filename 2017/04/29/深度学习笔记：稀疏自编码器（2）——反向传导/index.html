@@ -1,54 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <!-- content-Type -->
-<meta charset="utf-8">
-
-
-<meta http-equiv="x-ua-compatible" content="ie=edge">
-<meta name="renderer" content="webkit|ie-comp|ie-stand">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<meta name="language" content="en">
-<meta name="robots" content="all">
-
-
-<meta content="yes" name="apple-mobile-web-app-capable">
-<meta content="black" name="apple-mobile-web-app-status-bar-style">
-<meta content="telephone=no" name="format-detection">
-<meta content="email=no" name="format-detection">
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-<meta name="author" content="TongchengQiu, TongchengQiu@gmail.com">
-<meta name="reply-to" content="TongchengQiu@gmail.com">
-<meta name="owner" content="TongchengQiu">
-
-
-
-
-<meta name="google-site-verification" content="xxxxxxxxxx" />
-
-
-
-
-<meta name="baidu-site-verification" content="xxxxxxxxxx" />
-
-
-
-
-<meta name="description" content="Aaron Wu" />
-
-
-
-
-<meta name="keywords" content="机器学习," />
-
-
-<meta name="description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+  <meta charset="utf-8">
+  
+  <title>深度学习笔记：稀疏自编码器（2）——反向传导 | Aaron Wu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/index.html">
@@ -58,147 +15,81 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
-
-
-
-
-
-
-  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.0.2" />
-
-
-
-
-<link href='//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-
-
-
-<link href="http://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.0.2"/>
-
-
-<script>
-(function(){
-  var bp = document.createElement('script');
-  bp.src = '//push.zhanzhang.baidu.com/push.js';
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
-  <title> 深度学习笔记：稀疏自编码器（2）——反向传导 </title>
   
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'xxxxxxxxxx', 'auto');
-  ga('send', 'pageview');
-</script>
-
-
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?xxxxxxxxxx";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
+    <link rel="alternate" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
 
 </head>
-<body lang="">
 
-  <!--[if lte IE 9]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
-
-
-  <div class="another-theme layout">
-
-    
-<header class="header" id="header">
-
-  <div class="header-cont">
-    <div class="text-area">
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Aaron Wu</a>
+      </h1>
       
-        <h1 class="title" data-text="深度学习笔记：稀疏自编码器（2）——反向传导"> 深度学习笔记：稀疏自编码器（2）——反向传导 </h1>
-
-        
-        <div class="post-meta">
-          <div class="post-time">
-            Posted on
-            <time  datetime="2017-04-29T23:41:01+08:00" content="2017-04-29">
-              2017-04-29
-            </time>
-          </div>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-        </div>
-        
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Strive for excellence, not perfection.</a>
+        </h2>
       
     </div>
-    <!-- Navigation -->
-    
-    <nav class="navigation clearfix" id="navigation">
-      
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-        <a class="nav-link" href="/" rel="section">
-          Home
-        </a>
-      
+          <a class="main-nav-link" href="/">Home</a>
         
-        <a class="nav-link" href="/categories" rel="section">
-          Categories
-        </a>
-      
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-        <a class="nav-link" href="/tags" rel="section">
-          Tags
-        </a>
-      
+      </nav>
+      <nav id="sub-nav">
         
-        <a class="nav-link" href="/about" rel="section">
-          About
-        </a>
-      
-    </nav>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wanz2.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-深度学习笔记：稀疏自编码器（2）——反向传导" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" class="article-date">
+  <time datetime="2017-04-29T15:41:01.000Z" itemprop="datePublished">2017-04-29</time>
+</a>
     
   </div>
-  <div class="mask"></div>
-</header>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深度学习笔记：稀疏自编码器（2）——反向传导
+    </h1>
+  
 
-
-    <main class="container">
-
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
       
-
-  <article class="post-article post-type-normal post" itemscope>
-
-  <div class="post-body">
-
-    <div class="content markdown-body"><p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。  </p>
+        <p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。  </p>
 <a id="more"></a>
 <h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>本文中所使用的样本集：${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>其他符号：<br>|符号|描述|<br>|—|—|<br>|$(x^{(j)},y^{(j)})$|第$j$个样本|<br>|$m$|样本总数|<br>|$(x,y)$|单个样本|<br>|$x<em>i$|第$i$个输入值|<br>|$f()$|神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$|<br>|$W</em>{ij}^{(l)}$|神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值|<br>|$b_i^{(l)}$|第$l+1$层第$i$个神经元输入的偏置项|<br>|$n_l$|神经网络的总层数|<br>|$L_l$|第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$|<br>|$s_l$|第$l$层的节点数（不包括偏置单元）|<br>|$a_i^{l}$|第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$|<br>|$z_i^{(l)}$|第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z<em>i^{(l)})$|<br>|$h</em>{W,b}(x)$|输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值|<br><strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
 <h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：<br>$J(W,b;x,y)=\frac{1}{2}|h<em>{w,b}(x)-y|^{2}$<br>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：<br>$J(W,b)<br>=[\frac{1}{m}\sum</em>{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum<em>{l=1}^{n</em>{l}-1}\sum<em>{i=1}^{s</em>{l}}\sum<em>{j=1}^{s</em>{l+1}}(W<em>{ji}^{(l)})^{2}$<br>&emsp;&emsp;&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum</em>{i=1}^{m}(\frac{1}{2}|h<em>{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum</em>{l=1}^{n<em>{l}-1}\sum</em>{i=1}^{s<em>{l}}\sum</em>{j=1}^{s<em>{l+1}}(W</em>{ji}^{(l)})^{2}$<br>其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性</p>
@@ -207,168 +98,139 @@
 <li>初始化每一个参数$W_{ij}^{(l)}$和$b_i^{(l)}$为很小的接近零的随机值</li>
 <li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：<br>$W<em>{ij}^{(l)}=W</em>{ij}^{(l)}-\alpha\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)$<br>$b</em>{i}^{(l)}=b<em>{i}^{(l)}-\alpha\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b)$<br>其中$\alpha$是学习速率。<br>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。<h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2>&emsp;&emsp;我们将求偏导的项单独拿出来看：<br>$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W</em>{ij}^{(l)}$&emsp;&emsp;&emsp;(1)<br>$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)<br>&emsp;<br>&emsp;&emsp;显然，求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$。<br>&emsp;&emsp;由于：<br>$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{l+1}}{\partial W<em>{ij}^{l}}$&emsp;&emsp;&emsp;(3)<br>$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{(l+1)}}{\partial b<em>{i}^{(l)}}$&emsp;&emsp;&emsp;(4)<br>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta<em>{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。<br>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$可得：<br>$\delta_{i}^{(n<em>l)}=-(y</em>{i}-a_{i}^{(n<em>l)})f’(z</em>{i}^{(n<em>l)})$<br>$\delta</em>{i}^{(l)}=(\sum<em>{j=1}^{s</em>{l+1}}W<em>{ji}^{(l)}\delta</em>{j}^{(l+1)})f’(z_{i}^{(l)})$<br>通过以上第一式可以求出第$n<em>l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：<br>$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\delta <em>{i}^{(l+1)}a</em>{j}^{(l)}$&emsp;&emsp;&emsp;(5)<br>$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\delta</em>{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)<br>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。</li>
 </ol>
-</div>
 
-    <div class="post-sidebar">
-  <div class="toggle-btn" id="toggle-btn">
-    <i class="fa fa-reorder"></i>
-  </div>
-  <section class="post-toc-wrap" id="post-sidebar">
-    <h2 class="toc-title">内容目录</h2>
-    <div class="post-toc">
-      
-      
-        <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-本文中所使用的符号和一些约定"><span class="nav-text">0.本文中所使用的符号和一些约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-代价函数"><span class="nav-text">1.代价函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-梯度下降"><span class="nav-text">2.梯度下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-反向传导"><span class="nav-text">3.反向传导</span></a></li></ol></div>
       
     </div>
-  </section>
-</div>
+    <footer class="article-footer">
+      <a data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" data-id="cj2ep1prc000i0a0v32tfnfby" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
 
-
+    </footer>
   </div>
-
-  <footer class="post-footer">
+  
     
-      <div class="post-tags">
+<nav id="article-nav">
+  
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
-          <a href="/tags#机器学习" rel="tag">#机器学习</a>
+          深度学习笔记：稀疏自编码器（3）——稀疏自编码算法
         
       </div>
-    
-    
-  <style>
-    .donation {
-      width: 100%;
-      margin-top: 2rem;
-    }
-    .donation .text {
-      color: #333;
-      font-size: .8rem;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    .donation .text:hover {
-      color: rgb(63,134,181);
-    }
-    .donation .img-box {
-      transition: all .3s;
-      width: 0;
-      height: 0;
-      margin: 1rem auto;
-      overflow: hidden;
-    }
-    .donation .img-box img {
-      width: 100%;
-      height: 100%;
-    }
-    .donation #donation {
-      display: none;
-    }
-    .donation #donation:checked + .img-box {
-      width: 16rem;
-      height: 16rem;
-    }
-  </style>
-  <div class="donation">
-    <label class="text" for="donation">
-      如果你觉得文章对你有帮助，并且想为我买一杯咖啡，点这里～
-    </label>
-    <input type="checkbox" name="donation" id="donation">
-    <div class="img-box">
-      <img src="/img/donation.png" alt="donation" />
-    </div>
-  </div>
+    </a>
+  
+  
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度学习笔记：稀疏自编码器（1）————神经元与神经网络</div>
+    </a>
+  
+</nav>
 
-
-  </footer>
-
+  
 </article>
 
-
-
-
-      
-  <div class="comments" id="comments">
+</section>
+        
+          <aside id="sidebar">
+  
     
-      <div class="ds-thread" data-thread-key="2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/"
-           data-title="深度学习笔记：稀疏自编码器（2）——反向传导" data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VMWare/">VMWare</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/图像处理/">图像处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/">机器学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/">Java——对象的序列化与反序列化（1）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/">Java——JDBC执行SQL语句的两种方式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/30/Java——利用Collections.sort()对List排序/">Java——利用Collections.sort()对泛型为String的List排序</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/30/Java——重写equals-方法/">Java——重写equals()方法</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
       </div>
-    
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Aaron Wu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
   </div>
-
-
-
-
-    </main>
-
-    <footer class="footer clearfix">
-  <div class="copyright" >
-    <span>Copyright</span>
-    
-    &copy;  2015-
-    <span itemprop="copyrightYear">2017</span>
-    <span class="author" itemprop="copyrightHolder">Aaron Wu</span>
-  </div>
-
-  <div class="info">
-    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-      <span id="showDays" class="show-days"></span>
-      <script>
-      var birthDay = new Date('10/04/2015');
-      var now = new Date();
-      var duration = now.getTime() - birthDay.getTime();
-      var total= Math.floor(duration / (1000 * 60 * 60 * 24));
-      document.getElementById("showDays").innerHTML = "本站已运行 "+total+" 天";
-      </script>
-      ---
-    
-    <span id="busuanzi_container_site_pv">
-        总访问量<span id="busuanzi_value_site_pv"></span>次
-    </span>
-  </div>
-
-  <div class="my-theme">
-    Theme by <a href="//qiutc.me">qiutc</a> | <iframe style="margin-left: 5px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=TongchengQiu&amp;repo=hexo-theme-another&amp;type=star&amp;count=true"></iframe>
-  </div>
-
 </footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
 
   </div>
-
-  <div class="back-top-btn" id="back-top-btn"><i class="fa fa-chevron-up"></i></div>
-
-
-
-
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"xxxxxxxxxx"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-    
-     
-
-
-
-
-
-
-<script type="text/javascript" src="/js/motto.min.js?v=0.0.2"></script>
-<script type="text/javascript" src="/js/main.js?v=0.0.2"></script>
-
-
 </body>
 </html>
