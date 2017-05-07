@@ -1,27 +1,26 @@
 
-  
-    <!DOCTYPE HTML>
+ <!DOCTYPE HTML>
 <html >
 <head>
   <meta charset="UTF-8">
   
-    <title>Aaron Wu</title>
+    <title>tags | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="1  layout: tags2  title: tags3  —">
+    <meta name="description" content="Aaron Wu">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Aaron Wu">
+<meta property="og:title" content="tags">
 <meta property="og:url" content="https://wanz2.github.io/tags/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="1  layout: tags2  title: tags3  —">
-<meta property="og:updated_time" content="2017-05-07T14:12:26.000Z">
+<meta property="og:description" content="Aaron Wu">
+<meta property="og:updated_time" content="2017-05-07T14:25:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Aaron Wu">
-<meta name="twitter:description" content="1  layout: tags2  title: tags3  —">
+<meta name="twitter:title" content="tags">
+<meta name="twitter:description" content="Aaron Wu">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -36,9 +35,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-      <body>
-        <header>
-          
+    <body>
+      <header>
+        
 <div>
 		
 			<div id="imglogo">
@@ -59,6 +58,10 @@
 					
 						<li><a href="/archives">Archives</a></li>
 					
+						<li><a href="/tags">tags</a></li>
+					
+						<li><a href="/categories">categories</a></li>
+					
 						<li><a href="/about">About</a></li>
 					
 					<li>
@@ -73,56 +76,30 @@
 				</ul>
 			</nav>			
 </div>
-        </header>
-        <div id="container">
-          <div id="main" class="page" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/tags/index.html" title="" itemprop="url"></a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
-		
-  <p class="article-time">
-    <time datetime="2017-05-07T14:12:26.000Z" itemprop="datePublished"> Published 2017-05-07</time>
-    
-  </p>
-</header>
-	<div class="article-content">
-		
-		<p>1  layout: tags<br>2  title: tags<br>3  —</p>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
+      </header>
+      <div id="container">
+          
+<div class="archive-title" >
+<h2 class="tag-icon">Tags</h2>
 
+<a data-src="/tags/Java/" href="#Java" title="Java">Java<sup>4</sup></a>
 
+<a data-src="/tags/VMWare/" href="#VMWare" title="VMWare">VMWare<sup>1</sup></a>
+
+<a data-src="/tags/图像处理/" href="#图像处理" title="图像处理">图像处理<sup>1</sup></a>
+
+<a data-src="/tags/机器学习/" href="#机器学习" title="机器学习">机器学习<sup>5</sup></a>
+
+</div>
+<div id="main" class="archive-part">
+<div class="all-list-box"></div>
 </div>
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="https://wanz2.github.io/tags/index.html" data-title="Aaron Wu" data-tsina="undefined" class="share clearfix">
-	  </div>
-	
-	</div>
 
-
-</footer>
-
-   	       
-	</article>
-	
-	
-
-</div>  
-        </div>
-        <footer><div id="footer" >
+      </div>
+      <footer><div id="footer" >
 	
 	<div class="line">
 		<span></span>
@@ -159,7 +136,7 @@
 		</p>
 </div>
 </footer>
-        <script src="/js/jquery-2.0.3.min.js"></script>
+      <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
@@ -210,61 +187,30 @@ $(document).ready(function(){
 </script>
 
 
+
+
+
+
+
+
+
 <script type="text/javascript">
 $(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
+  var list    = $('.archive-title a'),
+      box     = $('.all-list-box'),
+      first   = $('.archive-title a:first-of-type');
+      box.load(first.attr('data-src').toString()+' #archive-page');
+      first.addClass('current');
+  list.each(function(){
+    $(this).click(function(){
+      var listSrc=$(this).attr('data-src').toString()+' #archive-page';
+      box.load(listSrc);
+      list.removeClass('current');
+      $(this).addClass('current');
+     });  
+    });
+  }); 
 </script>
-
-
-
-
-
-
-
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -327,6 +273,5 @@ var _hmt = _hmt || [];
 
 <!-- Tiny_search End -->
 
-      </body>
-     </html>
-     
+    </body>
+   </html>
