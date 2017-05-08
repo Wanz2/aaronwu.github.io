@@ -11,16 +11,12 @@
     
 
     
-    <meta name="description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
-
-VM">
+    <meta name="description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
-
-VM">
+<meta property="og:description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500">
@@ -32,12 +28,10 @@ VM">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500">
 <meta property="og:image" content="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500">
-<meta property="og:updated_time" content="2017-04-29T15:43:08.000Z">
+<meta property="og:updated_time" content="2017-05-08T03:36:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
-<meta name="twitter:description" content="一、前言&amp;emsp;&amp;emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：
-
-VM">
+<meta name="twitter:description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
 
     
@@ -144,11 +138,11 @@ VM">
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/others/">others</a>
+</div>
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/VMWare/">VMWare</a>
-  </div>
 
 </div>
 
@@ -210,7 +204,19 @@ VM">
 		<ul>
 		
 		  
-			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/others/" title="others">others<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 		  
 		
 		</ul>
@@ -234,10 +240,6 @@ VM">
 				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
-			
-				<li><a href="/tags/VMWare/" title="VMWare">VMWare<sup>1</sup></a></li>
-			
-		
 		</ul>
 </div>
 
@@ -246,7 +248,7 @@ VM">
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
+       <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
     </div>
   </div>
 

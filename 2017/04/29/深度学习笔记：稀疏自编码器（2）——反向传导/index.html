@@ -11,16 +11,16 @@
     
 
     
-    <meta name="description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+    <meta name="description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
-<meta property="og:updated_time" content="2017-05-07T11:10:23.000Z">
+<meta property="og:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+<meta property="og:updated_time" content="2017-05-08T03:39:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+<meta name="twitter:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -109,6 +109,11 @@
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+</div>
+
 
   <div class="article-tags">
   
@@ -175,7 +180,19 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>1</sup></a></li>
+			<li><a href="/categories/Java/" title="Java">Java<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/others/" title="others">others<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 		  
 		
 		</ul>
@@ -199,10 +216,6 @@
 				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
-			
-				<li><a href="/tags/VMWare/" title="VMWare">VMWare<sup>1</sup></a></li>
-			
-		
 		</ul>
 </div>
 
@@ -211,7 +224,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/VMWare/" style="font-size: 10px;">VMWare</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
+       <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
     </div>
   </div>
 
