@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/05/12/JavaWeb——Servlet异步处理支持和异步监听器/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。">
-<meta property="og:updated_time" content="2017-05-12T03:39:43.000Z">
+<meta property="og:updated_time" content="2017-05-12T03:44:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaWeb——Servlet异步处理支持和异步监听器">
 <meta name="twitter:description" content="Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。">
@@ -100,11 +100,18 @@
 <ol>
 <li>接收请求，对请求进行一些预处理。  </li>
 <li>调用业务逻辑接口进行完成业务的处理。  </li>
-<li>根据处理结果提交响应。<br>&emsp;&emsp;通常在第二步会消耗大量处理时间，因为Servlet线程会等待业务方法处理完毕。<br>&emsp;&emsp;在Servlet3.0中增加了异步支持之后，允许Servlet创建新的线程执行业务逻辑，使得Servlet在启动异步线程后自身可以立即返回容器。<h2 id="异步监听器"><a href="#异步监听器" class="headerlink" title="异步监听器"></a>异步监听器</h2>&emsp;&emsp;Servlet3.0同时增加了异步监听器，该监听器实现AsyncListener接口，该监听器提供了四个方法：  </li>
+<li>根据处理结果提交响应。  </li>
+</ol>
+<p>&emsp;&emsp;通常在第二步会消耗大量处理时间，因为Servlet线程会等待业务方法处理完毕。<br>&emsp;&emsp;在Servlet3.0中增加了异步支持之后，允许Servlet创建新的线程执行业务逻辑，使得Servlet在启动异步线程后自身可以立即返回容器。</p>
+<h2 id="异步监听器"><a href="#异步监听器" class="headerlink" title="异步监听器"></a>异步监听器</h2><p>&emsp;&emsp;Servlet3.0同时增加了异步监听器，该监听器实现AsyncListener接口，该监听器提供了四个方法：  </p>
+<ol>
 <li>onStartAsync(AsyncEvent event) 异步线程开始时调用；  </li>
 <li>onError(AsyncEvent event) 异步线程出错时调用</li>
 <li>onTimeout(AsyncEvent event) 异步线程执行超时时调用  </li>
-<li>onComplete(AsyncEvent event) 异步线程执行完毕时调用  <h2 id="异步Servlet和异步监听器使用步骤"><a href="#异步Servlet和异步监听器使用步骤" class="headerlink" title="异步Servlet和异步监听器使用步骤"></a>异步Servlet和异步监听器使用步骤</h2>&emsp;&emsp;具体的异步Servlet和监听器使用共分为三步：</li>
+<li>onComplete(AsyncEvent event) 异步线程执行完毕时调用  </li>
+</ol>
+<h2 id="异步Servlet和异步监听器使用步骤"><a href="#异步Servlet和异步监听器使用步骤" class="headerlink" title="异步Servlet和异步监听器使用步骤"></a>异步Servlet和异步监听器使用步骤</h2><p>&emsp;&emsp;具体的异步Servlet和监听器使用共分为三步：  </p>
+<ol>
 <li>获得异步上下文  </li>
 <li>注册监听器</li>
 <li>开启异步子线程，子线程执行业务方法<br>&emsp;&emsp;下面用一个示例来展示二者的使用：</li>
