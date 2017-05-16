@@ -1,245 +1,202 @@
 <!DOCTYPE html>
-<html lang="undefined">
-
-
-
-<!-- Head tag -->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
 <head>
-    
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="renderer" content="webkit|ie-comp|ie-stand">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-    
-    <title>
-    
-        深度学习笔记：稀疏自编码器（1）——神经元与神经网络 - 
-    
-    Aaron Wu
-    </title>
-    
-    <meta name="keywords" content="">
-    <meta name="description" content="Aaron Wu">
-    <meta name="author" content="Aaron Wu">
-    
-    
-    
-    
-    
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.bootcss.com/cc-icons/1.2.1/css/cc-icons.min.css" rel="stylesheet" type="text/css">
-    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
-    <!--<script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>-->
-    
-    
-    <script src="/js/script.js" type="text/javascript" async></script>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度学习笔记：稀疏自编码器（1）——神经元与神经网络 | Aaron Wu</title>
 
-    
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        showProcessingMessages: false,
-        jax: ["input/TeX","output/HTML-CSS", "output/PreviewHTML"], 
-        extensions: ["tex2jax.js", "fast-preview.js", "AssistiveMML.js" /*"MathMenu.js", "MathZoom.js", "[Contrib]/a11y/accessibility-menu.js"*/ ],
-        TeX: {
-            extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-        }, 
-        tex2jax: {
-            inlineMath: [['$','$']],
-            displayMath: [['$$','$$']], 
-            processEscapes: true,
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        },
-        "HTML-CSS": {linebreaks: {automatic: true}},
-        SVG: {linebreaks: {automatic: true}}
-    });
-    </script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js" async></script>
-    
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
+  <meta name="description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+<meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
+<meta property="og:updated_time" content="2017-05-16T16:26:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+<meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
     
-    <script type="text/javascript">
-    var duoshuo_admin_id = "6224035036874670849";
-    var duoshuoQuery = {short_name: 'unnamed42-github' };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = '//static.duoshuo.com/embed.js';
-        ds.id = "duoshuo-script";
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-    
-    <script src="/js/duoshuo-hook.js" async></script>
-    
-    
+  <meta content="{{ title }}" name="description">
+  <meta content="{{ title }}" name="keywords">
+  <meta content="{{ title }}" name="author">
 
-    
-    
-    
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
 
-    
-    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-    
+  <!-- Global styles START -->   
+  <link rel="stylesheet" href="/metronic/assets/plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/metronic/assets/plugins/bootstrap/css/bootstrap.min.css">
+  <!-- Global styles END --> 
+   
+  <!-- Page level plugin styles START -->
+  <link rel="stylesheet" href="/metronic/assets/pages/css/animate.css">
+  <link rel="stylesheet" href="/metronic/assets/plugins/owl.carousel/assets/owl.carousel.css">
+  <!-- Page level plugin styles END -->
 
+  <!-- Theme styles START -->
+  <link rel="stylesheet" href="/metronic/assets/pages/css/components.css">
+  <link rel="stylesheet" href="/metronic/assets/pages/css/slider.css">
+  <link rel="stylesheet" href="/metronic/assets/corporate/css/style.css">
+  <link rel="stylesheet" href="/metronic/assets/pages/css/portfolio.css">
+  <link rel="stylesheet" href="/metronic/assets/corporate/css/style-responsive.css">
+  <link rel="stylesheet" href="/metronic/assets/corporate/css/themes/red.css">
+  <link rel="stylesheet" href="/css/theme-styles.css">
+  <!-- Theme styles END --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
-
-<body class="post">
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="header">
-    <div class="container clearfix">
-        <div class="logo" style="width: auto;">
-            <a href="/" title="Aaron Wu" rel="home" style="text-decoration: none;">
-                
-                <span class="brand-logo">
-                    
-                    Aaron Wu
-                    
-                
-                </span>
-            </a>
-        </div>
-        <div id="global-nav">
-            <ul class="gnul">
-                <li class="gnli ">
-                    <a class="gna fa fa-home" href="/" title="Aaron Wu">
-                        <span class="gn-item">主页</span>
-                    </a>
-                </li>
-                
-                <li class="gnli dropdown current">
-                    <a class="gna fa fa-bars" href="#">
-                        <span class="gn-item">导航</span>
-                    </a>
-                    <div class="submenu">
-                        <div class="tab-content">
-                            <table>
-                                <tbody>
-                                    
-                                    <tr class="trline">
-                                        <td class="tdleft">分类</td>
-                                        <td class="tdright">
-                                            <ul class="tab-categories">
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/Java/">Java</a>
-                                                </li>
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/Linux/">Linux</a>
-                                                </li>
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/图像处理/">图像处理</a>
-                                                </li>
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/机器学习/">机器学习</a>
-                                                </li>
-                                            
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td class="tdleft">标签</td>
-                                        <td class="tdright">
-                                            <div class="tab-tags">
-                                                <a href="/tags/Java/" style="font-size: 12px;">Java</a> <a href="/tags/机器学习/" style="font-size: 12px;">机器学习</a> <a href="/tags/Linux/" style="font-size: 12px;">Linux</a> <a href="/tags/图像处理/" style="font-size: 12px;">图像处理</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </li>
-                
-                
-                <li class="gnli">
-                    <a class="gna fa fa-archive" href="/archives/index.html" title="">
-                        <span class="gn-item">归档</span>
-                    </a>
-                </li>
-                
-                <li class="gnli">
-                    <a class="gna fa fa-user" href="/about/index.html" title="">
-                        <span class="gn-item">关于</span>
-                    </a>
-                </li>
-                
-                <li class="gnli">
-                    <a class="gna fa fa-rss" href="/atom.xml" title="">
-                        <span class="gn-item">订阅</span>
-                    </a>
-                </li>
-                
-                
-                
-            </ul>
-        </div>
-        
-<form method="get" id="search-form" action="/search.html">
-    <input type="text" name="keywords" id="search-input" placeholder="输入关键词" />
-    <button type="submit" id="search-submit">
-        <span class="fa fa-search"></span>
-    </button>
-</form>
-
-
+<body class="corporate">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- BEGIN TOP BAR -->
+<div class="pre-header">
+  <div class="container">
+    <div class="row">
+      <!-- BEGIN TOP BAR LEFT PART -->
+      <div class="col-md-6 col-sm-6 col-xs-9 additional-shop-info">
+	<ul class="list-unstyled list-inline">
+	  <li><i class="fa fa-phone"></i><span>716-472-4484</span></li>
+	  <li><i class="fa fa-envelope-o"></i><span>ptsteadman@gmail.com</span></li>
+	</ul>
+      </div>
+      <!-- END TOP BAR LEFT PART -->
+      <!-- BEGIN TOP BAR MENU -->
+      <div class="col-md-6 col-sm-6 col-xs-3 additional-nav">
+	<ul class="list-unstyled list-inline pull-right">
+	  <li><a href="/login">Log In</a></li>
+	</ul>
+      </div>
+      <!-- END TOP BAR MENU -->
     </div>
-</nav>
+  </div>        
+</div>
+<!-- END TOP BAR -->
+<!-- BEGIN HEADER -->
+<div class="header">
+  <div class="container">
+    <!--<a class="site-logo" href="/" id="logo">Aaron Wu</a>-->
 
+    <a class="site-logo" href="/">
+      <img src="/metronic/assets/corporate/img/logos/logo-corp-red.png" alt="Metronic FrontEnd">
+    </a>
+
+    <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
+
+    <!-- BEGIN NAVIGATION -->
+    <div class="header-navigation pull-right font-transform-inherit">
+      <ul>
+	
+	<li class="">
+	  <a  href="/">Home</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/projects/">Projects</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/archives/">Blog</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/contact/">Contact</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/about/">About</a>
+	</li>
+	
+	<!-- BEGIN TOP SEARCH -->
+	<li class="menu-search">
+	  <span class="sep"></span>
+	  <i class="fa fa-search search-btn"></i>
+	  <div class="search-box">
+	    <form action="#">
+	      <div class="input-group">
+		<input type="text" placeholder="Search" class="form-control st-default-search-input">
+		<span class="input-group-btn">
+		  <button class="btn btn-primary" type="submit">Search</button>
+		</span>
+	      </div>
+	    </form>
+	  </div> 
+	</li>
+	<!-- END TOP SEARCH -->
+      </ul>
+    </div>
+    <!-- END NAVIGATION -->
+  </div>
+</div>
+<!-- Header END -->
+
+  <div class="container">
+  <ul class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/archives/">Blog</a></li>
+    <li class="active">Post</li>
+  </ul>
+  <section id="main">
     
-<main id="content">
-    <div class="container clearfix">
-        <div id="primary" >
-            <nav class="breadcrumb-navigation">
-                <a rel="bookmark" href="/">主页</a>
-                <span class="breadcrumb-arrow fa fa-angle-right"></span>
-                 
-<a href="/categories/机器学习/" title="机器学习" rel="category tag">机器学习</a>
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">深度学习笔记：稀疏自编码器（1）——神经元与神经网络</a>
+    </h2>
 
-                <span class="breadcrumb-arrow fa fa-angle-right"></span>
-                深度学习笔记：稀疏自编码器（1）——神经元与神经网络
-            </nav>
-            <article class="single-post">
-                <header class="post-header">
-                    <h1 class="post-title">
-                        <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">深度学习笔记：稀疏自编码器（1）——神经元与神经网络</a>
-                    </h1>
-                </header>
-                <div class="post-meta">
-    <ul class="inline-ul">
-        <li class="inline-li">
-            <time>2017-04-29</time>
-        </li>
-        
-        <li class="inline-li">
-            <span class="post-span">·</span>
-        </li>
-        <li class="inline-li">
-             
-<a href="/categories/机器学习/" title="机器学习" rel="category tag">机器学习</a>
 
-        </li>
-        
-        
-        <li class="inline-li">
-            <span class="post-span">·</span>
-        </li>
-        <li class="inline-li">
-            <span id="busuanzi_value_page_pv"></span> Views
-        </li>
-        
-    </ul>
-</div> 
+    <div class="row">
+<div class="col-md-9 col-sm-9 blog-posts">
+<article id="post-深度学习笔记：稀疏自编码器（1）————神经元与神经网络" class="article article-type-post blog-item" itemscope itemprop="blogPost">
+  <div class="article-meta">
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      <ul class="blog-info">
+	<li><i class="fa fa-user"></i> Anonymous</li>
+	<li><i class="fa fa-calendar"></i>
+	  <time datetime="2017-04-29T15:38:52.000Z" itemprop="datePublished">2017/04/29</time>
 
-                <div class="post-body clearfix">
-                    <div class="post-content">
-                        
-                        <p>&emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见<a href="http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">UFLDL教程</a>，看完教程之后再来看本文可能会更加清晰。  </p>
+	</li>
+	<li class="hidden-xs"><i class="fa fa-comments"></i>
+	  <a href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/#disqus_thread" class="article-comment-link">Comments</a>
+	</li>
+	<li class="hidden-xs"><i class="fa fa-tags"></i> 
+	  
+  
+    <a href="/tags/机器学习/" title="机器学习">机器学习</a>
+  
+
+
+	</li>
+      </ul>
+      
+  <div class="article-category">
+    
+    Category: 
+    
+    Categories:
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+  <br>
+
+
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见<a href="http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">UFLDL教程</a>，看完教程之后再来看本文可能会更加清晰。  </p>
 <a id="more"></a>
 <h2 id="0-本文中使用的符号一览及本文中的一些约定"><a href="#0-本文中使用的符号一览及本文中的一些约定" class="headerlink" title="0. 本文中使用的符号一览及本文中的一些约定"></a>0. 本文中使用的符号一览及本文中的一些约定</h2><table>
 <thead>
@@ -304,152 +261,250 @@
 <h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z<em>3)]$<br>&emsp;&emsp;则上图神经网络中的前向传播过程可表示为：<br>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$<br>&emsp;&emsp;$a^{(2)}=f(z^{(2)})$<br>&emsp;&emsp;$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$<br>&emsp;&emsp;$h</em>{W,b}(x)=f(z^{(3)})$<br>&emsp;&emsp;下面以$z^{(2)}=W^{(1)}x+b^{(1)}$为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$\begin{pmatrix}<br>z_1^{(2)}\<br>z_2^{(2)}\<br>z<em>3^{(2)}\<br>\end{pmatrix}$<br>$=<br>\begin{pmatrix}<br>W</em>{11}^{(1)}&amp;W<em>{12}^{(1)}&amp;W</em>{13}^{(1)}\<br>W<em>{21}^{(1)}&amp;W</em>{22}^{(1)}&amp;W<em>{23}^{(1)}\<br>W</em>{31}^{(1)}&amp;W<em>{32}^{(1)}&amp;W</em>{33}^{(1)}\<br>\end{pmatrix}$<br>$\begin{pmatrix}x_1\<br>x_2\<br>x_3\<br>\end{pmatrix}$<br>$+<br>\begin{pmatrix}<br>b_1^{(1)}\<br>b_2^{(1)}\<br>b_3^{(1)}\<br>\end{pmatrix}$  </p>
 <p>&emsp;&emsp;最终，神经网络前向传播过程可表示为：<br>&emsp;&emsp;$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$<br>&emsp;&emsp;$a^{(l+1)}=f(z^{(l+1)})$  </p>
 
-                    </div>
-                </div>
-                <nav class="post-tags">
-                
-                    
-                    <a href="/tags/机器学习/" title="机器学习" rel="tag" class="fa fa-tag">机器学习</a>
-                    
-                
-                </nav>
-            </article>
-        </div><!-- div#primary -->
-        <ul id="pager">
-
-    <li class="previous">
-        <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" title="深度学习笔记：稀疏自编码器（2）——反向传导" class="tooltipped tooltipped-n" aria-label="深度学习笔记：稀疏自编码器（2）——反向传导"><span class="fa fa-chevron-left"></span> 上一篇文章</a>
-    </li>
-    
-    
-    <li class="next">
-        <a href="/2017/04/06/压缩感知算法原理/" title="压缩感知算法原理" class="tooltipped tooltipped-n" aria-label="压缩感知算法原理">下一篇文章 <span class="fa fa-chevron-right"></span></a>
-    </li>
-    
-</ul>
-
-        
-<section id="comments">
-    
-    <!-- Duoshuo start -->
-    <div class="ds-thread"
-        data-thread-key="2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/"
-        data-title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络"
-        data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" >
+      
     </div>
-    <!-- Duoshuo end -->
+  </div>
+  
     
-
-    
-</section>
-
-
+<nav id="article-nav">
+  
+    <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
-    </div>
-</main>
-
-    <!-- Footer -->
-    
-<!-- #content -->
-<footer id="footer">
-    <div class="container">
-        <p>
-            <span class="cc-license">
-                <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" title="Creative Commons license by-sa">
-                <span class="cc cc-cc"></span>
-                
-                    <span class="cc cc-by"></span>
-                
-                    <span class="cc cc-sa"></span>
-                
-                </a>
-            </span>
-            &nbsp;2015-2017 Aaron Wu.
-        </p>
-        <p>Themed by <a href="https://github.com/unnamed42/hexo-theme-kunkka">Kunkka</a> | Powered by <a href="https://hexo.io/">Hexo</a>.</p>
+          深度学习笔记：稀疏自编码器（2）——反向传导
         
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/06/压缩感知算法原理/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">压缩感知算法原理</div>
+    </a>
+  
+</nav>
+
+  
+  <br>
+</article>
 
 
-<div class="sns-icons">
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="https://github.com/unnamed42">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-github fa-stack-1x fa-inverse"></span>
-            
-        </a>
-    </span>
-        
-    
-        
-        
-    
-        
-        
-    
-        
-        
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="https://plus.google.com/u/0/101538012089625781458">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-google-plus fa-stack-1x fa-inverse"></span>
-            
-        </a>
-    </span>
-        
-    
-        
-        
-    
-        
-        
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="https://www.zhihu.com/people/huang-wen-rui-74">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-stack-1x fa-inverse">知</span>
-            
-        </a>
-    </span>
-        
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="http://tieba.baidu.com/home/main/?un=Xelnagaman">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-stack-1x fa-inverse">贴</span>
-            
-        </a>
-    </span>
-        
-    
+
+
+</div>
+<div class="col-md-3 col-sm-3 blog-sidebar">
+  <!-- CATEGORIES START -->
+<h2 class="no-top-space">Categories</h2>
+
+<div class="widget-wrap">
+  <div class="widget">
+    <ul class="nav sidebar-categories margin-bottom-40">
+      
+	<li>
+	  <a href="/categories/Java/">Java (6)</a>
+	</li>
+      
+	<li>
+	  <a href="/categories/机器学习/">机器学习 (6)</a>
+	</li>
+      
+	<li>
+	  <a href="/categories/Linux/">Linux (1)</a>
+	</li>
+      
+	<li>
+	  <a href="/categories/图像处理/">图像处理 (1)</a>
+	</li>
+      
+    </ul>
+  </div>
 </div>
 
 
-    </div>
-</footer>
-<!-- #footer -->
+<!-- CATEGORIES END -->
 
-    <div id="totop" title="送你上天">
-    <canvas id="totop-canvas" width="48" height="48"></canvas>
-    <div id="totop-percent"></div>
-</div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<!-- BEGIN BLOG TAGS -->
+<div class="blog-tags margin-bottom-20">
+  <h2>Tags</h2>
+  
+  <div class="widget-wrap">
+    <div class="widget">
+      
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/"><i class='fa fa-tags'></i>Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/"><i class='fa fa-tags'></i>Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/图像处理/"><i class='fa fa-tags'></i>图像处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/"><i class='fa fa-tags'></i>机器学习</a></li></ul>
+    </div>
+  </div>
+
+
+</div>
+<!-- END BLOG TAGS -->
+
+
+<!-- BEGIN FEATURED POSTS -->                            
+<h2>Featured Posts</h2>
+<div class="recent-news margin-bottom-10">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+<!-- END FEATURED POSTS -->                            
+
+</div>
+</div>
+
+  </section>
+</div>
+
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="pre-footer">
+      <div class="container">
+        <div class="row">
+          <!-- BEGIN BOTTOM ABOUT BLOCK -->
+          <div class="col-md-4 col-sm-6 pre-footer-col">
+            <h2>About Us</h2>
+            <p>Computer Lab is a software development and marketing company based in Brooklyn, New York. <br><br> Computer Lab was founded in 2015, and is focused on so on and so forth.</p>
+          </div>
+          <!-- END BOTTOM ABOUT BLOCK -->
+
+          <!-- BEGIN BOTTOM CONTACTS -->
+          <div class="col-md-4 col-sm-6 pre-footer-col">
+            <h2>Contact</h2>
+            <address class="margin-bottom-40">
+              140 Metropolitan Avenue<br>
+              5th Floor<br>
+              Brooklyn, NY 11249<br>
+              Phone: 716-472-4484<br>
+              Email: <a href="mailto:ptsteadman@gmail.com">ptsteadman@gmail.com</a><br>
+            </address>
+          </div>
+          <!-- END BOTTOM CONTACTS -->
+
+	
+          <!-- BEGIN TWITTER BLOCK --> 
+          <div class="col-md-4 col-sm-6 pre-footer-col">
+
+	  <a data-tweet-limit="1" class="twitter-timeline"
+	  href="https://twitter.com/computerlab_"
+	  data-widget-id="678830341331820544">Tweets by @computerlab_</a>
+
+	  <script>!function(d,s,id){var
+	  js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+          </div>
+          <!-- END TWITTER BLOCK -->
+	
+        </div>
+      </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+
+    <!-- BEGIN FOOTER -->
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <!-- BEGIN COPYRIGHT -->
+          <div class="col-md-6 col-sm-6 padding-top-10">
+                  &copy; 2017 Aaron Wu<br>
+ <a href="javascript:;">Privacy Policy</a> | <a href="javascript:;">Terms of Service</a>
+          </div>
+          <!-- END COPYRIGHT -->
+	  <!-- BEGIN SOCIAL -->
+<div class="col-md-6 col-sm-6">
+  <ul class="social-footer list-unstyled list-inline pull-right">
+    
+      <li><a href="https://github.com/ptsteadman"><i class="fa fa-github"></i></a></li>
+    
+      <li><a href="https://twitter.com/ptsteadman"><i class="fa fa-twitter"></i></a></li>
+    
+      <li><a href="https://www.facebook.com/ptsteadman"><i class="fa fa-facebook"></i></a></li>
+    
+      <li><a href="/atom.xml"><i class="fa fa-rss"></i></a></li>
+    
+      <li><a href="https://linkedin.com/in/ptsteadman"><i class="fa fa-linkedin"></i></a></li>
+    
+      <li><a href="http://stackoverflow.com/users/2480493/patrick-steadman"><i class="fa fa-stackoverflow"></i></a></li>
+    
+  </ul>  
+</div>
+<!-- END SOCIAL -->
+
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+
+  <!-- BEGIN CORE PLUGINS (REQUIRED FOR ALL PAGES) -->
+<!--[if lt IE 9]>
+<script src="/metronic/assets/plugins/respond.min.js"></script>
+<![endif]--> 
+<script src="/metronic/assets/plugins/jquery.min.js"></script>
+<script src="/metronic/assets/plugins/jquery-migrate.min.js"></script>
+<script src="/metronic/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/metronic/assets/corporate/scripts/back-to-top.js"></script>
+<script src="/metronic/assets/plugins/owl.carousel/owl.carousel.min.js"></script>
+<script src="/metronic/assets/corporate/scripts/layout.js"></script>
+<script src="/js/wow.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        Layout.init();    
+        Layout.initOWL();
+        Layout.initTwitter();
+        Layout.initFixHeaderWithPreHeader(); /* Switch On Header Fixing (only if you have pre-header) */
+        Layout.initNavScrolling(); 
+	new WOW().init();
+    });
+</script>
+<!-- END CORE PLUGINS -->
+
+<!-- BEGIN PAGE-SPECIFIC PLUGINS --> 
+
+
+
+
+
+
+
+<!-- END PAGE-SPECIFIC PLUGINS --> 
+
+<!-- BEGIN INTEGRATIONS -->
+
+
+
+
+
+<!-- END INTEGRATIONS --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -469,5 +524,4 @@
 <!-- hexo-inject:end -->
 
 </body>
-
 </html>

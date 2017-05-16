@@ -1,245 +1,199 @@
 <!DOCTYPE html>
-<html lang="undefined">
-
-
-
-<!-- Head tag -->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
 <head>
-    
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="renderer" content="webkit|ie-comp|ie-stand">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-    
-    <title>
-    
-        Java——JDBC执行SQL语句的两种方式 - 
-    
-    Aaron Wu
-    </title>
-    
-    <meta name="keywords" content="">
-    <meta name="description" content="Aaron Wu">
-    <meta name="author" content="Aaron Wu">
-    
-    
-    
-    
-    
-    <link href="/css/style.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://cdn.bootcss.com/cc-icons/1.2.1/css/cc-icons.min.css" rel="stylesheet" type="text/css">
-    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
-    <!--<script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>-->
-    
-    
-    <script src="/js/script.js" type="text/javascript" async></script>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Java——JDBC执行SQL语句的两种方式 | Aaron Wu</title>
 
-    
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        showProcessingMessages: false,
-        jax: ["input/TeX","output/HTML-CSS", "output/PreviewHTML"], 
-        extensions: ["tex2jax.js", "fast-preview.js", "AssistiveMML.js" /*"MathMenu.js", "MathZoom.js", "[Contrib]/a11y/accessibility-menu.js"*/ ],
-        TeX: {
-            extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-        }, 
-        tex2jax: {
-            inlineMath: [['$','$']],
-            displayMath: [['$$','$$']], 
-            processEscapes: true,
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        },
-        "HTML-CSS": {linebreaks: {automatic: true}},
-        SVG: {linebreaks: {automatic: true}}
-    });
-    </script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js" async></script>
-    
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
+  <meta name="description" content="本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java——JDBC执行SQL语句的两种方式">
+<meta property="og:url" content="https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
+<meta property="og:updated_time" content="2017-05-08T03:33:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java——JDBC执行SQL语句的两种方式">
+<meta name="twitter:description" content="本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。">
+  
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
     
-    <script type="text/javascript">
-    var duoshuo_admin_id = "6224035036874670849";
-    var duoshuoQuery = {short_name: 'unnamed42-github' };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = '//static.duoshuo.com/embed.js';
-        ds.id = "duoshuo-script";
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-    </script>
-    
-    <script src="/js/duoshuo-hook.js" async></script>
-    
-    
+  <meta content="{{ title }}" name="description">
+  <meta content="{{ title }}" name="keywords">
+  <meta content="{{ title }}" name="author">
 
-    
-    
-    
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
 
-    
-    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-    
+  <!-- Global styles START -->   
+  <link rel="stylesheet" href="/metronic/assets/plugins/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/metronic/assets/plugins/bootstrap/css/bootstrap.min.css">
+  <!-- Global styles END --> 
+   
+  <!-- Page level plugin styles START -->
+  <link rel="stylesheet" href="/metronic/assets/pages/css/animate.css">
+  <link rel="stylesheet" href="/metronic/assets/plugins/owl.carousel/assets/owl.carousel.css">
+  <!-- Page level plugin styles END -->
 
+  <!-- Theme styles START -->
+  <link rel="stylesheet" href="/metronic/assets/pages/css/components.css">
+  <link rel="stylesheet" href="/metronic/assets/pages/css/slider.css">
+  <link rel="stylesheet" href="/metronic/assets/corporate/css/style.css">
+  <link rel="stylesheet" href="/metronic/assets/pages/css/portfolio.css">
+  <link rel="stylesheet" href="/metronic/assets/corporate/css/style-responsive.css">
+  <link rel="stylesheet" href="/metronic/assets/corporate/css/themes/red.css">
+  <link rel="stylesheet" href="/css/theme-styles.css">
+  <!-- Theme styles END --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
-
-<body class="post">
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="header">
-    <div class="container clearfix">
-        <div class="logo" style="width: auto;">
-            <a href="/" title="Aaron Wu" rel="home" style="text-decoration: none;">
-                
-                <span class="brand-logo">
-                    
-                    Aaron Wu
-                    
-                
-                </span>
-            </a>
-        </div>
-        <div id="global-nav">
-            <ul class="gnul">
-                <li class="gnli ">
-                    <a class="gna fa fa-home" href="/" title="Aaron Wu">
-                        <span class="gn-item">主页</span>
-                    </a>
-                </li>
-                
-                <li class="gnli dropdown current">
-                    <a class="gna fa fa-bars" href="#">
-                        <span class="gn-item">导航</span>
-                    </a>
-                    <div class="submenu">
-                        <div class="tab-content">
-                            <table>
-                                <tbody>
-                                    
-                                    <tr class="trline">
-                                        <td class="tdleft">分类</td>
-                                        <td class="tdright">
-                                            <ul class="tab-categories">
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/Java/">Java</a>
-                                                </li>
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/Linux/">Linux</a>
-                                                </li>
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/图像处理/">图像处理</a>
-                                                </li>
-                                            
-                                                <li class="cat-item">
-                                                    <a href="/categories/机器学习/">机器学习</a>
-                                                </li>
-                                            
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td class="tdleft">标签</td>
-                                        <td class="tdright">
-                                            <div class="tab-tags">
-                                                <a href="/tags/Java/" style="font-size: 12px;">Java</a> <a href="/tags/机器学习/" style="font-size: 12px;">机器学习</a> <a href="/tags/Linux/" style="font-size: 12px;">Linux</a> <a href="/tags/图像处理/" style="font-size: 12px;">图像处理</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </li>
-                
-                
-                <li class="gnli">
-                    <a class="gna fa fa-archive" href="/archives/index.html" title="">
-                        <span class="gn-item">归档</span>
-                    </a>
-                </li>
-                
-                <li class="gnli">
-                    <a class="gna fa fa-user" href="/about/index.html" title="">
-                        <span class="gn-item">关于</span>
-                    </a>
-                </li>
-                
-                <li class="gnli">
-                    <a class="gna fa fa-rss" href="/atom.xml" title="">
-                        <span class="gn-item">订阅</span>
-                    </a>
-                </li>
-                
-                
-                
-            </ul>
-        </div>
-        
-<form method="get" id="search-form" action="/search.html">
-    <input type="text" name="keywords" id="search-input" placeholder="输入关键词" />
-    <button type="submit" id="search-submit">
-        <span class="fa fa-search"></span>
-    </button>
-</form>
-
-
+<body class="corporate">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- BEGIN TOP BAR -->
+<div class="pre-header">
+  <div class="container">
+    <div class="row">
+      <!-- BEGIN TOP BAR LEFT PART -->
+      <div class="col-md-6 col-sm-6 col-xs-9 additional-shop-info">
+	<ul class="list-unstyled list-inline">
+	  <li><i class="fa fa-phone"></i><span>716-472-4484</span></li>
+	  <li><i class="fa fa-envelope-o"></i><span>ptsteadman@gmail.com</span></li>
+	</ul>
+      </div>
+      <!-- END TOP BAR LEFT PART -->
+      <!-- BEGIN TOP BAR MENU -->
+      <div class="col-md-6 col-sm-6 col-xs-3 additional-nav">
+	<ul class="list-unstyled list-inline pull-right">
+	  <li><a href="/login">Log In</a></li>
+	</ul>
+      </div>
+      <!-- END TOP BAR MENU -->
     </div>
-</nav>
+  </div>        
+</div>
+<!-- END TOP BAR -->
+<!-- BEGIN HEADER -->
+<div class="header">
+  <div class="container">
+    <!--<a class="site-logo" href="/" id="logo">Aaron Wu</a>-->
 
+    <a class="site-logo" href="/">
+      <img src="/metronic/assets/corporate/img/logos/logo-corp-red.png" alt="Metronic FrontEnd">
+    </a>
+
+    <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
+
+    <!-- BEGIN NAVIGATION -->
+    <div class="header-navigation pull-right font-transform-inherit">
+      <ul>
+	
+	<li class="">
+	  <a  href="/">Home</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/projects/">Projects</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/archives/">Blog</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/contact/">Contact</a>
+	</li>
+	
+	<li class="">
+	  <a  href="/about/">About</a>
+	</li>
+	
+	<!-- BEGIN TOP SEARCH -->
+	<li class="menu-search">
+	  <span class="sep"></span>
+	  <i class="fa fa-search search-btn"></i>
+	  <div class="search-box">
+	    <form action="#">
+	      <div class="input-group">
+		<input type="text" placeholder="Search" class="form-control st-default-search-input">
+		<span class="input-group-btn">
+		  <button class="btn btn-primary" type="submit">Search</button>
+		</span>
+	      </div>
+	    </form>
+	  </div> 
+	</li>
+	<!-- END TOP SEARCH -->
+      </ul>
+    </div>
+    <!-- END NAVIGATION -->
+  </div>
+</div>
+<!-- Header END -->
+
+  <div class="container">
+  <ul class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/archives/">Blog</a></li>
+    <li class="active">Post</li>
+  </ul>
+  <section id="main">
     
-<main id="content">
-    <div class="container clearfix">
-        <div id="primary" >
-            <nav class="breadcrumb-navigation">
-                <a rel="bookmark" href="/">主页</a>
-                <span class="breadcrumb-arrow fa fa-angle-right"></span>
-                 
-<a href="/categories/Java/" title="Java" rel="category tag">Java</a>
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/">Java——JDBC执行SQL语句的两种方式</a>
+    </h2>
 
-                <span class="breadcrumb-arrow fa fa-angle-right"></span>
-                Java——JDBC执行SQL语句的两种方式
-            </nav>
-            <article class="single-post">
-                <header class="post-header">
-                    <h1 class="post-title">
-                        <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/" title="Java——JDBC执行SQL语句的两种方式">Java——JDBC执行SQL语句的两种方式</a>
-                    </h1>
-                </header>
-                <div class="post-meta">
-    <ul class="inline-ul">
-        <li class="inline-li">
-            <time>2017-05-04</time>
-        </li>
-        
-        <li class="inline-li">
-            <span class="post-span">·</span>
-        </li>
-        <li class="inline-li">
-             
-<a href="/categories/Java/" title="Java" rel="category tag">Java</a>
 
-        </li>
-        
-        
-        <li class="inline-li">
-            <span class="post-span">·</span>
-        </li>
-        <li class="inline-li">
-            <span id="busuanzi_value_page_pv"></span> Views
-        </li>
-        
-    </ul>
-</div> 
+    <div class="row">
+<div class="col-md-9 col-sm-9 blog-posts">
+<article id="post-Java——JDBC执行SQL语句的两种方式" class="article article-type-post blog-item" itemscope itemprop="blogPost">
+  <div class="article-meta">
+  </div>
+  <div class="article-inner">
+    
+    
+    <header class="article-header">
+      <ul class="blog-info">
+	<li><i class="fa fa-user"></i> Anonymous</li>
+	<li><i class="fa fa-calendar"></i>
+	  <time datetime="2017-05-04T15:36:23.000Z" itemprop="datePublished">2017/05/04</time>
 
-                <div class="post-body clearfix">
-                    <div class="post-content">
-                        
-                        <p>&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  </p>
+	</li>
+	<li class="hidden-xs"><i class="fa fa-comments"></i>
+	  <a href="https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/#disqus_thread" class="article-comment-link">Comments</a>
+	</li>
+	<li class="hidden-xs"><i class="fa fa-tags"></i> 
+	  
+  
+    <a href="/tags/Java/" title="Java">Java</a>
+  
+
+
+	</li>
+      </ul>
+      
+  <div class="article-category">
+    
+    Category: 
+    
+    Categories:
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+  <br>
+
+
+    </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>&emsp;&emsp;本文记录一下JDBC执行SQL语句的两种方式，分别是使用Statment对象和使用PreparedStatment对象。  </p>
 <a id="more"></a>
 <p>&emsp;&emsp;使用JDBC前首先要在项目中导入数据库驱动jar包，本文使用的是MySQL，IDE使用的是Intellij IDEA，导入驱动的过程在此不赘述。<br>&emsp;&emsp;使用JDBC执行SQL语句共分为三步：<br>&emsp;&emsp;&emsp;&emsp;1. 获得连接类Connection对象<br>&emsp;&emsp;&emsp;&emsp;2. 获得语句对象<br>&emsp;&emsp;&emsp;&emsp;3. 执行语句<br>&emsp;&emsp;其中使用PreparedStatment对象执行SQL语句更为灵活，可以传入参数。本文编写了一个查询数据库的示例。 </p>
 <p>&emsp;&emsp;示例数据库脚本为：  </p>
@@ -250,170 +204,250 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * （模型层）操作数据模型</div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DAO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 方法一：使用Statment对象执行sql语句</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     * <span class="doctag">@throws</span> SQLException</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">statmentQuery</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        <span class="comment">//获得数据库连接</span></div><div class="line">        Connection connection = DBUtil.getConnection();</div><div class="line">        <span class="comment">//创建sql语句</span></div><div class="line">        String sql = <span class="string">"SELECT * FROM student_table"</span>;</div><div class="line">        <span class="comment">//获取Statment对象</span></div><div class="line">        Statement statement = connection.createStatement();</div><div class="line">        <span class="comment">//打印出查询语句</span></div><div class="line">        System.out.println(sql);</div><div class="line">        <span class="comment">//执行sql语句并获得结果集</span></div><div class="line">        ResultSet resultSet = statement.executeQuery(sql);</div><div class="line">        <span class="comment">//将查询结果映射到实体对象</span></div><div class="line">        Student student = mapEntity(resultSet);</div><div class="line">        <span class="keyword">return</span> student;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 方法二：通过PreparedStatment对象执行sql语句，可以进行参数的传递</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     * <span class="doctag">@throws</span> SQLException</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">preparedStatmentQuery</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        <span class="comment">//获得数据库连接</span></div><div class="line">        Connection connection = DBUtil.getConnection();</div><div class="line">        <span class="comment">//创建sql语句，使用?作为占位符</span></div><div class="line">        String sql = <span class="string">"SELECT * FROM student_table WHERE id = ? AND name = ?"</span>;</div><div class="line">        <span class="comment">//创建预编译查询语句对象</span></div><div class="line">        PreparedStatement pstmt = connection.prepareStatement(sql);</div><div class="line">        <span class="comment">//给预编译查询语句对象传入参数</span></div><div class="line">        pstmt.setInt(<span class="number">1</span>, <span class="number">1</span>);</div><div class="line">        pstmt.setString(<span class="number">2</span>, <span class="string">"桐人"</span>);</div><div class="line">        <span class="comment">//打印出查询语句</span></div><div class="line">        System.out.println(sql);</div><div class="line">        <span class="comment">//执行预编译查询语句</span></div><div class="line">        ResultSet resultSet = pstmt.executeQuery();</div><div class="line">        <span class="comment">//将查询结果映射到实体对象</span></div><div class="line">        Student student = mapEntity(resultSet);</div><div class="line">        <span class="keyword">return</span> student;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 将查询结果映射到实体对象</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> resultSet</div><div class="line">     * <span class="doctag">@throws</span> SQLException</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">private</span> Student <span class="title">mapEntity</span><span class="params">(ResultSet resultSet)</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        Student tempStudent = <span class="keyword">new</span> Student();</div><div class="line">        <span class="keyword">if</span> (resultSet.next()) &#123;</div><div class="line">            tempStudent = <span class="keyword">new</span> Student();</div><div class="line">            tempStudent.setId(resultSet.getInt(<span class="string">"id"</span>));</div><div class="line">            tempStudent.setName(resultSet.getString(<span class="string">"name"</span>));</div><div class="line">            tempStudent.setSex(resultSet.getString(<span class="string">"sex"</span>));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> tempStudent;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * （模型层）实体类</div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Integer id;</div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> String sex;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSex</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> sex;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(String sex)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.sex = sex;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Student&#123;"</span> +</div><div class="line">                <span class="string">"id="</span> + id +</div><div class="line">                <span class="string">", name='"</span> + name + <span class="string">'\''</span> +</div><div class="line">                <span class="string">", sex='"</span> + sex + <span class="string">'\''</span> +</div><div class="line">                <span class="string">'&#125;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.sql.SQLException;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 05/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException </span>&#123;</div><div class="line">        DAO dao = <span class="keyword">new</span> DAO();</div><div class="line">        System.out.println(<span class="string">"使用Statment对象执行sql语句："</span>);</div><div class="line">        System.out.println(dao.statmentQuery());</div><div class="line">        System.out.println(<span class="string">"=================="</span>);</div><div class="line">        System.out.println(<span class="string">"使用PreparedStatment对象执行查询语句："</span>);</div><div class="line">        System.out.println(dao.preparedStatmentQuery());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-                    </div>
-                </div>
-                <nav class="post-tags">
-                
-                    
-                    <a href="/tags/Java/" title="Java" rel="tag" class="fa fa-tag">Java</a>
-                    
-                
-                </nav>
-            </article>
-        </div><!-- div#primary -->
-        <ul id="pager">
-
-    <li class="previous">
-        <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/" title="Java——对象的序列化与反序列化（1）" class="tooltipped tooltipped-n" aria-label="Java——对象的序列化与反序列化（1）"><span class="fa fa-chevron-left"></span> 上一篇文章</a>
-    </li>
-    
-    
-    <li class="next">
-        <a href="/2017/04/30/Java——利用Collections.sort()对List排序/" title="Java——利用Collections.sort()对泛型为String的List排序" class="tooltipped tooltipped-n" aria-label="Java——利用Collections.sort()对泛型为String的List排序">下一篇文章 <span class="fa fa-chevron-right"></span></a>
-    </li>
-    
-</ul>
-
-        
-<section id="comments">
-    
-    <!-- Duoshuo start -->
-    <div class="ds-thread"
-        data-thread-key="2017/05/04/Java——JDBC执行SQL语句的两种方式/"
-        data-title="Java——JDBC执行SQL语句的两种方式"
-        data-url="https://wanz2.github.io/2017/05/04/Java——JDBC执行SQL语句的两种方式/" >
+      
     </div>
-    <!-- Duoshuo end -->
+  </div>
+  
     
-
-    
-</section>
-
-
+<nav id="article-nav">
+  
+    <a href="/2017/05/05/Java——对象的序列化与反序列化（1）/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
-    </div>
-</main>
-
-    <!-- Footer -->
-    
-<!-- #content -->
-<footer id="footer">
-    <div class="container">
-        <p>
-            <span class="cc-license">
-                <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" title="Creative Commons license by-sa">
-                <span class="cc cc-cc"></span>
-                
-                    <span class="cc cc-by"></span>
-                
-                    <span class="cc cc-sa"></span>
-                
-                </a>
-            </span>
-            &nbsp;2015-2017 Aaron Wu.
-        </p>
-        <p>Themed by <a href="https://github.com/unnamed42/hexo-theme-kunkka">Kunkka</a> | Powered by <a href="https://hexo.io/">Hexo</a>.</p>
+          Java——对象的序列化与反序列化（1）
         
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/30/Java——利用Collections.sort()对List排序/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java——利用Collections.sort()对泛型为String的List排序</div>
+    </a>
+  
+</nav>
+
+  
+  <br>
+</article>
 
 
-<div class="sns-icons">
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="https://github.com/unnamed42">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-github fa-stack-1x fa-inverse"></span>
-            
-        </a>
-    </span>
-        
-    
-        
-        
-    
-        
-        
-    
-        
-        
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="https://plus.google.com/u/0/101538012089625781458">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-google-plus fa-stack-1x fa-inverse"></span>
-            
-        </a>
-    </span>
-        
-    
-        
-        
-    
-        
-        
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="https://www.zhihu.com/people/huang-wen-rui-74">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-stack-1x fa-inverse">知</span>
-            
-        </a>
-    </span>
-        
-    
-        
-        
-            
-    <span class="sns-icon fa-stack">
-        <a target="_blank" href="http://tieba.baidu.com/home/main/?un=Xelnagaman">
-            <span class="fa fa-square fa-stack-2x"></span>
-            
-            <span class="fa fa-stack-1x fa-inverse">贴</span>
-            
-        </a>
-    </span>
-        
-    
+
+
+</div>
+<div class="col-md-3 col-sm-3 blog-sidebar">
+  <!-- CATEGORIES START -->
+<h2 class="no-top-space">Categories</h2>
+
+<div class="widget-wrap">
+  <div class="widget">
+    <ul class="nav sidebar-categories margin-bottom-40">
+      
+	<li>
+	  <a href="/categories/Java/">Java (6)</a>
+	</li>
+      
+	<li>
+	  <a href="/categories/机器学习/">机器学习 (6)</a>
+	</li>
+      
+	<li>
+	  <a href="/categories/Linux/">Linux (1)</a>
+	</li>
+      
+	<li>
+	  <a href="/categories/图像处理/">图像处理 (1)</a>
+	</li>
+      
+    </ul>
+  </div>
 </div>
 
 
+<!-- CATEGORIES END -->
+
+<!-- BEGIN BLOG TAGS -->
+<div class="blog-tags margin-bottom-20">
+  <h2>Tags</h2>
+  
+  <div class="widget-wrap">
+    <div class="widget">
+      
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/"><i class='fa fa-tags'></i>Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/"><i class='fa fa-tags'></i>Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/图像处理/"><i class='fa fa-tags'></i>图像处理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/机器学习/"><i class='fa fa-tags'></i>机器学习</a></li></ul>
     </div>
-</footer>
-<!-- #footer -->
+  </div>
 
-    <div id="totop" title="送你上天">
-    <canvas id="totop-canvas" width="48" height="48"></canvas>
-    <div id="totop-percent"></div>
-</div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
+</div>
+<!-- END BLOG TAGS -->
 
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+<!-- BEGIN FEATURED POSTS -->                            
+<h2>Featured Posts</h2>
+<div class="recent-news margin-bottom-10">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+<!-- END FEATURED POSTS -->                            
+
+</div>
+</div>
+
+  </section>
+</div>
+
+    <!-- BEGIN PRE-FOOTER -->
+    <div class="pre-footer">
+      <div class="container">
+        <div class="row">
+          <!-- BEGIN BOTTOM ABOUT BLOCK -->
+          <div class="col-md-4 col-sm-6 pre-footer-col">
+            <h2>About Us</h2>
+            <p>Computer Lab is a software development and marketing company based in Brooklyn, New York. <br><br> Computer Lab was founded in 2015, and is focused on so on and so forth.</p>
+          </div>
+          <!-- END BOTTOM ABOUT BLOCK -->
+
+          <!-- BEGIN BOTTOM CONTACTS -->
+          <div class="col-md-4 col-sm-6 pre-footer-col">
+            <h2>Contact</h2>
+            <address class="margin-bottom-40">
+              140 Metropolitan Avenue<br>
+              5th Floor<br>
+              Brooklyn, NY 11249<br>
+              Phone: 716-472-4484<br>
+              Email: <a href="mailto:ptsteadman@gmail.com">ptsteadman@gmail.com</a><br>
+            </address>
+          </div>
+          <!-- END BOTTOM CONTACTS -->
+
+	
+          <!-- BEGIN TWITTER BLOCK --> 
+          <div class="col-md-4 col-sm-6 pre-footer-col">
+
+	  <a data-tweet-limit="1" class="twitter-timeline"
+	  href="https://twitter.com/computerlab_"
+	  data-widget-id="678830341331820544">Tweets by @computerlab_</a>
+
+	  <script>!function(d,s,id){var
+	  js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+          </div>
+          <!-- END TWITTER BLOCK -->
+	
+        </div>
+      </div>
+    </div>
+    <!-- END PRE-FOOTER -->
+
+    <!-- BEGIN FOOTER -->
+    <div class="footer">
+      <div class="container">
+        <div class="row">
+          <!-- BEGIN COPYRIGHT -->
+          <div class="col-md-6 col-sm-6 padding-top-10">
+                  &copy; 2017 Aaron Wu<br>
+ <a href="javascript:;">Privacy Policy</a> | <a href="javascript:;">Terms of Service</a>
+          </div>
+          <!-- END COPYRIGHT -->
+	  <!-- BEGIN SOCIAL -->
+<div class="col-md-6 col-sm-6">
+  <ul class="social-footer list-unstyled list-inline pull-right">
+    
+      <li><a href="https://github.com/ptsteadman"><i class="fa fa-github"></i></a></li>
+    
+      <li><a href="https://twitter.com/ptsteadman"><i class="fa fa-twitter"></i></a></li>
+    
+      <li><a href="https://www.facebook.com/ptsteadman"><i class="fa fa-facebook"></i></a></li>
+    
+      <li><a href="/atom.xml"><i class="fa fa-rss"></i></a></li>
+    
+      <li><a href="https://linkedin.com/in/ptsteadman"><i class="fa fa-linkedin"></i></a></li>
+    
+      <li><a href="http://stackoverflow.com/users/2480493/patrick-steadman"><i class="fa fa-stackoverflow"></i></a></li>
+    
+  </ul>  
+</div>
+<!-- END SOCIAL -->
+
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+
+  <!-- BEGIN CORE PLUGINS (REQUIRED FOR ALL PAGES) -->
+<!--[if lt IE 9]>
+<script src="/metronic/assets/plugins/respond.min.js"></script>
+<![endif]--> 
+<script src="/metronic/assets/plugins/jquery.min.js"></script>
+<script src="/metronic/assets/plugins/jquery-migrate.min.js"></script>
+<script src="/metronic/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="/metronic/assets/corporate/scripts/back-to-top.js"></script>
+<script src="/metronic/assets/plugins/owl.carousel/owl.carousel.min.js"></script>
+<script src="/metronic/assets/corporate/scripts/layout.js"></script>
+<script src="/js/wow.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        Layout.init();    
+        Layout.initOWL();
+        Layout.initTwitter();
+        Layout.initFixHeaderWithPreHeader(); /* Switch On Header Fixing (only if you have pre-header) */
+        Layout.initNavScrolling(); 
+	new WOW().init();
+    });
 </script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+<!-- END CORE PLUGINS -->
+
+<!-- BEGIN PAGE-SPECIFIC PLUGINS --> 
+
+
+
+
+
+
+
+<!-- END PAGE-SPECIFIC PLUGINS --> 
+
+<!-- BEGIN INTEGRATIONS -->
+
+
+
+
+
+<!-- END INTEGRATIONS --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
-
 </html>
