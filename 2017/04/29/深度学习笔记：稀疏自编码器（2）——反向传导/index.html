@@ -1,41 +1,17 @@
-<!DOCTYPE html>
-<html lang="">
-  <head>
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>深度学习笔记：稀疏自编码器（2）——反向传导 | Aaron Wu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+    <meta name="author" content="Aaron Wu">
+    
 
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-  <meta name="description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。"/>
-
-
-
-
-  <meta name="keywords" content="机器学习," />
-
-
-
-
-
-  <link rel="alternate" href="/default" title="Aaron Wu">
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
-
-
-
-<link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/"/>
-
-
-<meta name="description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+    
+    <meta name="description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/index.html">
@@ -46,89 +22,80 @@
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta name="twitter:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
 
-
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
-<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
-
-
-
-
-
-<script type="text/javascript">
-  var themeConfig = {
-    fancybox: {
-      enable: false
-    },
-  };
-</script>
-
-
-
-
-  
-
-
-
-    <title> 深度学习笔记：稀疏自编码器（2）——反向传导 - Aaron Wu </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  </head>
+    
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
   <body>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="page">
-      <header id="masthead"><div class="site-header-inner">
-    <h1 class="site-title">
-        <a href="/." class="logo">Aaron Wu</a>
-    </h1>
-
-    <nav id="nav-top">
-        
-            <ul id="menu-top" class="nav-top-items">
-                
-                    <li class="menu-item">
-                        <a href="/archives">
-                            
-                            
-                                Archives
-                            
-                        </a>
-                    </li>
-                
-                    <li class="menu-item">
-                        <a href="/about">
-                            
-                            
-                                About
-                            
-                        </a>
-                    </li>
-                
-            </ul>
-        
-  </nav>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:wanz2.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
 </div>
-
-      </header>
-      <div id="content">
-        
-    <div id="primary">
-        
-  <article class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        
-          深度学习笔记：稀疏自编码器（2）——反向传导
-        
-      </h1>
-
-      <time class="post-time">
-          4月 29 2017
-      </time>
     </header>
-
-
-
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-            <div class="post-content">
-            <p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。   </p>
+      <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" title="深度学习笔记：稀疏自编码器（2）——反向传导" itemprop="url">深度学习笔记：稀疏自编码器（2）——反向传导</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-29T15:41:01.000Z" itemprop="datePublished"> 发表于 2017-04-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中所使用的符号和一些约定"><span class="toc-number">1.</span> <span class="toc-text">0.本文中所使用的符号和一些约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-代价函数"><span class="toc-number">2.</span> <span class="toc-text">1.代价函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-梯度下降"><span class="toc-number">3.</span> <span class="toc-text">2.梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-反向传导"><span class="toc-number">4.</span> <span class="toc-text">3.反向传导</span></a></li></ol>
+		
+		</div>
+		
+		<p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。   </p>
 <a id="more"></a>
 <h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>&emsp;&emsp;本文中所使用的样本集：<br>${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>&emsp;&emsp;其他符号：  </p>
 <table>
@@ -200,86 +167,435 @@
 <li>初始化每一个参数$W_{ij}^{(l)}$和$b_i^{(l)}$为很小的接近零的随机值  </li>
 <li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：<br>&emsp;&emsp;$W<em>{ij}^{(l)}=W</em>{ij}^{(l)}-\alpha\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)$<br>&emsp;&emsp;$b</em>{i}^{(l)}=b<em>{i}^{(l)}-\alpha\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b)$<br>其中$\alpha$是学习速率。<br>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。  <h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2>&emsp;&emsp;我们将求偏导的项单独拿出来看：<br>&emsp;&emsp;$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W</em>{ij}^{(l)}$&emsp;&emsp;&emsp;(1)<br>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)<br>&emsp;&emsp;显然，求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$。<br>&emsp;&emsp;由于：<br>&emsp;&emsp;$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{l+1}}{\partial W<em>{ij}^{l}}$&emsp;&emsp;&emsp;(3)<br>&emsp;&emsp;$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{(l+1)}}{\partial b<em>{i}^{(l)}}$&emsp;&emsp;&emsp;(4)<br>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta<em>{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。<br>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$可得：<br>&emsp;&emsp;$\delta_{i}^{(n<em>l)}=-(y</em>{i}-a_{i}^{(n<em>l)})f’(z</em>{i}^{(n<em>l)})$<br>&emsp;&emsp;$\delta</em>{i}^{(l)}=(\sum<em>{j=1}^{s</em>{l+1}}W<em>{ji}^{(l)}\delta</em>{j}^{(l+1)})f’(z_{i}^{(l)})$<br>通过以上第一式可以求出第$n<em>l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：<br>&emsp;&emsp;$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\delta <em>{i}^{(l+1)}a</em>{j}^{(l)}$&emsp;&emsp;&emsp;(5)<br>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\delta</em>{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)<br>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。   </li>
 </ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
 
-            </div>
-          
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+</div>
 
-    
-      <footer class="post-footer">
-        <div class="post-tags">
-          
-            <a href="/tags/机器学习/">机器学习</a>
-          
-        </div>
 
-        
-        
-  <nav class="post-nav">
-    
-      <a class="prev" href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</span>
-        <span class="prev-text nav-mobile">Prev</span>
-      </a>
-    
-    
-      <a class="next" href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">
-        <span class="next-text nav-default">深度学习笔记：稀疏自编码器（1）——神经元与神经网络</span>
-        <span class="prev-text nav-mobile">Next</span>
-        <i class="iconfont icon-right"></i>
-      </a>
-    
-  </nav>
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/机器学习/">机器学习</a>
+  </div>
 
-        
-  <div class="comments" id="comments">
-    
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" data-title="深度学习笔记：稀疏自编码器（2）——反向传导 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" title="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
+  <strong>上一篇：</strong><br/>
+  <span>
+  深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/"  title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+ <strong>下一篇：</strong><br/> 
+ <span>深度学习笔记：稀疏自编码器（1）——神经元与神经网络
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中所使用的符号和一些约定"><span class="toc-number">1.</span> <span class="toc-text">0.本文中所使用的符号和一些约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-代价函数"><span class="toc-number">2.</span> <span class="toc-text">1.代价函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-梯度下降"><span class="toc-number">3.</span> <span class="toc-text">2.梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-反向传导"><span class="toc-number">4.</span> <span class="toc-text">3.反向传导</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a>
+    </div>
   </div>
 
 
-      </footer>
-    
-  </article>
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">10</span></li></ul>
+  </div>
 
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://coolshell.cn" target="_blank" title="COOLSHELL">COOLSHELL</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qinjiangbo.com" target="_blank" title="心灵港">心灵港</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.whu.edu.cn" target="_blank" title="武汉大学">武汉大学</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
     </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> I&#39;m Aaron Wu in WHU <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Wanz2" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:wuwenan_6@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
 
-      </div>
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Aaron Wu">Aaron Wu</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
 
-      <footer id="colophon"><span class="copyright-year">
-    
-        &copy;
-    
-        2014 -
-    
-    2017
-    <span class="footer-author">Aaron Wu.</span>
-    <span class="power-by">
-        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
-    </span>
-</span>
-
-      </footer>
-
-      <div class="back-to-top" id="back-to-top">
-        <i class="iconfont icon-up"></i>
-      </div>
-    </div>
-    
-
-
-    
-
-
-
-
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
   
-    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
-  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
 
-  
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
 
-    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
-<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
