@@ -13,8 +13,6 @@
     
     <title>
     
-        2017 - 
-    
     Aaron Wu
     </title>
     
@@ -86,7 +84,7 @@
 </head>
 
 
-<body class="archive post-archive">
+<body class="page">
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="header">
     <div class="container clearfix">
         <div class="logo" style="width: auto;">
@@ -157,7 +155,7 @@
                 </li>
                 
                 
-                <li class="gnli current">
+                <li class="gnli">
                     <a class="gna fa fa-archive" href="/archives/index.html" title="">
                         <span class="gn-item">归档</span>
                     </a>
@@ -191,90 +189,29 @@
     </div>
 </nav>
 
-    <div id="content">
+    
+<main id="content" class="not-found">
     <div class="container clearfix">
-        <!-- Main Content -->
-        <main id="primary">
-    <div class="post-content">
-        <div id="archives">
-        
-        
-            
-            
-                
-                
-            <div class="archive-title" id="archive-2017-4">
-                <h3 class="archive-time">2017-4</h3>
-                <div class="archives">
-            
-                    <div class="brick">
-                        <span class="time">4-29</span>
-                        <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/">深度学习笔记：稀疏自编码器（1）——神经元与神经网络</a>
-                    </div>
-        
-            
-            
-                    <div class="brick">
-                        <span class="time">4-6</span>
-                        <a href="/2017/04/06/压缩感知算法原理/">压缩感知算法原理</a>
-                    </div>
-        
-            
-            
-                    <div class="brick">
-                        <span class="time">4-1</span>
-                        <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</a>
-                    </div>
-        
-            
-            
-                    <div class="brick">
-                        <span class="time">4-1</span>
-                        <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/">Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</a>
-                    </div>
-        
-        
-                </div><!-- enclosing tag for the last div.archive-title -->
-            </div><!-- enclosing tag for the last div.archives -->
-        
+        <div id="wrapper">
+            <h1 id="not-found-title">您所要访问的页面不存在！</h1>
+            <p id="count-down">将在<span id="second">5</span>秒后跳回<a href="/" target="_blank" rel="external">主页</a></p>
         </div>
+        <img id="wasted" src="http://img.mp.itc.cn/upload/20160825/5361be0fb77e42acb70a28f4907495a2_th.jpg"></img>
     </div>
-    
-    <nav id="archive-nav">
-        <ul class="nav"><!-- nav class required for Bootstrap scrollspy -->
-            <li class="year"><a href="#archive-2017-4" class="year-anchor">2017</a><ul class="months"><li class="month" id="anchor-2017-4"><a href="#archive-2017-4" class="month-anchor">4</a></li>
-            
-                </ul><!-- enclosing tag for ul.months -->
-            </li><!-- enclosing tag for li.year -->
-            
-        </ul>
-    </nav>
-    
 </main>
 
-        
-<div id="sidebar">
-
-<div class="widget widget-comments">
-    <h3 class="widget-title">最新评论</h3>
-    
-    <ul class="list ds-recent-comments" data-num-items="5"></ul>
-    
-</div>
-
-
-
-    <div class="widget recent-posts"></div>
-
-
-    <div class="widget widget-links"></div>
-
-</div>
-<!-- end #sidebar -->
-
-
-    </div>
-</div>
+<script type="text/javascript">
+$(function() {
+    var sec = 5;
+    var timer = setInterval(function() { 
+        $('#second').text(sec--);
+        if (sec == 0) {
+            clearInterval(timer);
+            location.href = '/';
+        }
+    }, 1000);
+});
+</script>
 
     <!-- Footer -->
     
