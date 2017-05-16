@@ -19,7 +19,7 @@
 <meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
-<meta property="og:updated_time" content="2017-05-16T13:05:15.000Z">
+<meta property="og:updated_time" content="2017-05-16T13:06:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
 <meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
@@ -154,7 +154,7 @@
 </tr>
 </tbody>
 </table>
-<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
+<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>&emsp;&emsp;$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$</p>
 <h2 id="1-神经元"><a href="#1-神经元" class="headerlink" title="1. 神经元"></a>1. 神经元</h2><h3 id="1-1-神经元定义"><a href="#1-1-神经元定义" class="headerlink" title="1.1 神经元定义"></a>1.1 神经元定义</h3><p>&emsp;&emsp;神经元是以$x$为输入，$h_{W,b}$为输出的运算单元，如图所示：  </p>
 <p><img src="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png" alt="神经元">  </p>
 <h3 id="1-2-激活函数"><a href="#1-2-激活函数" class="headerlink" title="1.2 激活函数"></a>1.2 激活函数</h3><p>&emsp;&emsp;通常在神经元中输出值为0表示神经元被激活，输出为1表示神经元被抑制，而计算输出值所用的函数则被称为“激活函数”。本文中所用的激活函数为sigmoid函数：<br>&emsp;&emsp;&emsp;&emsp;$f(z)=\frac{1}{1+e^{(-z)}}$，其定义域为$(-\infty,+\infty)$，值域为$(0,1)$。<br>&emsp;&emsp;以上图神经元为例，假设第$i$个输入值与神经元连线上的权重为$w_1$，输入值偏置项为$b<em>1$，在单个神经元中，有：<br>&emsp;&emsp;$h</em>{W,b}(x)=f(x_1w_1+x_2w_2+x_3w_3+b_1)$<br>&emsp;&emsp;观察可以发现，单个神经元就是一个<strong>逻辑回归</strong>模型。</p>
@@ -272,11 +272,11 @@
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 		</ul>
