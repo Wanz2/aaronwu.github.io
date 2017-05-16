@@ -19,7 +19,7 @@
 <meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
-<meta property="og:updated_time" content="2017-05-16T16:15:53.000Z">
+<meta property="og:updated_time" content="2017-05-16T16:18:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
 <meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
@@ -160,7 +160,7 @@
 <h3 id="1-2-激活函数"><a href="#1-2-激活函数" class="headerlink" title="1.2 激活函数"></a>1.2 激活函数</h3><p>&emsp;&emsp;通常在神经元中输出值为0表示神经元被激活，输出为1表示神经元被抑制，而计算输出值所用的函数则被称为“激活函数”。本文中所用的激活函数为sigmoid函数：<br>&emsp;&emsp;&emsp;&emsp;$f(z)=\frac{1}{1+e^{(-z)}}$，其定义域为$(-\infty,+\infty)$，值域为$(0,1)$。<br>&emsp;&emsp;以上图神经元为例，假设第$i$个输入值与神经元连线上的权重为$w_1$，输入值偏置项为$b<em>1$，在单个神经元中，有：<br>&emsp;&emsp;$h</em>{W,b}(x)=f(x_1w_1+x_2w_2+x_3w_3+b_1)$<br>&emsp;&emsp;观察可以发现，单个神经元就是一个<strong>逻辑回归</strong>模型。  </p>
 <h2 id="2-神经网络"><a href="#2-神经网络" class="headerlink" title="2. 神经网络"></a>2. 神经网络</h2><h3 id="2-1-神经网络定义"><a href="#2-1-神经网络定义" class="headerlink" title="2.1 神经网络定义"></a>2.1 神经网络定义</h3><p>&emsp;&emsp;神经网络就是将多个神经元连在一起，前一层神经元的输出就是后一层神经元的输入，下图是一个三层神经网络：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png" alt="三层神经网络模型"><br>&emsp;&emsp;以上图为例，最左边一层为<strong>输入层</strong>，中间一层为<strong>隐藏层</strong>，最右边一层为<strong>输出层</strong>。  </p>
 <h3 id="2-2-前向传播"><a href="#2-2-前向传播" class="headerlink" title="2.2 前向传播"></a>2.2 前向传播</h3><p>&emsp;&emsp;前向传播就是使用输入值$x$通过神经网络计算出输出值$h_{W,b}(x)$的过程。以上图神经网络为例，前向传播中每一个神经元输入输出过程如下：<br>&emsp;&emsp;令$z_i^{(l)}$表示第$l$层第$i$个神经元的输入值，有<br>&emsp;&emsp;$z<em>i^{(l+1)}=W</em>{i1}^{(l)}x<em>1+W</em>{i2}^{(l)}x<em>2+W</em>{i3}^{(l)}x_3+b_i^{(l)}$ （这里其实是一个<strong>线性回归</strong>模型）<br>&emsp;&emsp;$a_i^{(l)}=f(z<em>i^{(l)})$<br>&emsp;&emsp;$h</em>{W,b}(x)=a_1^{(3)}$  </p>
-<h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z<em>3)]$<br>&emsp;&emsp;则上图神经网络中的前向传播过程可表示为：<br>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$<br>&emsp;&emsp;$a^{(2)}=f(z^{(2)})$<br>&emsp;&emsp;$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$<br>&emsp;&emsp;$h</em>{W,b}(x)=f(z^{(3)})$<br>&emsp;&emsp;下面以$z^{(2)}=W^{(1)}x+b^{(1)}$为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$\begin{pmatrix}<br>z_1\^{(2)}\\<br>z_2^{(2)}\\<br>z<em>3^{(2)}\\<br>\end{pmatrix}$<br>$=<br>\begin{pmatrix}<br>W</em>{11}^{(1)}&amp;W<em>{12}^{(1)}&amp;W</em>{13}^{(1)}\<br>W<em>{21}^{(1)}&amp;W</em>{22}^{(1)}&amp;W<em>{23}^{(1)}\<br>W</em>{31}^{(1)}&amp;W<em>{32}^{(1)}&amp;W</em>{33}^{(1)}\<br>\end{pmatrix}$<br>$\begin{pmatrix}x_1\<br>x_2\<br>x_3\<br>\end{pmatrix}$<br>$+<br>\begin{pmatrix}<br>b_1^{(1)}\<br>b_2^{(1)}\<br>b_3^{(1)}\<br>\end{pmatrix}$  </p>
+<h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z<em>3)]$<br>&emsp;&emsp;则上图神经网络中的前向传播过程可表示为：<br>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$<br>&emsp;&emsp;$a^{(2)}=f(z^{(2)})$<br>&emsp;&emsp;$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$<br>&emsp;&emsp;$h</em>{W,b}(x)=f(z^{(3)})$<br>&emsp;&emsp;下面以$z^{(2)}=W^{(1)}x+b^{(1)}$为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$\begin{pmatrix}<br>z_1^{(2)}\<br>z_2^{(2)}\<br>z<em>3^{(2)}\<br>\end{pmatrix}$<br>$=<br>\begin{pmatrix}<br>W</em>{11}^{(1)}&amp;W<em>{12}^{(1)}&amp;W</em>{13}^{(1)}\<br>W<em>{21}^{(1)}&amp;W</em>{22}^{(1)}&amp;W<em>{23}^{(1)}\<br>W</em>{31}^{(1)}&amp;W<em>{32}^{(1)}&amp;W</em>{33}^{(1)}\<br>\end{pmatrix}$<br>$\begin{pmatrix}x_1\<br>x_2\<br>x_3\<br>\end{pmatrix}$<br>$+<br>\begin{pmatrix}<br>b_1^{(1)}\<br>b_2^{(1)}\<br>b_3^{(1)}\<br>\end{pmatrix}$  </p>
 <p>&emsp;&emsp;最终，神经网络前向传播过程可表示为：<br>&emsp;&emsp;$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$<br>&emsp;&emsp;$a^{(l+1)}=f(z^{(l+1)})$  </p>
   
 	</div>
@@ -263,11 +263,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
