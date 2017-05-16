@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见Exercise:Sparse Autoencoder，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。"/>
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Aaron Wu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/"/>
+
+
+<meta name="description" content="本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见Exercise:Sparse Autoencoder，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习">
+<meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见Exercise:Sparse Autoencoder，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。">
+<meta property="og:updated_time" content="2017-05-08T03:40:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习">
+<meta name="twitter:description" content="本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见Exercise:Sparse Autoencoder，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习 - Aaron Wu </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Aaron Wu</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          深度学习笔记：稀疏自编码器（4）——稀疏自编码器代码练习
+        
+      </h1>
+
+      <time class="post-time">
+          4月 29 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>&emsp;&emsp;本文是ufldl稀疏自编码器教程中的练习，详细的练习要求参见<a href="http://deeplearning.stanford.edu/wiki/index.php/Exercise:Sparse_Autoencoder" target="_blank" rel="external">Exercise:Sparse Autoencoder</a>，笔者将练习中要求实现的三个文件代码记录在此，并作了详细的注释。<br><a id="more"></a></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% sampleIMAGES.m</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">patches</span> = <span class="title">sampleIMAGES</span><span class="params">()</span> % 函数返回64*10000的矩阵<span class="title">patches</span></span></div><div class="line"><span class="comment">% sampleIMAGES</span></div><div class="line"><span class="comment">% Returns 10000 patches for training</span></div><div class="line"></div><div class="line">load IMAGES;    <span class="comment">% load images from disk </span></div><div class="line"></div><div class="line">patchsize = <span class="number">8</span>;  <span class="comment">% we'll use 8x8 patches </span></div><div class="line">numpatches = <span class="number">10000</span>;</div><div class="line"></div><div class="line"><span class="comment">% Initialize patches with zeros.  Your code will fill in this matrix--one</span></div><div class="line"><span class="comment">% column per patch, 10000 columns. </span></div><div class="line">patches = <span class="built_in">zeros</span>(patchsize*patchsize, numpatches);</div><div class="line"></div><div class="line"><span class="comment">%% ---------- YOUR CODE HERE --------------------------------------</span></div><div class="line"><span class="comment">%  Instructions: Fill in the variable called "patches" using data </span></div><div class="line"><span class="comment">%  from IMAGES.  </span></div><div class="line"><span class="comment">%  </span></div><div class="line"><span class="comment">%  IMAGES is a 3D array containing 10 images</span></div><div class="line"><span class="comment">%  For instance, IMAGES(:,:,6) is a 512x512 array containing the 6th image,</span></div><div class="line"><span class="comment">%  and you can type "imagesc(IMAGES(:,:,6)), colormap gray;" to visualize</span></div><div class="line"><span class="comment">%  it. (The contrast（对比度） on these images look a bit off because they have</span></div><div class="line"><span class="comment">%  been preprocessed using using "whitening（白化）."  See the lecture notes for</span></div><div class="line"><span class="comment">%  more details.) As a second example, IMAGES(21:30,21:30,1) is an image</span></div><div class="line"><span class="comment">%  patch（图像片） corresponding to the pixels in the block (21,21) to (30,30) of</span></div><div class="line"><span class="comment">%  Image 1</span></div><div class="line"></div><div class="line"><span class="comment">%% 注释译文：</span></div><div class="line"><span class="comment">%   指导：用IMAGES中提取出的数据填充变量"patches"</span></div><div class="line"><span class="comment">%   </span></div><div class="line"><span class="comment">%   IMAGES是一个包含10个图片的3D向量</span></div><div class="line"><span class="comment">%   举个栗子：</span></div><div class="line"><span class="comment">%   IMAGES(:,:,6)是一个包含第6张图片的512*512的向量，</span></div><div class="line"><span class="comment">%   输入“imagesc(IMAGES(:,:,6)),colormap gray;”能显示出该图片。</span></div><div class="line"><span class="comment">%   图片对比度比较低，因为图片经过了白化预处理，教程笔记中有关于白化的更多细节</span></div><div class="line"><span class="comment">%   第二个栗子：</span></div><div class="line"><span class="comment">%   IMAGES(21:30,21:30,1)是第1张图片里从像素点(21,21)到(30,30)的像素块组成的图像片</span></div><div class="line"></div><div class="line"><span class="comment">%%</span></div><div class="line"><span class="keyword">for</span> imageNum = <span class="number">1</span>:<span class="number">10</span> <span class="comment">% 在每张图片中选取1000个patch，共10000个patch</span></div><div class="line">    [rowNum, colNum] = <span class="built_in">size</span>(IMAGES(:, :, imageNum)); <span class="comment">% 返回每张图片的尺寸，保存在rowNum和colNum中</span></div><div class="line">    <span class="keyword">for</span> patchNum = <span class="number">1</span>:<span class="number">1000</span> <span class="comment">% 每个patch的尺寸为8*8</span></div><div class="line">        xPos = randi([<span class="number">1</span>, rowNum-patchsize+<span class="number">1</span>]); <span class="comment">% 设置xPos为1和图像最大行数之间的一个随机数</span></div><div class="line">        yPos = randi([<span class="number">1</span>, colNum-patchsize+<span class="number">1</span>]); <span class="comment">% 设置yPos为1和图像最大列数之间的一个随机数</span></div><div class="line">        patches(:, (imageNum<span class="number">-1</span>)*<span class="number">1000</span>+patchNum) =  <span class="built_in">reshape</span>(IMAGES(xPos:xPos+<span class="number">7</span>, yPos:yPos+<span class="number">7</span>, imageNum), <span class="number">64</span>, <span class="number">1</span>);</div><div class="line">        <span class="comment">% reshape将提取出的8*8的图像变形为64*1的列向量</span></div><div class="line">        <span class="comment">% patches选中矩阵patches相应的列放入64*1的列向量</span></div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line">        </div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">%% ---------------------------------------------------------------</span></div><div class="line"><span class="comment">% For the autoencoder to work well we need to normalize the data</span></div><div class="line"><span class="comment">% Specifically, since the output of the network is bounded between [0,1]</span></div><div class="line"><span class="comment">% (due to the sigmoid activation function), we have to make sure </span></div><div class="line"><span class="comment">% the range of pixel values is also bounded between [0,1]</span></div><div class="line">patches = normalizeData(patches);</div><div class="line"></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">%% ---------------------------------------------------------------</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">patches</span> = <span class="title">normalizeData</span><span class="params">(patches)</span></span></div><div class="line"></div><div class="line"><span class="comment">% Squash data to [0.1, 0.9] since we use sigmoid as the activation</span></div><div class="line"><span class="comment">% function in the output layer</span></div><div class="line"></div><div class="line"><span class="comment">% Remove DC (mean of images). </span></div><div class="line">patches = <span class="built_in">bsxfun</span>(@minus, patches, mean(patches));</div><div class="line"></div><div class="line"><span class="comment">% Truncate to +/-3 standard deviations and scale to -1 to 1</span></div><div class="line">pstd = <span class="number">3</span> * std(patches(:));</div><div class="line">patches = max(min(patches, pstd), -pstd) / pstd;</div><div class="line"></div><div class="line"><span class="comment">% Rescale from [-1,1] to [0.1,0.9]</span></div><div class="line">patches = (patches + <span class="number">1</span>) * <span class="number">0.4</span> + <span class="number">0.1</span>;</div><div class="line"></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% sparseAutoencoderCost.m</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="params">[cost,grad]</span> = <span class="title">sparseAutoencoderCost</span><span class="params">(theta, visibleSize, hiddenSize, ...</span></span></div><div class="line">                                             lambda, sparsityParam, beta, data)</div><div class="line"><span class="comment">%%</span></div><div class="line"><span class="comment">% 本函数返回代价函数以及一次迭代后更新权重的变化值</span></div><div class="line"><span class="comment">%%</span></div><div class="line"><span class="comment">% visibleSize: the number of input units (probably 64) </span></div><div class="line"><span class="comment">% hiddenSize: the number of hidden units (probably 25) </span></div><div class="line"><span class="comment">% lambda: weight decay parameter 权重衰减参数</span></div><div class="line"><span class="comment">% sparsityParam: The desired average activation for the hidden units (denoted in the lecture</span></div><div class="line"><span class="comment">%                           notes by the greek alphabet rho, which looks</span></div><div class="line"><span class="comment">%                           like a lower-case "p"). 隐藏层期望激活度，在教程中用rho表示</span></div><div class="line"><span class="comment">% beta: weight of sparsity penalty term 稀疏性惩罚项的权重，在教程中用beta表示</span></div><div class="line"><span class="comment">% data: Our 64x10000 matrix containing the training data.  So, data(:,i) is the i-th training example. </span></div><div class="line">  </div><div class="line"><span class="comment">% The input theta is a vector (because minFunc expects the parameters to be</span></div><div class="line"><span class="comment">% a vector). </span></div><div class="line"><span class="comment">% 输入的theta是向量</span></div><div class="line"><span class="comment">% theta是由所有参数组合起来的一个s1*s2+s2*s3+s2+s3维的向量</span></div><div class="line"><span class="comment">% 之所以要将参数转换成这样的格式，是因为要满足minFunc函数的参数</span></div><div class="line"></div><div class="line"><span class="comment">% We first convert theta to the (W1, W2, b1, b2) matrix/vector format, so that this </span></div><div class="line"><span class="comment">% follows the notation convention（记符惯例） of the lecture notes.</span></div><div class="line"><span class="comment">% 我们先将theta转换为(W1,W2,b1,b2)的矩阵/向量格式，符合教程笔记的记符惯例</span></div><div class="line"></div><div class="line">W1 = <span class="built_in">reshape</span>(theta(<span class="number">1</span>:hiddenSize*visibleSize), hiddenSize, visibleSize);</div><div class="line"><span class="comment">% 将theta中第1到第s1*s2个元素变形组合成s2*s1维的矩阵，变形时使用向量按列开始填充</span></div><div class="line">W2 = <span class="built_in">reshape</span>(theta(hiddenSize*visibleSize+<span class="number">1</span>:<span class="number">2</span>*hiddenSize*visibleSize), visibleSize, hiddenSize);</div><div class="line"><span class="comment">% 将第s1*s2+1到第2*s2*s3个元素变形组合成s3*s3维矩阵，这里有s1=s3</span></div><div class="line">b1 = theta(<span class="number">2</span>*hiddenSize*visibleSize+<span class="number">1</span>:<span class="number">2</span>*hiddenSize*visibleSize+hiddenSize);</div><div class="line"><span class="comment">% 类似上面，初始化输入层偏置项向量b1</span></div><div class="line">b2 = theta(<span class="number">2</span>*hiddenSize*visibleSize+hiddenSize+<span class="number">1</span>:<span class="keyword">end</span>);</div><div class="line"><span class="comment">% 初始化第二层偏置项向量b2</span></div><div class="line"></div><div class="line"><span class="comment">% Cost and gradient variables (your code needs to compute these values). </span></div><div class="line"><span class="comment">% Here, we initialize them to zeros. </span></div><div class="line">cost = <span class="number">0</span>; <span class="comment">% 将代价值初始化为0</span></div><div class="line">W1grad = <span class="built_in">zeros</span>(<span class="built_in">size</span>(W1)); </div><div class="line">W2grad = <span class="built_in">zeros</span>(<span class="built_in">size</span>(W2));</div><div class="line">b1grad = <span class="built_in">zeros</span>(<span class="built_in">size</span>(b1)); </div><div class="line">b2grad = <span class="built_in">zeros</span>(<span class="built_in">size</span>(b2));</div><div class="line"></div><div class="line"><span class="comment">%% ---------- YOUR CODE HERE --------------------------------------</span></div><div class="line"><span class="comment">%  Instructions: Compute the cost/optimization objective J_sparse(W,b) for the Sparse Autoencoder,</span></div><div class="line"><span class="comment">%                and the corresponding gradients W1grad, W2grad, b1grad, b2grad.</span></div><div class="line"><span class="comment">%</span></div><div class="line"><span class="comment">% W1grad, W2grad, b1grad and b2grad should be computed using backpropagation.</span></div><div class="line"><span class="comment">% Note that W1grad has the same dimensions as W1, b1grad has the same dimensions</span></div><div class="line"><span class="comment">% as b1, etc.  Your code should set W1grad to be the partial derivative of J_sparse(W,b) with</span></div><div class="line"><span class="comment">% respect to W1.  I.e., W1grad(i,j) should be the partial derivative of J_sparse(W,b) </span></div><div class="line"><span class="comment">% with respect to the input parameter W1(i,j).  Thus, W1grad should be equal to the term </span></div><div class="line"><span class="comment">% [(1/m) \Delta W^&#123;(1)&#125; + \lambda W^&#123;(1)&#125;] in the last block of pseudo-code in Section 2.2 </span></div><div class="line"><span class="comment">% of the lecture notes (and similarly for W2grad, b1grad, b2grad).</span></div><div class="line"><span class="comment">% </span></div><div class="line"><span class="comment">% Stated differently, if we were using batch gradient descent to optimize the parameters,</span></div><div class="line"><span class="comment">% the gradient descent update to W1 would be W1 := W1 - alpha * W1grad, and similarly for W2, b1, b2. </span></div><div class="line"><span class="comment">% </span></div><div class="line"></div><div class="line"><span class="comment">%%</span></div><div class="line"><span class="comment">% </span></div><div class="line"><span class="comment">%注释译文</span></div><div class="line"><span class="comment">% 指导：为稀疏自编码器计算代价/优化对象J_sparse(W,b)，以及对应的梯度W1grad, W2grad, b1grad, b2grad</span></div><div class="line"><span class="comment">% </span></div><div class="line"><span class="comment">% W1grad, W2grad, b1grad和b2grad应该使用反向传导计算。</span></div><div class="line"><span class="comment">% 注意W1grad和W1有相同的维度，b1grad和b1有相同的维度等。</span></div><div class="line"><span class="comment">% 你的代码应该设置W1grad为J_sparse(W,b)关于W1的偏导数，</span></div><div class="line"><span class="comment">% 也就是说，W1grad(i,j)应该是J_sparse(W,b)关于输入参数W1(i,j)的偏导数。</span></div><div class="line"><span class="comment">% 因此，W1grad应该等于项[(1/m) \Delta W^&#123;(1)&#125;+ \ambdaW^&#123;(1)&#125;]（其他参数也一样），</span></div><div class="line"><span class="comment">% 参见课件Section2.2最后一块的伪代码</span></div><div class="line"><span class="comment">% 换句话说，如果我们使用批量梯度下降法去最小化参数，</span></div><div class="line"><span class="comment">% W1权值的更新应该是W1:= W1-alpha*W1grad, 而W2,b1,b2也类似</span></div><div class="line"><span class="comment">%</span></div><div class="line"></div><div class="line"><span class="comment">% J_sparse(W,b)共有三项</span></div><div class="line">Jcost = <span class="number">0</span>; <span class="comment">% 样本均方误差项</span></div><div class="line">Jweight = <span class="number">0</span>; <span class="comment">% 权重衰减项</span></div><div class="line">Jsparse = <span class="number">0</span>; <span class="comment">% 稀疏性惩罚项</span></div><div class="line">[n m] = <span class="built_in">size</span>(data); <span class="comment">% n表示样本特征数，m表示样本个数</span></div><div class="line"></div><div class="line"><span class="comment">% 前向算法计算各神经网络节点的线性组合值和active值</span></div><div class="line">z2 = W1*data + <span class="built_in">repmat</span>(b1, <span class="number">1</span>, m); <span class="comment">% 第二层输入值，即隐藏层中各节点输入值矩阵，repmat函数将矩阵进行重复并组合起来</span></div><div class="line">a2 = sigmoid(z2); <span class="comment">% 第二层输出值（激活值），注意sigmoid函数在本文件164行定义</span></div><div class="line">z3 = W2*a2 + <span class="built_in">repmat</span>(b2, <span class="number">1</span>, m); <span class="comment">% 第三层输入值</span></div><div class="line">a3 = sigmoid(z3); <span class="comment">% 输出层各节点输出值（激活值）矩阵</span></div><div class="line"></div><div class="line"><span class="comment">% 计算样本均方误差项</span></div><div class="line">Jcost = (<span class="number">0.5</span>/m)*sum(sum((a3-data).^<span class="number">2</span>));</div><div class="line"></div><div class="line"><span class="comment">% 计算权重衰减项</span></div><div class="line">Jweight = (<span class="number">1</span>/<span class="number">2</span>)*(sum(sum(W1.^<span class="number">2</span>)) + sum(sum(W2.^<span class="number">2</span>)));</div><div class="line"></div><div class="line"><span class="comment">% 计算稀疏性惩罚项</span></div><div class="line">rho = (<span class="number">1</span>/m).*sum(a2, <span class="number">2</span>); <span class="comment">% 求出教程中的rho，即隐藏层（第二层）神经元的平均活跃度，</span></div><div class="line">                                        <span class="comment">% 在训练集上取隐藏层每个节点输出值的平均</span></div><div class="line">Jsparse = sum(sparsityParam .* <span class="built_in">log</span>(sparsityParam ./ rho) + ...</div><div class="line">              (<span class="number">1</span>-sparsityParam) .* <span class="built_in">log</span>((<span class="number">1</span>-sparsityParam) ./ (<span class="number">1</span> - rho )));</div><div class="line">          </div><div class="line"><span class="comment">% 代价函数总表达式</span></div><div class="line">cost = Jcost+lambda*Jweight+<span class="built_in">beta</span>*Jsparse;</div><div class="line"></div><div class="line"><span class="comment">% 计算残差</span></div><div class="line">d3 = -(data-a3).*sigmoidInv(z3); <span class="comment">% 输出层（第三层）残差，sigmoidInv为sigmoid导数，在第170行有定义</span></div><div class="line">sterm = <span class="built_in">beta</span>*(-sparsityParam./rho+(<span class="number">1</span>-sparsityParam)./(<span class="number">1</span>-rho)); <span class="comment">% 隐藏层稀疏性规则项</span></div><div class="line">d2 = (W2'*d3+<span class="built_in">repmat</span>(sterm, <span class="number">1</span>, m)).*sigmoidInv(z2); <span class="comment">% 隐藏层（第二层）残差，计算时要加入稀疏性规则项</span></div><div class="line"></div><div class="line"><span class="comment">% 计算W1grad</span></div><div class="line">W1grad = W1grad+d2*data';</div><div class="line">W1grad = (<span class="number">1</span>/m).*W1grad+lambda*W1;</div><div class="line"></div><div class="line"><span class="comment">% 计算W2grad</span></div><div class="line">W2grad = W2grad+d3*a2';</div><div class="line">W2grad = (<span class="number">1</span>/m).*W2grad+lambda*W2;</div><div class="line"></div><div class="line"><span class="comment">% 计算b1grad</span></div><div class="line">b1grad = b1grad + sum(d2, <span class="number">2</span>); <span class="comment">% 注意b的偏导数是一个向量，因此要把一行的值累加起来</span></div><div class="line">b1grad = (<span class="number">1</span>/m)*b1grad;</div><div class="line"></div><div class="line"><span class="comment">% 计算b2grad</span></div><div class="line">b2grad = b2grad + sum(d3, <span class="number">2</span>);</div><div class="line">b2grad = (<span class="number">1</span>/m)*b2grad;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">%-------------------------------------------------------------------</span></div><div class="line"><span class="comment">% After computing the cost and gradient, we will convert the gradients back</span></div><div class="line"><span class="comment">% to a vector format (suitable for minFunc).  Specifically, we will unroll</span></div><div class="line"><span class="comment">% your gradient matrices into a vector.</span></div><div class="line"></div><div class="line">grad = [W1grad(:) ; W2grad(:) ; b1grad(:) ; b2grad(:)]; <span class="comment">%将各矩阵按列首尾相接成为一个列向量</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="comment">%-------------------------------------------------------------------</span></div><div class="line"><span class="comment">% Here's an implementation of the sigmoid function, which you may find useful</span></div><div class="line"><span class="comment">% in your computation of the costs and the gradients.  This inputs a (row or</span></div><div class="line"><span class="comment">% column) vector (say (z1, z2, z3)) and returns (f(z1), f(z2), f(z3)). </span></div><div class="line"></div><div class="line"><span class="comment">% 定义sigmoid函数</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sigm</span> = <span class="title">sigmoid</span><span class="params">(x)</span></span></div><div class="line">  </div><div class="line">    sigm = <span class="number">1</span> ./ (<span class="number">1</span> + <span class="built_in">exp</span>(-x));</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="comment">% sigmoid函数求导</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sigmInv</span> = <span class="title">sigmoidInv</span><span class="params">(x)</span></span></div><div class="line">    </div><div class="line">    sigmInv = sigmoid(x).*(<span class="number">1</span>-sigmoid(x)); </div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% computeNumericalGradient.m</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">numgrad</span> = <span class="title">computeNumericalGradient</span><span class="params">(J, theta)</span></span></div><div class="line"><span class="comment">% numgrad = computeNumericalGradient(J, theta)</span></div><div class="line"><span class="comment">% theta: a vector of parameters</span></div><div class="line"><span class="comment">% J: a function that outputs a real-number. Calling y = J(theta) will return the</span></div><div class="line"><span class="comment">% function value at theta. </span></div><div class="line">  </div><div class="line"><span class="comment">% Initialize numgrad with zeros</span></div><div class="line">numgrad = <span class="built_in">zeros</span>(<span class="built_in">size</span>(theta));</div><div class="line"></div><div class="line"><span class="comment">%% ---------- YOUR CODE HERE --------------------------------------</span></div><div class="line"><span class="comment">% Instructions: </span></div><div class="line"><span class="comment">% Implement numerical gradient checking, and return the result in numgrad.  </span></div><div class="line"><span class="comment">% (See Section 2.3 of the lecture notes.)</span></div><div class="line"><span class="comment">% You should write code so that numgrad(i) is (the numerical approximation to) the </span></div><div class="line"><span class="comment">% partial derivative of J with respect to the i-th input argument, evaluated at theta.  </span></div><div class="line"><span class="comment">% I.e., numgrad(i) should be the (approximately) the partial derivative of J with </span></div><div class="line"><span class="comment">% respect to theta(i).</span></div><div class="line"><span class="comment">%                </span></div><div class="line"><span class="comment">% Hint: You will probably want to compute the elements of numgrad one at a time. </span></div><div class="line"></div><div class="line"><span class="comment">%% 注释译文</span></div><div class="line"><span class="comment">% 指导：</span></div><div class="line"><span class="comment">% 实现数值上的梯度检验，并将结果返回到numgrad中</span></div><div class="line"><span class="comment">% （查看课程笔记的Section 2.3）</span></div><div class="line"><span class="comment">% 你应当写代码使numgrad(i)是J关于第i个输入参数的偏导数的近似值，输入参数为theta</span></div><div class="line"><span class="comment">% 也就是说，numgrad(i)应该近似是J关于theta(i)的偏导数</span></div><div class="line"><span class="comment">%</span></div><div class="line"><span class="comment">% 提示：你很可能希望一次计算一个numgrad中的元素</span></div><div class="line"></div><div class="line">epsilon = <span class="number">1e-4</span>;</div><div class="line">n = <span class="built_in">size</span>(theta, <span class="number">1</span>); <span class="comment">% n为向量theta的维度</span></div><div class="line">E = <span class="built_in">eye</span>(n); <span class="comment">% 函数eye(n)用来创建n维的单位矩阵</span></div><div class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:n</div><div class="line">    delta = E(:, <span class="built_in">i</span>)*epsilon;</div><div class="line">    numgrad(<span class="built_in">i</span>) = (J(theta+delta)-J(theta-delta))/(<span class="number">2.0</span>*epsilon);</div><div class="line"><span class="keyword">end</span></div><div class="line">  </div><div class="line"><span class="comment">%% ---------------------------------------------------------------</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/">机器学习</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/">
+        <span class="next-text nav-default">深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2017
+    <span class="footer-author">Aaron Wu.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  </body>
+</html>

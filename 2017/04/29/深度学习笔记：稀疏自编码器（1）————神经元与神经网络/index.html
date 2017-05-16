@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。"/>
+
+
+
+
+  <meta name="keywords" content="机器学习," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Aaron Wu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/"/>
+
+
+<meta name="description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+<meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
+<meta property="og:updated_time" content="2017-05-16T16:26:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+<meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 深度学习笔记：稀疏自编码器（1）——神经元与神经网络 - Aaron Wu </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Aaron Wu</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          深度学习笔记：稀疏自编码器（1）——神经元与神经网络
+        
+      </h1>
+
+      <time class="post-time">
+          4月 29 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>&emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见<a href="http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">UFLDL教程</a>，看完教程之后再来看本文可能会更加清晰。  </p>
+<a id="more"></a>
+<h2 id="0-本文中使用的符号一览及本文中的一些约定"><a href="#0-本文中使用的符号一览及本文中的一些约定" class="headerlink" title="0. 本文中使用的符号一览及本文中的一些约定"></a>0. 本文中使用的符号一览及本文中的一些约定</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>输入值向量，为$n$维</td>
+</tr>
+<tr>
+<td>$x_i$</td>
+<td>第$i$个输入值</td>
+</tr>
+<tr>
+<td>$f()$</td>
+<td>神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$</td>
+</tr>
+<tr>
+<td>$W_{ij}^{(l)}$</td>
+<td>神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值</td>
+</tr>
+<tr>
+<td>$b_i^{(l)}$</td>
+<td>第$l+1$层第$i$个神经元输入的偏置项</td>
+</tr>
+<tr>
+<td>$n_l$</td>
+<td>神经网络的总层数</td>
+</tr>
+<tr>
+<td>$L_l$</td>
+<td>第$l$层，则输入层为$L<em>1$，输出层为$L</em>{nl}$</td>
+</tr>
+<tr>
+<td>$s_l$</td>
+<td>第$l$层的节点数（不包括偏置单元）</td>
+</tr>
+<tr>
+<td>$a_i^{l}$</td>
+<td>第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$</td>
+</tr>
+<tr>
+<td>$z_i^{(l)}$</td>
+<td>第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z_i^{(l)})$</td>
+</tr>
+<tr>
+<td>$h_{W,b}(x)$</td>
+<td>输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>&emsp;&emsp;$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$  </p>
+<h2 id="1-神经元"><a href="#1-神经元" class="headerlink" title="1. 神经元"></a>1. 神经元</h2><h3 id="1-1-神经元定义"><a href="#1-1-神经元定义" class="headerlink" title="1.1 神经元定义"></a>1.1 神经元定义</h3><p>&emsp;&emsp;神经元是以$x$为输入，$h_{W,b}$为输出的运算单元，如图所示：    </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png" alt="神经元">  </p>
+<h3 id="1-2-激活函数"><a href="#1-2-激活函数" class="headerlink" title="1.2 激活函数"></a>1.2 激活函数</h3><p>&emsp;&emsp;通常在神经元中输出值为0表示神经元被激活，输出为1表示神经元被抑制，而计算输出值所用的函数则被称为“激活函数”。本文中所用的激活函数为sigmoid函数：<br>&emsp;&emsp;&emsp;&emsp;$f(z)=\frac{1}{1+e^{(-z)}}$，其定义域为$(-\infty,+\infty)$，值域为$(0,1)$。<br>&emsp;&emsp;以上图神经元为例，假设第$i$个输入值与神经元连线上的权重为$w_1$，输入值偏置项为$b<em>1$，在单个神经元中，有：<br>&emsp;&emsp;$h</em>{W,b}(x)=f(x_1w_1+x_2w_2+x_3w_3+b_1)$<br>&emsp;&emsp;观察可以发现，单个神经元就是一个<strong>逻辑回归</strong>模型。  </p>
+<h2 id="2-神经网络"><a href="#2-神经网络" class="headerlink" title="2. 神经网络"></a>2. 神经网络</h2><h3 id="2-1-神经网络定义"><a href="#2-1-神经网络定义" class="headerlink" title="2.1 神经网络定义"></a>2.1 神经网络定义</h3><p>&emsp;&emsp;神经网络就是将多个神经元连在一起，前一层神经元的输出就是后一层神经元的输入，下图是一个三层神经网络：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png" alt="三层神经网络模型"><br>&emsp;&emsp;以上图为例，最左边一层为<strong>输入层</strong>，中间一层为<strong>隐藏层</strong>，最右边一层为<strong>输出层</strong>。  </p>
+<h3 id="2-2-前向传播"><a href="#2-2-前向传播" class="headerlink" title="2.2 前向传播"></a>2.2 前向传播</h3><p>&emsp;&emsp;前向传播就是使用输入值$x$通过神经网络计算出输出值$h_{W,b}(x)$的过程。以上图神经网络为例，前向传播中每一个神经元输入输出过程如下：<br>&emsp;&emsp;令$z_i^{(l)}$表示第$l$层第$i$个神经元的输入值，有<br>&emsp;&emsp;$z<em>i^{(l+1)}=W</em>{i1}^{(l)}x<em>1+W</em>{i2}^{(l)}x<em>2+W</em>{i3}^{(l)}x_3+b_i^{(l)}$（这里其实是一个<strong>线性回归</strong>模型）<br>&emsp;&emsp;$a_i^{(l)}=f(z<em>i^{(l)})$<br>&emsp;&emsp;$h</em>{W,b}(x)=a_1^{(3)}$  </p>
+<h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z<em>3)]$<br>&emsp;&emsp;则上图神经网络中的前向传播过程可表示为：<br>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$<br>&emsp;&emsp;$a^{(2)}=f(z^{(2)})$<br>&emsp;&emsp;$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$<br>&emsp;&emsp;$h</em>{W,b}(x)=f(z^{(3)})$<br>&emsp;&emsp;下面以$z^{(2)}=W^{(1)}x+b^{(1)}$为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$\begin{pmatrix}<br>z_1^{(2)}\<br>z_2^{(2)}\<br>z<em>3^{(2)}\<br>\end{pmatrix}$<br>$=<br>\begin{pmatrix}<br>W</em>{11}^{(1)}&amp;W<em>{12}^{(1)}&amp;W</em>{13}^{(1)}\<br>W<em>{21}^{(1)}&amp;W</em>{22}^{(1)}&amp;W<em>{23}^{(1)}\<br>W</em>{31}^{(1)}&amp;W<em>{32}^{(1)}&amp;W</em>{33}^{(1)}\<br>\end{pmatrix}$<br>$\begin{pmatrix}x_1\<br>x_2\<br>x_3\<br>\end{pmatrix}$<br>$+<br>\begin{pmatrix}<br>b_1^{(1)}\<br>b_2^{(1)}\<br>b_3^{(1)}\<br>\end{pmatrix}$  </p>
+<p>&emsp;&emsp;最终，神经网络前向传播过程可表示为：<br>&emsp;&emsp;$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$<br>&emsp;&emsp;$a^{(l+1)}=f(z^{(l+1)})$  </p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/">机器学习</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">深度学习笔记：稀疏自编码器（2）——反向传导</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/04/06/压缩感知算法原理/">
+        <span class="next-text nav-default">压缩感知算法原理</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2017
+    <span class="footer-author">Aaron Wu.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

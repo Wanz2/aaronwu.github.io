@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。"/>
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Aaron Wu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="https://wanz2.github.io/2017/05/12/JavaWeb——Servlet异步处理支持和异步监听器/"/>
+
+
+<meta name="description" content="Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaWeb——Servlet异步处理支持和异步监听器">
+<meta property="og:url" content="https://wanz2.github.io/2017/05/12/JavaWeb——Servlet异步处理支持和异步监听器/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。">
+<meta property="og:updated_time" content="2017-05-12T03:52:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaWeb——Servlet异步处理支持和异步监听器">
+<meta name="twitter:description" content="Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> JavaWeb——Servlet异步处理支持和异步监听器 - Aaron Wu </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Aaron Wu</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          JavaWeb——Servlet异步处理支持和异步监听器
+        
+      </h1>
+
+      <time class="post-time">
+          5月 12 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>&emsp;&emsp;Servlet的异步支持是Servlet3.0中的新特性，它允许Servlet开启一个新的线程来异步处理业务，本文通过一个示例来介绍该特性。</p>
+<h2 id="Servlet异步处理支持"><a href="#Servlet异步处理支持" class="headerlink" title="Servlet异步处理支持"></a>Servlet异步处理支持</h2><p>&emsp;&emsp;Servlet3.0中加入了线程的异步支持，在增加异步支持以前，Servlet的工作流程大致如下：  </p>
+<ol>
+<li>接收请求，对请求进行一些预处理。  </li>
+<li>调用业务逻辑接口进行完成业务的处理。  </li>
+<li>根据处理结果提交响应。  </li>
+</ol>
+<p>&emsp;&emsp;通常在第二步会消耗大量处理时间，因为Servlet线程会等待业务方法处理完毕。<br>&emsp;&emsp;在Servlet3.0中增加了异步支持之后，允许Servlet创建新的线程执行业务逻辑，使得Servlet在启动异步线程后自身可以立即返回容器。</p>
+<h2 id="异步监听器"><a href="#异步监听器" class="headerlink" title="异步监听器"></a>异步监听器</h2><p>&emsp;&emsp;Servlet3.0同时增加了异步监听器，该监听器实现AsyncListener接口，该监听器提供了四个方法：  </p>
+<ol>
+<li>onStartAsync(AsyncEvent event) 异步线程开始时调用；  </li>
+<li>onError(AsyncEvent event) 异步线程出错时调用</li>
+<li>onTimeout(AsyncEvent event) 异步线程执行超时时调用  </li>
+<li>onComplete(AsyncEvent event) 异步线程执行完毕时调用  </li>
+</ol>
+<h2 id="异步Servlet和异步监听器使用步骤"><a href="#异步Servlet和异步监听器使用步骤" class="headerlink" title="异步Servlet和异步监听器使用步骤"></a>异步Servlet和异步监听器使用步骤</h2><p>&emsp;&emsp;具体的异步Servlet和监听器使用共分为三步：  </p>
+<ol>
+<li>获得异步上下文  </li>
+<li>注册监听器</li>
+<li>开启异步子线程，子线程执行业务方法  </li>
+</ol>
+<p>&emsp;&emsp;下面用一个示例来展示二者的使用：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">page</span> <span class="attr">contentType</span>=<span class="string">"text/html;charset=UTF-8"</span> <span class="attr">language</span>=<span class="string">"java"</span> %&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>异步Servlet和Listener示例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/AsyncServlet"</span>&gt;</span>访问异步Servlet<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> servlet;</div><div class="line"></div><div class="line"><span class="keyword">import</span> javax.servlet.AsyncContext;</div><div class="line"><span class="keyword">import</span> javax.servlet.AsyncEvent;</div><div class="line"><span class="keyword">import</span> javax.servlet.AsyncListener;</div><div class="line"><span class="keyword">import</span> javax.servlet.ServletException;</div><div class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</div><div class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</div><div class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</div><div class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</div><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.text.SimpleDateFormat;</div><div class="line"><span class="keyword">import</span> java.util.Date;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 12/05/2017.</div><div class="line"> */</div><div class="line"><span class="meta">@WebServlet</span>(name = <span class="string">"AsyncServlet"</span>,</div><div class="line">        urlPatterns = <span class="string">"/AsyncServlet"</span>,</div><div class="line">        <span class="comment">//开启异步支持</span></div><div class="line">        asyncSupported = <span class="keyword">true</span></div><div class="line">)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AsyncServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</div><div class="line">        response.setContentType(<span class="string">"text/html;charset=utf-8"</span>);</div><div class="line">        System.out.println(<span class="string">"Servlet开始时间："</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</div><div class="line"></div><div class="line">        <span class="comment">//step1:获得异步上下文</span></div><div class="line">        AsyncContext ctx = request.startAsync();</div><div class="line">        <span class="comment">//step2:注册监听器</span></div><div class="line">        ctx.addListener(<span class="keyword">new</span> AsyncListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">(AsyncEvent asyncEvent)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">                System.out.println(<span class="string">"onComplete..."</span>);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTimeout</span><span class="params">(AsyncEvent asyncEvent)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">                System.out.println(<span class="string">"onTimeout..."</span>);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(AsyncEvent asyncEvent)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">                System.out.println(<span class="string">"onError..."</span>);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStartAsync</span><span class="params">(AsyncEvent asyncEvent)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">                System.out.println(<span class="string">"onStartAsync..."</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        <span class="comment">//step3:开启异步子线程，子线程执行业务方法</span></div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Executor(ctx)).start();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"Servlet结束时间："</span> + <span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//子线程类</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Executor</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</div><div class="line">        <span class="keyword">private</span> AsyncContext ctx;</div><div class="line"></div><div class="line">        Executor(AsyncContext ctx) &#123;</div><div class="line">            <span class="keyword">this</span>.ctx = ctx;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                System.out.println(<span class="string">"业务开始时间："</span>+<span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</div><div class="line"></div><div class="line">                <span class="comment">//线程等待十秒钟，以模拟业务方法执行</span></div><div class="line">                Thread.sleep(<span class="number">10000</span>);</div><div class="line"></div><div class="line">                System.out.println(<span class="string">"业务结束时间："</span>+<span class="keyword">new</span> SimpleDateFormat(<span class="string">"YYYY-MM-dd HH:mm:ss"</span>).format(<span class="keyword">new</span> Date()));</div><div class="line"></div><div class="line">                <span class="comment">//关闭异步上下文</span></div><div class="line">                ctx.complete();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;执行结果如下所示：  </p>
+<p>Servlet开始时间：2017-05-12 11:49:54<br>Servlet结束时间：2017-05-12 11:49:54<br>业务开始时间：2017-05-12 11:49:54<br>业务结束时间：2017-05-12 11:50:04<br>onComplete…</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Java/">Java</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2017/05/09/Java——对象的序列化与反序列化（2）/">
+        <span class="next-text nav-default">Java——对象的序列化与反序列化（2）</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2017
+    <span class="footer-author">Aaron Wu.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  </body>
+</html>

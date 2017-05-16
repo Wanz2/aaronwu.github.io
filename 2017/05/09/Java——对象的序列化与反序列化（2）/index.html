@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="description" content="本文是Java对象的序列化与反序列化的第二篇，主要记录了自定义序列化与反序列化的方式，以及序列化与反序列化过程中继承的关系。"/>
+
+
+
+
+  <meta name="keywords" content="Java," />
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Aaron Wu">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1" />
+
+
+
+<link rel="canonical" href="https://wanz2.github.io/2017/05/09/Java——对象的序列化与反序列化（2）/"/>
+
+
+<meta name="description" content="本文是Java对象的序列化与反序列化的第二篇，主要记录了自定义序列化与反序列化的方式，以及序列化与反序列化过程中继承的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java——对象的序列化与反序列化（2）">
+<meta property="og:url" content="https://wanz2.github.io/2017/05/09/Java——对象的序列化与反序列化（2）/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="本文是Java对象的序列化与反序列化的第二篇，主要记录了自定义序列化与反序列化的方式，以及序列化与反序列化过程中继承的关系。">
+<meta property="og:updated_time" content="2017-05-09T03:19:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java——对象的序列化与反序列化（2）">
+<meta name="twitter:description" content="本文是Java对象的序列化与反序列化的第二篇，主要记录了自定义序列化与反序列化的方式，以及序列化与反序列化过程中继承的关系。">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> Java——对象的序列化与反序列化（2） - Aaron Wu </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Aaron Wu</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Java——对象的序列化与反序列化（2）
+        
+      </h1>
+
+      <time class="post-time">
+          5月 9 2017
+      </time>
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>&emsp;&emsp;序列化与反序列化操作中，可能在某些情况下我们不希望对象中的所有元素都被序列化，如对象中的某个元素是密码一类的敏感信息，若经过序列化处理，可能被他人通过读取文件或拦截网络传输等方式访问到。防止自定义序列化的方式有两种：<br>&emsp;&emsp;第一种是将类实现Externalizable接口，该接口继承了Serializable接口同时增添了两个方法：writeExternal()和readExternal()<br>&emsp;&emsp;第二种是在实现Serializable接口时使用transient（瞬时）关键字。<br>&emsp;&emsp;本文继承上文，介绍上面的第二种方法。</p>
+<h2 id="Serizable类对象自定义序列化"><a href="#Serizable类对象自定义序列化" class="headerlink" title="Serizable类对象自定义序列化"></a>Serizable类对象自定义序列化</h2><p>&emsp;&emsp;自定义序列化有两个关键点，如下：<br>&emsp;&emsp;&emsp;&emsp;1. 使用transient（瞬时）关键字，当使用该关键字时，可通过它逐个字段地关闭序列化。<br>&emsp;&emsp;&emsp;&emsp;2. 重写writeObject()和readObject()方法。<br>具体代码示例如下：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 自定义序列化和反序列化操作</div><div class="line"> * Created by wuwenan on 09/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String id;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String id, String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"Student&#123;"</span> +</div><div class="line">                <span class="string">"id='"</span> + id + <span class="string">'\''</span> +</div><div class="line">                <span class="string">", name='"</span> + name + <span class="string">'\''</span> +</div><div class="line">                <span class="string">'&#125;'</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(java.io.ObjectOutputStream s)</span></span></div><div class="line">            <span class="keyword">throws</span> java.io.IOException&#123;</div><div class="line">        <span class="comment">//把jvm能默认序列化的元素进行序列化操作</span></div><div class="line">        s.defaultWriteObject();</div><div class="line">        <span class="comment">//自定义序列化</span></div><div class="line">        s.writeObject(name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(java.io.ObjectInputStream s)</span></span></div><div class="line">            <span class="keyword">throws</span> java.io.IOException, ClassNotFoundException &#123;</div><div class="line">        <span class="comment">//把jvm能默认反序列化的元素进行反序列化操作</span></div><div class="line">        s.defaultReadObject();</div><div class="line">        <span class="comment">//自己完成反序列化操作</span></div><div class="line">        <span class="keyword">this</span>.name = (String) s.readObject();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">//1.对象序列化</span></div><div class="line">        <span class="comment">//创建对象实例</span></div><div class="line">        Student student = <span class="keyword">new</span> Student(<span class="string">"123"</span>,<span class="string">"娜美"</span>);</div><div class="line">        <span class="comment">//创建文件</span></div><div class="line">        File file = <span class="keyword">new</span> File(<span class="string">"/Users/wuwenan/Work/customSerialization.txt"</span>);</div><div class="line">        <span class="keyword">if</span>(!file.exists())&#123;</div><div class="line">            file.createNewFile();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//从文件创建序列化流对象</span></div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(file));</div><div class="line">        <span class="comment">//将对象实例写入序列化流缓存</span></div><div class="line">        oos.writeObject(student);</div><div class="line">        <span class="comment">//将序列化流缓存输出</span></div><div class="line">        oos.flush();</div><div class="line">        <span class="comment">//关闭序列化流</span></div><div class="line">        oos.close();</div><div class="line"></div><div class="line">        <span class="comment">//2.对象的反序列化</span></div><div class="line">        <span class="comment">//从文件创建反序列化流对象</span></div><div class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(file));</div><div class="line">        <span class="comment">//通过反序列化流对象读取实体对象，由于返回的是Object类型，因此要进行向下转型</span></div><div class="line">        Student stu1 = (Student) ois.readObject();</div><div class="line">        System.out.println(stu1);</div><div class="line">        ois.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="序列化和反序列化中的继承问题"><a href="#序列化和反序列化中的继承问题" class="headerlink" title="序列化和反序列化中的继承问题"></a>序列化和反序列化中的继承问题</h2><p>&emsp;&emsp;一个类实现了序列化接口，那么其子类都可以进行序列化；在对子类对象进行反序列化时，若其父类没有实现序列化接口，则从没有实现序列化接口的那一级父类开始，该类及其所有子类的构造方法会被显式调用。<br>&emsp;&emsp;以下分别用两个demo来说明：<br>&emsp;&emsp;一个类实现了序列化接口，那么其子类都可以进行序列化。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 2016/12/5 0005.</div><div class="line"> * 对象序列化示例</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectSeriaDemo2</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</div><div class="line">        File file = <span class="keyword">new</span> File(<span class="string">"/Users/wuwenan/Work/serialization2.txt"</span>);</div><div class="line">        <span class="keyword">if</span>(!file.exists())&#123;</div><div class="line">            file.createNewFile();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//1.进行序列化</span></div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(</div><div class="line">                <span class="keyword">new</span> FileOutputStream(file));</div><div class="line">        Foo2 foo2 = <span class="keyword">new</span> Foo2();</div><div class="line">        oos.writeObject(foo2);</div><div class="line">        oos.flush();</div><div class="line">        oos.close();</div><div class="line"></div><div class="line">        <span class="comment">//2.进行反序列化</span></div><div class="line">        <span class="comment">//反序列化是否递归调用父类构造函数，这里控制台只打印了对象，但不能说明没有调用父类构造函数</span></div><div class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(</div><div class="line">                <span class="keyword">new</span> FileInputStream(file));</div><div class="line">        Foo2 foo2temp = (Foo2) ois.readObject();</div><div class="line">        System.out.println(foo2temp);</div><div class="line">        ois.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">一个类实现了序列化接口，那么其子类都可以进行序列化</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Foo..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo1</span> <span class="keyword">extends</span> <span class="title">Foo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Foo1</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Foo1..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo2</span> <span class="keyword">extends</span> <span class="title">Foo1</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Foo2</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"Foo2..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在对子类对象进行反序列化时，若其父类没有实现序列化接口，则从没有实现序列化接口的那一级父类开始，该类及其所有子类的构造方法会被显式调用。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.*;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 2016/12/5 0005.</div><div class="line"> * 对象序列化示例</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObjectSeriaDemo2</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</div><div class="line">        <span class="comment">//创建序列化测试文件</span></div><div class="line">        File file = <span class="keyword">new</span> File(<span class="string">"/Users/wuwenan/Work/serializationBar.txt"</span>);</div><div class="line">        <span class="keyword">if</span>(!file.exists())&#123;</div><div class="line">            file.createNewFile();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//进行序列化</span></div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(</div><div class="line">                <span class="keyword">new</span> FileOutputStream(<span class="string">"/Users/wuwenan/Work/serializationBar.txt"</span>));</div><div class="line">        Bar2 bar2 = <span class="keyword">new</span> Bar2();</div><div class="line">        oos.writeObject(bar2);</div><div class="line">        oos.flush();</div><div class="line">        oos.close();</div><div class="line"></div><div class="line">        <span class="comment">//进行反序列化</span></div><div class="line">        System.out.println(<span class="string">"====反序列化的分隔线===="</span>);</div><div class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(</div><div class="line">                <span class="keyword">new</span> FileInputStream(<span class="string">"/Users/wuwenan/Work/serializationBar.txt"</span>));</div><div class="line">        Bar2 bar2temp = (Bar2) ois.readObject();</div><div class="line">        System.out.println(bar2temp);</div><div class="line">        ois.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Bar</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"bar"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar1</span> <span class="keyword">extends</span> <span class="title">Bar</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Bar1</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"bar1..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar2</span> <span class="keyword">extends</span> <span class="title">Bar1</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Bar2</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"bar2..."</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+        <div class="post-tags">
+          
+            <a href="/tags/Java/">Java</a>
+          
+        </div>
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017/05/12/JavaWeb——Servlet异步处理支持和异步监听器/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">JavaWeb——Servlet异步处理支持和异步监听器</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017/05/05/Java——对象的序列化与反序列化（1）/">
+        <span class="next-text nav-default">Java——对象的序列化与反序列化（1）</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2017
+    <span class="footer-author">Aaron Wu.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  </body>
+</html>
