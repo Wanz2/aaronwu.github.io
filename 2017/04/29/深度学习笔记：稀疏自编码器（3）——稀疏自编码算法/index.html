@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F">
-<meta property="og:updated_time" content="2017-05-16T14:13:44.000Z">
+<meta property="og:updated_time" content="2017-05-17T01:29:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
 <meta name="twitter:description" content="有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。">
@@ -156,7 +156,7 @@
 <hr>
 <p>&emsp;&emsp;在这里，我们是要用$\hat{\rho<em>j}$去逼近$\rho$，这里的KL散度是：<br>&emsp;&emsp;$\sum</em>{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)=\sum</em>{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}<em>j}$<br>&emsp;&emsp;于是我们在代价函数中加入这一惩罚因子，代价函数就变成：<br>&emsp;&emsp;$J</em>{sparse}(W,b)=J(W,b)+\beta \sum_{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)$<br>&emsp;&emsp;代价函数改变了，在反向传导时残差公式也要做出相应的改变，之前隐藏层第$i$个结点残差为：<br>&emsp;&emsp;$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)})f’(z<em>{i}^{(2)})$<br>现在应该将其换成：<br>&emsp;&emsp;$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}<em>i}))f’(z</em>{i}^{(2)})$  </p>
 <hr>
-<p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述"><br>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述"><br>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在<br><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="此处输入图片的描述"><br>中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
+<p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差"><br>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="残差递推公式"><br>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在<br><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差"><br>中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
   
 	</div>
 		<footer class="article-footer clearfix">
