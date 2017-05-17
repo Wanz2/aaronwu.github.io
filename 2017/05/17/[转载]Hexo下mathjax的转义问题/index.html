@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
-<meta property="og:updated_time" content="2017-05-17T03:59:11.000Z">
+<meta property="og:updated_time" content="2017-05-17T04:00:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【转载】Hexo下mathjax的转义问题">
 <meta name="twitter:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
@@ -103,9 +103,9 @@
 <h3 id="方法二：保护代码块"><a href="#方法二：保护代码块" class="headerlink" title="方法二：保护代码块"></a>方法二：保护代码块</h3><p>&emsp;&emsp;我们知道在markdown中的两个<code>` </code>之间的东西不会转义，正好符号我们的需求，我们保护<code>\[</code>之间的代码不被markdown渲染，这样就可以，但是有一个后遗症，就是的样式问题，markdown中是code的样式的，这样也还是有问题，解决思路就是重新处理code标签,使其遇见<code>\]</code>的话，跳过，详情见:<a href="https://liam0205.me/2015/09/09/fix-conflict-between-mathjax-and-markdown/" target="_blank" rel="external">解决MathJax与Markdown的冲突</a>这个方法有个问题，就是有时候我们的代码中会有$$的出现，这时候，仍然使用mathjax就有可能出现无法预料的结果了。</p>
 <h3 id="方法三：更换Hexo的markdown引擎"><a href="#方法三：更换Hexo的markdown引擎" class="headerlink" title="方法三：更换Hexo的markdown引擎"></a>方法三：更换Hexo的markdown引擎</h3><p>&emsp;&emsp;这个是最重的方法，直接换发动机，就是把hexo默认的渲染markdown的引擎换掉。查到了有如下几个插件可以使用:</p>
 <p><em>hexo-renderer-pandoc</em>，很强大的解析器，Pandoc的语法完全没有上述问题, 推荐使用。<br><em>hexo-renderer-kramed</em>,或者<em>hexo-renderer-marked</em>，这两个差不多，第一个fork了第二个，改了一部分bug，但是还是有部分问题。  </p>
-<p>&emsp;&emsp;下面说一下如何使用pandoc渲染。</p>
+<p>&emsp;&emsp;下面说一下如何使用pandoc渲染。  </p>
 <ol>
-<li>首先安装Pandoc，官网提供了Ubuntu的deb安装包，按照官网教程就可以安装完成。</li>
+<li>首先安装Pandoc，官网提供了Ubuntu的deb安装包，按照官网教程就可以安装完成。  </li>
 <li>就是卸载hexo默认的markd,再安装新的:  </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">npm uninstall hexo-renderer-marked --save</div><div class="line">npm install hexo-renderer-pandoc --save</div><div class="line">```  </div><div class="line"></div><div class="line">如果决定要换的话，还是更换为Pandoc吧，虽然比较笨重，需要首先安装Pandoc， 不过的确可以完美解决上述的不兼容问题，另外它的语法与markdown有些微的差异，需要注意。  </div><div class="line"></div><div class="line">### 方法四：修改Hexo渲染源码  </div><div class="line">这个方法是我目前使用的，相对来说，通用性较高的一种方式。思路就是修改hexo的渲染源码: `nodes_modules/marked/lib/marked.js`:  </div><div class="line"></div><div class="line"> - 去掉`\\`的额外转义  </div><div class="line"> - 将em标签对应的符号中，去掉`_`，因为markdown中有`*`可以表示斜体，`—`就去掉了。  </div><div class="line"></div><div class="line">具体思路参考了[使Marked.js与MathJax共存](http://blog.csdn.net/emptyset110/article/details/50123231)：  </div><div class="line"></div><div class="line">打开`nodes_modules/marked/lib/marked.js`:   </div><div class="line"></div><div class="line">第一步: 找到下面的代码:</div></pre></td></tr></table></figure>
@@ -219,11 +219,11 @@
 			
 		
 			
-				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>1</sup></a></li>
 			
 		
 			
