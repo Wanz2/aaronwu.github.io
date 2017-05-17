@@ -19,7 +19,7 @@
 <meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
-<meta property="og:updated_time" content="2017-05-17T01:40:57.000Z">
+<meta property="og:updated_time" content="2017-05-17T01:44:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
 <meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
@@ -182,8 +182,7 @@
 <p>&emsp;&emsp;$h_{W,b}(x)=f(z^{(3)})$  </p>
 <p>&emsp;&emsp;下面以  </p>
 <p>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$  </p>
-<p>为例，展开一下具体的矩阵表示，其他式子略：  </p>
-<p>&emsp;&emsp;<br>$$<br>\begin{pmatrix}<br>z_1^{(2)}\<br>z_2^{(2)}\<br>z<em>3^{(2)}\<br>\end{pmatrix}=<br>\begin{pmatrix}<br>W</em>{11}^{(1)}&amp;W<em>{12}^{(1)}&amp;W</em>{13}^{(1)}\<br>W<em>{21}^{(1)}&amp;W</em>{22}^{(1)}&amp;W<em>{23}^{(1)}\<br>W</em>{31}^{(1)}&amp;W<em>{32}^{(1)}&amp;W</em>{33}^{(1)}\<br>\end{pmatrix}<br>\begin{pmatrix}x_1\<br>x_2\<br>x_3\<br>\end{pmatrix}+<br>\begin{pmatrix}<br>b_1^{(1)}\<br>b_2^{(1)}\<br>b_3^{(1)}\<br>\end{pmatrix}<br>$$  </p>
+<p>为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$$<br>\begin{pmatrix}<br>z_1^{(2)}\<br>z_2^{(2)}\<br>z<em>3^{(2)}\<br>\end{pmatrix}=<br>\begin{pmatrix}<br>W</em>{11}^{(1)}&amp;W<em>{12}^{(1)}&amp;W</em>{13}^{(1)}\<br>W<em>{21}^{(1)}&amp;W</em>{22}^{(1)}&amp;W<em>{23}^{(1)}\<br>W</em>{31}^{(1)}&amp;W<em>{32}^{(1)}&amp;W</em>{33}^{(1)}\<br>\end{pmatrix}<br>\begin{pmatrix}x_1\<br>x_2\<br>x_3\<br>\end{pmatrix}+<br>\begin{pmatrix}<br>b_1^{(1)}\<br>b_2^{(1)}\<br>b_3^{(1)}\<br>\end{pmatrix}<br>$$  </p>
 <p>最终，神经网络前向传播过程可表示为：  </p>
 <p>&emsp;&emsp;$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$  </p>
 <p>&emsp;&emsp;$a^{(l+1)}=f(z^{(l+1)})$   </p>

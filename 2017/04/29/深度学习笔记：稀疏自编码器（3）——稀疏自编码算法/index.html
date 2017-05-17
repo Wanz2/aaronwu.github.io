@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F">
-<meta property="og:updated_time" content="2017-05-17T01:29:18.000Z">
+<meta property="og:updated_time" content="2017-05-17T01:53:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
 <meta name="twitter:description" content="有了神经网络和反向传播的基础，我们就可以将其应用到稀疏自编码器中了。">
@@ -141,22 +141,52 @@
 </tr>
 </tbody>
 </table>
-<h2 id="1-什么是稀疏自编码器"><a href="#1-什么是稀疏自编码器" class="headerlink" title="1.什么是稀疏自编码器"></a>1.什么是稀疏自编码器</h2><p>&emsp;&emsp;先上图：<br><img src="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png" alt="有隐藏层的稀疏自编码器"><br>&emsp;&emsp;上图为有一个隐藏层的稀疏自编码器示意图。稀疏自编码器为非监督学习，其所使用的样本集${x^{(1)},x^{(2)},…,x^{(m)}}$为没有类别标记的样本，我们希望令输出值$h_{W,b}(x)$与输入值$x$近似相等。</p>
+<h2 id="1-什么是稀疏自编码器"><a href="#1-什么是稀疏自编码器" class="headerlink" title="1.什么是稀疏自编码器"></a>1.什么是稀疏自编码器</h2><p>&emsp;&emsp;先上图：  </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/400px-Autoencoder636.png" alt="有隐藏层的稀疏自编码器">  </p>
+<p>&emsp;&emsp;上图为有一个隐藏层的稀疏自编码器示意图。稀疏自编码器为非监督学习，其所使用的样本集  </p>
+<p>&emsp;&emsp;${x^{(1)},x^{(2)},…,x^{(m)}}$  </p>
+<p>为没有类别标记的样本，我们希望令输出值$h_{W,b}(x)$与输入值$x$近似相等。  </p>
 <h2 id="2-为什么要用稀疏自编码器"><a href="#2-为什么要用稀疏自编码器" class="headerlink" title="2.为什么要用稀疏自编码器"></a>2.为什么要用稀疏自编码器</h2><p>&emsp;&emsp;由于为数据人工增加类别标记是一个非常麻烦的过程，我们希望机器能够自己学习到样本中的一些重要特征。通过对隐藏层施加一些限制，能够使得它在恶劣的环境下学习到能最好表达样本的特征，并能有效地对样本进行降维。这种限制可以是对隐藏层稀疏性的限制。  </p>
 <h2 id="3-稀疏性限制"><a href="#3-稀疏性限制" class="headerlink" title="3.稀疏性限制"></a>3.稀疏性限制</h2><h3 id="3-1稀疏性"><a href="#3-1稀疏性" class="headerlink" title="3.1稀疏性"></a>3.1稀疏性</h3><p>&emsp;&emsp;当使用sigmoid函数作为激活函数时，若神经元输出值为1，则可认为其被激活，若神经元输出值为0，则可认为其被抑制（使用tanh函数时，代表激活和抑制的值分别为1和-1）。稀疏性限制就是要保证大多数神经元输出为0，即被抑制的状态。  </p>
 <h3 id="3-2如何限制隐藏层稀疏性"><a href="#3-2如何限制隐藏层稀疏性" class="headerlink" title="3.2如何限制隐藏层稀疏性"></a>3.2如何限制隐藏层稀疏性</h3><p>&emsp;&emsp;在本文开始所给出的稀疏自编码网络中，为了限制隐藏结点稀疏性，可以进行如下表示：  </p>
 <ol>
-<li>使用$a_{j}^{(2)}$表示第2层第$j$个神经元的激活度。  </li>
-<li>使用$a_{j}^{(2)}(x)$表示在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度。  </li>
-<li>使用$\hat{\rho<em>{j}}=\frac{1}{m}\sum</em>{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度。  </li>
-<li>使用$\rho$表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制。<br>&emsp;&emsp;我们希望$\hat{\rho_{j}}$和$\rho$越接近越好，因此我们要对这两者有显著差异的情况进行惩罚，惩罚使用KL散度。  </li>
+<li><p>使用$a_{j}^{(2)}$表示第2层第$j$个神经元的激活度。  </p>
+</li>
+<li><p>使用$a_{j}^{(2)}(x)$表示在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度。  </p>
+</li>
+<li><p>使用<br>&emsp;&emsp;$\hat{\rho<em>{j}}=\frac{1}{m}\sum</em>{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$<br>表示第2层第$j$个隐藏神经元在训练集上的平均活跃度。 </p>
+</li>
+<li><p>使用$\rho$表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制。  </p>
+</li>
 </ol>
+<p>&emsp;&emsp;我们希望$\hat{\rho_{j}}$和$\rho$越接近越好，因此我们要对这两者有显著差异的情况进行惩罚，惩罚使用KL散度。   </p>
 <hr>
-<p><strong>PS. 什么是KL散度？</strong><br>&emsp;&emsp;KL散度又称相对熵，是对两个概率分布P和Q差异的非对称性度量，非对称性意味着$D(P|Q)\neq D(Q|P)$，$D(P|Q)$表示用概率分布$Q$来拟合概率分布$P$时所产生的信息损耗。其定义为：<br>给定随机变量$s$，<br>若为离散型随机变量：$D(P|Q)=\sum(p(i)log(\frac{p(i)}{q(i)}))$，此处p和q表示随机变量的分布律，$p(i)$表示随机变量$s$取$i$的概率。<br>若为连续型随机变量：$D(P|Q)=\int p(s)log(\frac{p(s)}{q(s)})d(s)$，此处$p$和$q$表示随机变量$s$的概率密度。<br>&emsp;&emsp;KL散度的性质是，当$P=Q$时值为0，随着$P$和$Q$差异增大而递增。  </p>
+<p><strong>PS. 什么是KL散度？</strong><br>&emsp;&emsp;KL散度又称相对熵，是对两个概率分布P和Q差异的非对称性度量，非对称性意味着$D(P|Q)\neq D(Q|P)$，$D(P|Q)$表示用概率分布$Q$来拟合概率分布$P$时所产生的信息损耗。其定义为：  </p>
+<p>给定随机变量$s$，  </p>
+<p> 若为离散型随机变量：  </p>
+<p>&emsp;&emsp;$D(P|Q)=\sum(p(i)log(\frac{p(i)}{q(i)}))$  </p>
+<p>此处p和q表示随机变量的分布律，$p(i)$表示随机变量$s$取$i$的概率。   </p>
+<p>若为连续型随机变量：  </p>
+<p>&emsp;&emsp;$D(P|Q)=\int p(s)log(\frac{p(s)}{q(s)})d(s)$  </p>
+<p>此处$p$和$q$表示随机变量$s$的概率密度。  </p>
+<p>&emsp;&emsp;KL散度的性质是，当$P=Q$时值为0，随着$P$和$Q$差异增大而递增。  </p>
 <hr>
-<p>&emsp;&emsp;在这里，我们是要用$\hat{\rho<em>j}$去逼近$\rho$，这里的KL散度是：<br>&emsp;&emsp;$\sum</em>{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)=\sum</em>{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}<em>j}$<br>&emsp;&emsp;于是我们在代价函数中加入这一惩罚因子，代价函数就变成：<br>&emsp;&emsp;$J</em>{sparse}(W,b)=J(W,b)+\beta \sum_{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)$<br>&emsp;&emsp;代价函数改变了，在反向传导时残差公式也要做出相应的改变，之前隐藏层第$i$个结点残差为：<br>&emsp;&emsp;$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)})f’(z<em>{i}^{(2)})$<br>现在应该将其换成：<br>&emsp;&emsp;$\delta</em>{i}^{(2)}=(\sum<em>{j=1}^{s</em>{3}}W<em>{ji}^{(2)}\delta</em>{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}<em>i}))f’(z</em>{i}^{(2)})$  </p>
+<p>&emsp;&emsp;在这里，我们是要用$\hat{\rho_j}$去逼近$\rho$，这里的KL散度是：  </p>
+<p>&emsp;&emsp;$\sum_{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)=\sum</em>{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}_j}$  </p>
+<p>&emsp;&emsp;于是我们在代价函数中加入这一惩罚因子，代价函数就变成：  </p>
+<p>&emsp;&emsp;$J<em>{sparse}(W,b)=J(W,b)+\beta \sum</em>{j=1}^{s_2}KL(\rho | \hat{\rho}_j)$   </p>
+<p>代价函数改变了，在反向传导时残差公式也要做出相应的改变，之前隐藏层第$i$个结点残差为：  </p>
+<p>&emsp;&emsp;$\delta<em>{i}^{(2)}=(\sum</em>{j=1}^{s<em>{3}}W</em>{ji}^{(2)}\delta<em>{j}^{(3)})f’(z</em>{i}^{(2)})$  </p>
+<p>现在应该将其换成：  </p>
+<p>&emsp;&emsp;$\delta<em>{i}^{(2)}=(\sum</em>{j=1}^{s<em>{3}}W</em>{ji}^{(2)}\delta_{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}<em>i}))f’(z</em>{i}^{(2)})$  </p>
 <hr>
-<p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差"><br>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：<br><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="残差递推公式"><br>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在<br><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差"><br>中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
+<p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：  </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差">  </p>
+<p>但根据ufldl教程<a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="external">反向传导算法</a>一节的推导，残差递推公式为：  </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/%E6%AE%8B%E5%B7%AE%E9%80%92%E6%8E%A8%E5%85%AC%E5%BC%8F" alt="残差递推公式">  </p>
+<p>笔者自己根据公式推了一遍，同时加上自己的理解，笔者认为在  </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差">  </p>
+<p>中，累加的上限应该是$s_3$而不是$s_2$，因此在本文最后处的公式里写的是$s_3$，但笔者由于还是在校学生，知识有限，此处还是存在疑问，恳请看到本文的同学能在这里指点一二，感激不尽！</p>
   
 	</div>
 		<footer class="article-footer clearfix">

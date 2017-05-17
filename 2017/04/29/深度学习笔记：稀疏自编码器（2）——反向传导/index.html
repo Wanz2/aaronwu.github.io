@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
-<meta property="og:updated_time" content="2017-05-16T14:02:18.000Z">
+<meta property="og:updated_time" content="2017-05-17T01:47:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
 <meta name="twitter:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
@@ -97,7 +97,9 @@
 		
 		<p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。   </p>
 <a id="more"></a>
-<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>&emsp;&emsp;本文中所使用的样本集：<br>${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$<br>&emsp;&emsp;其他符号：  </p>
+<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>&emsp;&emsp;本文中所使用的样本集：  </p>
+<p>${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$  </p>
+<p>&emsp;&emsp;其他符号：  </p>
 <table>
 <thead>
 <tr>
@@ -160,13 +162,39 @@
 </tr>
 </tbody>
 </table>
-<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：<br>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$<br>&emsp;&emsp;$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$  </p>
-<h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：<br>&emsp;&emsp;$J(W,b;x,y)=\frac{1}{2}|h<em>{w,b}(x)-y|^{2}$<br>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：<br>$J(W,b)<br>=[\frac{1}{m}\sum</em>{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum<em>{l=1}^{n</em>{l}-1}\sum<em>{i=1}^{s</em>{l}}\sum<em>{j=1}^{s</em>{l+1}}(W<em>{ji}^{(l)})^{2}$<br>&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum</em>{i=1}^{m}(\frac{1}{2}|h<em>{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum</em>{l=1}^{n<em>{l}-1}\sum</em>{i=1}^{s<em>{l}}\sum</em>{j=1}^{s<em>{l+1}}(W</em>{ji}^{(l)})^{2}$<br>&emsp;&emsp;其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性  </p>
-<h2 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2.梯度下降"></a>2.梯度下降</h2><p>&emsp;&emsp;为了优化代价函数，要进行以下几步：    </p>
+<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：  </p>
+<p>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$  </p>
+<p>&emsp;&emsp;$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$  </p>
+<h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：  </p>
+<p>&emsp;&emsp;$J(W,b;x,y)=\frac{1}{2}|h_{w,b}(x)-y|^{2}$  </p>
+<p>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：  </p>
+<p>$J(W,b)<br>=[\frac{1}{m}\sum<em>{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum</em>{l=1}^{n<em>{l}-1}\sum</em>{i=1}^{s<em>{l}}\sum</em>{j=1}^{s<em>{l+1}}(W</em>{ji}^{(l)})^{2}$  </p>
+<p>&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum<em>{i=1}^{m}(\frac{1}{2}|h</em>{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum<em>{l=1}^{n</em>{l}-1}\sum<em>{i=1}^{s</em>{l}}\sum<em>{j=1}^{s</em>{l+1}}(W_{ji}^{(l)})^{2}$  </p>
+<p>&emsp;&emsp;其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性  </p>
+<h2 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2.梯度下降"></a>2.梯度下降</h2><p>&emsp;&emsp;为了优化代价函数，要进行以下几步：  </p>
 <ol>
 <li>初始化每一个参数$W_{ij}^{(l)}$和$b_i^{(l)}$为很小的接近零的随机值  </li>
-<li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：<br>&emsp;&emsp;$W<em>{ij}^{(l)}=W</em>{ij}^{(l)}-\alpha\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)$<br>&emsp;&emsp;$b</em>{i}^{(l)}=b<em>{i}^{(l)}-\alpha\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b)$<br>其中$\alpha$是学习速率。<br>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。  <h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2>&emsp;&emsp;我们将求偏导的项单独拿出来看：<br>&emsp;&emsp;$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W</em>{ij}^{(l)}$&emsp;&emsp;&emsp;(1)<br>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)<br>&emsp;&emsp;显然，求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$。<br>&emsp;&emsp;由于：<br>&emsp;&emsp;$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{l+1}}{\partial W<em>{ij}^{l}}$&emsp;&emsp;&emsp;(3)<br>&emsp;&emsp;$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l+1)}}\frac{\partial z</em>{i}^{(l+1)}}{\partial b<em>{i}^{(l)}}$&emsp;&emsp;&emsp;(4)<br>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta<em>{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。<br>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l)}}$可得：<br>&emsp;&emsp;$\delta_{i}^{(n<em>l)}=-(y</em>{i}-a_{i}^{(n<em>l)})f’(z</em>{i}^{(n<em>l)})$<br>&emsp;&emsp;$\delta</em>{i}^{(l)}=(\sum<em>{j=1}^{s</em>{l+1}}W<em>{ji}^{(l)}\delta</em>{j}^{(l+1)})f’(z_{i}^{(l)})$<br>通过以上第一式可以求出第$n<em>l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：<br>&emsp;&emsp;$\frac{\partial}{\partial W</em>{ij}^{(l)}}J(W,b;x,y)=\delta <em>{i}^{(l+1)}a</em>{j}^{(l)}$&emsp;&emsp;&emsp;(5)<br>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\delta</em>{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)<br>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。   </li>
+<li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：  </li>
 </ol>
+<p>&emsp;&emsp;$W<em>{ij}^{(l)}=W</em>{ij}^{(l)}-\alpha\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b)$  </p>
+<p>&emsp;&emsp;$b<em>{i}^{(l)}=b</em>{i}^{(l)}-\alpha\frac{\partial}{\partial b_{i}^{(l)}}J(W,b)$   </p>
+<p>其中$\alpha$是学习速率。    </p>
+<p>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。  </p>
+<h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2><p>&emsp;&emsp;我们将求偏导的项单独拿出来看：  </p>
+<p>&emsp;&emsp;$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W</em>{ij}^{(l)}$&emsp;&emsp;&emsp;(1)  </p>
+<p>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum</em>{i=1}^{m}\frac{\partial}{\partial b_{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)  </p>
+<p>显然，求出$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b</em>{i}^{(l)}}J(W,b)$。  </p>
+<p>由于：  </p>
+<p>&emsp;&emsp;$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l+1)}}\frac{\partial z<em>{i}^{l+1}}{\partial W</em>{ij}^{l}}$&emsp;&emsp;&emsp;(3)   </p>
+<p>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z</em>{i}^{(l+1)}}\frac{\partial z<em>{i}^{(l+1)}}{\partial b</em>{i}^{(l)}}$&emsp;&emsp;&emsp;(4)  </p>
+<p>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z<em>{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta</em>{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。  </p>
+<p>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z_{i}^{(l)}}$可得：  </p>
+<p>&emsp;&emsp;$\delta_{i}^{(n<em>l)}=-(y</em>{i}-a_{i}^{(n<em>l)})f’(z</em>{i}^{(n_l)})$  </p>
+<p>&emsp;&emsp;$\delta<em>{i}^{(l)}=(\sum</em>{j=1}^{s<em>{l+1}}W</em>{ji}^{(l)}\delta<em>{j}^{(l+1)})f’(z</em>{i}^{(l)})$  </p>
+<p>通过以上第一式可以求出第$n_l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：  </p>
+<p>&emsp;&emsp;$\frac{\partial}{\partial W<em>{ij}^{(l)}}J(W,b;x,y)=\delta </em>{i}^{(l+1)}a_{j}^{(l)}$&emsp;&emsp;&emsp;(5)  </p>
+<p>&emsp;&emsp;$\frac{\partial}{\partial b<em>{i}^{(l)}}J(W,b;x,y)=\delta</em>{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)    </p>
+<p>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。   </p>
   
 	</div>
 		<footer class="article-footer clearfix">
