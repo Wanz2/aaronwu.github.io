@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
-<meta property="og:updated_time" content="2017-05-17T02:22:36.000Z">
+<meta property="og:updated_time" content="2017-05-17T02:32:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta name="twitter:description" content="笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
@@ -91,7 +91,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.3 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.4 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-协方差矩阵"><span class="toc-number">5.</span> <span class="toc-text">1.5 协方差矩阵</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.3 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.4 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-协方差矩阵"><span class="toc-number">5.</span> <span class="toc-text">1.5 协方差矩阵</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-数理统计中的协方差和协方差矩阵概念"><span class="toc-number"></span> <span class="toc-text">2.数理统计中的协方差和协方差矩阵概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1数理统计中的统计量"><span class="toc-number">1.</span> <span class="toc-text">2.1数理统计中的统计量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2样本协方差"><span class="toc-number">2.</span> <span class="toc-text">2.2样本协方差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3样本协方差矩阵"><span class="toc-number">3.</span> <span class="toc-text">2.3样本协方差矩阵</span></a></li></ol>
 		
 		</div>
 		
@@ -159,10 +159,10 @@
 <p>&emsp;&emsp;笔者在这里仅给出结论，因为本文仅仅是笔者在应用到相关知识点时的复习，为了理清思路而做的记录，关于上述结论的证明，可以在任意一本概率论的书中找到。  </p>
 <h2 id="1-5-协方差矩阵"><a href="#1-5-协方差矩阵" class="headerlink" title="1.5 协方差矩阵"></a>1.5 协方差矩阵</h2><p>&emsp;&emsp;令$(X_1,X_2,…,X_n)$为$n$维随机向量($n\geq2$),记  </p>
 <p>&emsp;&emsp;$b_{ij}=Cov(X_i,X_j)=E((X_i-E(X_i))(X_j-E(X_j))), i,j=1,2,…,n$，  </p>
-<p>则矩阵<br>$$<br>B=<br>\begin{bmatrix}<br>b<em>{11}&amp;b</em>{12}&amp;\cdots&amp;b<em>{1n}\<br>b</em>{21}&amp;b<em>{22}&amp;\cdots&amp;b</em>{2n}\<br>\vdots&amp;\vdots&amp;&amp;\vdots\<br>b<em>{n1}&amp;b</em>{n2}&amp;\cdots&amp;b_{nn}<br>\end{bmatrix}<br>$$  </p>
+<p>则矩阵<br>$$<br>B=<br>\begin{bmatrix}<br>b<em>{11}&amp;b</em>{12}&amp;\cdots&amp;b<em>{1n}\\<br>b</em>{21}&amp;b<em>{22}&amp;\cdots&amp;b</em>{2n}\\<br>\vdots&amp;\vdots&amp;&amp;\vdots\\<br>b<em>{n1}&amp;b</em>{n2}&amp;\cdots&amp;b_{nn}<br>\end{bmatrix}<br>$$  </p>
 <p>为$(X_1,\cdots,X_n)$的协方差矩阵。  </p>
-<p>#2.数理统计中的协方差和协方差矩阵概念<br>&emsp;&emsp;以上所说的是概率论中的协方差概念，但是我们在深度学习的实际运用中，通常是对已经获得的数据进行分析，因此类比概率论中的随机变量的数字特征，可以得到数理统计中的相关统计量，同时可以定义协方差和协方差矩阵  </p>
-<p>##2.1数理统计中的统计量<br>&emsp;&emsp;记$(X_1,X_2,\cdots,X_n)$是来自总体$X$的样本，$(x_1,x_2,\cdots,x_n)$是样本观察值。  </p>
+<h1 id="2-数理统计中的协方差和协方差矩阵概念"><a href="#2-数理统计中的协方差和协方差矩阵概念" class="headerlink" title="2.数理统计中的协方差和协方差矩阵概念"></a>2.数理统计中的协方差和协方差矩阵概念</h1><p>&emsp;&emsp;以上所说的是概率论中的协方差概念，但是我们在深度学习的实际运用中，通常是对已经获得的数据进行分析，因此类比概率论中的随机变量的数字特征，可以得到数理统计中的相关统计量，同时可以定义协方差和协方差矩阵  </p>
+<h2 id="2-1数理统计中的统计量"><a href="#2-1数理统计中的统计量" class="headerlink" title="2.1数理统计中的统计量"></a>2.1数理统计中的统计量</h2><p>&emsp;&emsp;记$(X_1,X_2,\cdots,X_n)$是来自总体$X$的样本，$(x_1,x_2,\cdots,x_n)$是样本观察值。  </p>
 <table>
 <thead>
 <tr>
@@ -189,12 +189,12 @@
 </tr>
 </tbody>
 </table>
-<p>##2.2样本协方差<br>&emsp;&emsp;样本均值表征了样本分布的中间点；而样本标准差则是样本各个观察值到样本分布中间点的距离的平均值。样本均值和样本标准差均是用来描述一维数据的。  </p>
+<h2 id="2-2样本协方差"><a href="#2-2样本协方差" class="headerlink" title="2.2样本协方差"></a>2.2样本协方差</h2><p>&emsp;&emsp;样本均值表征了样本分布的中间点；而样本标准差则是样本各个观察值到样本分布中间点的距离的平均值。样本均值和样本标准差均是用来描述一维数据的。  </p>
 <p>&emsp;&emsp;但在生活中我们通常会用到多维数据，比如我们有两个总体$X$和$Y$，两者的样本分别是$(X_1,X_2,\cdots,X_n)$和$(Y_1,Y_2,\cdots,Y_n)$，样本观察值分别是$(x_1,x_2,\cdots,x_n)$和$(y_1,y_2,\cdots,y_n)$，我们希望能够分析出这两个样本的相关性，因此需要定义样本之间的协方差。回忆一下样本方差的定义：  </p>
 <p>&emsp;&emsp;$S^2=\frac{1}{n-1}\sum_{i=1}^{n}(X_i-\bar{X})^2$  </p>
 <p>仿照样本方差定义，我们可以定义样本协方差：  </p>
 <p>&emsp;&emsp;$Cov(X,Y)=\frac{1}{n-1}\sum_{i=1}^{n}(X_i-\bar{X})(Y_i-\bar{Y})$  </p>
-<p>##2.3样本协方差矩阵<br>&emsp;&emsp;同样地，我们可以定义数理统计中的协方差矩阵概念，但这里的协方差矩阵并不是描述两个总体之间相关性，而是用来描述样本各维度之间的相关性。<br>&emsp;&emsp;比如我们有一个$m$维的总体  </p>
+<h2 id="2-3样本协方差矩阵"><a href="#2-3样本协方差矩阵" class="headerlink" title="2.3样本协方差矩阵"></a>2.3样本协方差矩阵</h2><p>&emsp;&emsp;同样地，我们可以定义数理统计中的协方差矩阵概念，但这里的协方差矩阵并不是描述两个总体之间相关性，而是用来描述样本各维度之间的相关性。<br>&emsp;&emsp;比如我们有一个$m$维的总体  </p>
 <p>&emsp;&emsp;$X=(X_1,X_2,\cdots,X_m)^{\mathrm{T} }$，  </p>
 <p>有样本${(X^{(1)}_1,X^{(1)}_2,\cdots,X^{(1)}_m)^{\mathrm{T} },(X^{(2)}_1,X^{(2)}_2\cdots,X^{(2)}_m)^{\mathrm{T} },\cdots,(X^{(n)}_1,X^{(n)}_2\cdots,X^{(n)}_m)^{\mathrm{T} }}$， </p>
 <p>观察值分别是${(x^{(1)}_1,x^{(1)}_2\cdots,x^{(1)}_m)^{\mathrm{T} },(x^{(2)}_1,x^{(2)}_2\cdots,x^{(2)}_m)^{\mathrm{T} },\cdots,(x^{(n)}_1,x^{(n)}_2\cdots,x^{(n)}_m)^{\mathrm{T} }}$，  </p>
@@ -270,7 +270,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.3 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.4 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-协方差矩阵"><span class="toc-number">5.</span> <span class="toc-text">1.5 协方差矩阵</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.3 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.4 相关系数的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-协方差矩阵"><span class="toc-number">5.</span> <span class="toc-text">1.5 协方差矩阵</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-数理统计中的协方差和协方差矩阵概念"><span class="toc-number"></span> <span class="toc-text">2.数理统计中的协方差和协方差矩阵概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1数理统计中的统计量"><span class="toc-number">1.</span> <span class="toc-text">2.1数理统计中的统计量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2样本协方差"><span class="toc-number">2.</span> <span class="toc-text">2.2样本协方差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3样本协方差矩阵"><span class="toc-number">3.</span> <span class="toc-text">2.3样本协方差矩阵</span></a></li></ol>
  
   </div>
 
