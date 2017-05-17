@@ -4,35 +4,23 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu</title>
+    <title>Hexo下mathjax的转义问题——转载 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
+    <meta name="description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
-<meta property="og:url" content="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/index.html">
+<meta property="og:title" content="Hexo下mathjax的转义问题——转载">
+<meta property="og:url" content="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045435665?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045508291?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500">
-<meta property="og:image" content="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500">
-<meta property="og:updated_time" content="2017-05-09T06:26:13.000Z">
+<meta property="og:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
+<meta property="og:updated_time" content="2017-05-17T03:27:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
-<meta name="twitter:description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
+<meta name="twitter:title" content="Hexo下mathjax的转义问题——转载">
+<meta name="twitter:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -87,14 +75,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置" itemprop="url">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</a>
+      <a href="/2017/05/17/[转载]Hexo下mathjax的转义问题/" title="Hexo下mathjax的转义问题——转载" itemprop="url">Hexo下mathjax的转义问题——转载</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-31T19:29:51.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
+    <time datetime="2017-05-17T03:02:35.000Z" itemprop="datePublished"> 发表于 2017-05-17</time>
     
   </p>
 </header>
@@ -103,36 +91,33 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>&emsp;&emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：</p>
+		<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>&emsp;&emsp;我们平时使用markdown写文档的时候，免不了会碰到数学公式，好在有强大的Mathjax,可以解析网页上的数学公式，与hexo的结合也很简单，可以手动加入js，或者直接使用hexo-math插件.大部分情况下都是可以的，但是Markdwon本身的特殊符号与Latex中的符号会出现冲突的时候:<br>—的转义，在markdown中，<code>_</code>是斜体，但是在latex中，却有下标的意思，就会出现问题。<br><code>\\</code>的换行，在markdown中，<code>\\</code>会被转义为<code>\</code>这样也会影响影响mathjax对公式中的<code>\\</code>进行渲染  </p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>&emsp;&emsp;hexo默认使用marked.js去解析我们写的markdown，比如一些符号，<code>_</code>代表斜体，会被处理为<code>&lt;em&gt;</code>标签，比如<code>x_i</code>在开始被渲染的时候，处理为<code>x&lt;em&gt;i&lt;/em&gt;</code>，这个时候mathjax就无法渲染成下标了。很多符号都有这个问题，比如粗体<code>*</code>,也是无法在mathjax渲染出来的，好在有替代的乘法等,包括<code>\\</code>同理。 所以说到底，是hexo使用的markdown引擎的锅，因为很多其它引擎在这方面处理的很好。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>在网上查了一些资料，结合自己使用经验，总结为如下的方法</p>
 <ol>
-<li>VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</li>
-<li>Windows主机中配置Xshell工具以远程控制虚拟系统<a id="more"></a>
+<li><p>手动escape<br>&emsp;&emsp;这个方法最直接，需要转义我就转义。比如我需要在公式中写下标符号，那就修改写法写为: $x_i$;需要换行就使用<code>\\</code>,即可。 很明显，这种方式虽然可以解决问题通用性很差,比如想迁移到其它地方，就无法识别了，因为大部分的markdown引擎是没有这个问题的。</p>
+</li>
+<li><p>保护代码块<br>&emsp;&emsp;我们知道在markdown中的两个`之间的东西不会转义，正好符号我们的需求，我们保护[之间的代码不被markdown渲染，这样就可以，但是有一个后遗症，就是的样式问题， markdown中是code的样式的，这样也还是有问题，解决思路就是重新处理code标签,使其遇见]的话，跳过，详情见:解决 MathJax 与 Markdown 的冲突 这个方法有个问题，就是有时候我们的代码中会有$$的出现，这时候，仍然使用mathjax就有可能出现无法预料的结果了。</p>
+</li>
+<li><p>更换Hexo的markdown引擎<br>&emsp;&emsp;这个是最直接的方法，也是我现在使用的方法，直接换发动机,就是把hexo默认的渲染markdown的引擎换掉。查到了有如下几个插件可以使用:</p>
 </li>
 </ol>
-<h1 id="二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><a href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置" class="headerlink" title="二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置"></a>二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</h1><ol>
-<li>在VMware中配置NAT网络模式<br> 1.1 在虚拟机设置中将网络适配器设置为NAT模式<br><img src="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500" alt=""><br> 1.2 在VMware工具栏点击“编辑”-“虚拟网络编辑器”，在弹出的窗口中选择“更改设置”<br><img src="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500" alt=""><br> 1.3 在弹出的窗口中选择VMnet8，并将其VMnet信息选择为NAT模式，点击“NAT设置”<br><img src="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500" alt=""><br> 1.4 在弹出的窗口中，记住“网关IP”，之后配置IP地址会用到。在“端口转发”中选择“添加”<br><img src="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500" alt=""><br> 1.5 在弹出的窗口中进行如下配置，其中主机端口可以自行设定，推荐设定值范围在10000和65535之间；虚拟机IP地址的前三位与上一步中网关地址的前三位相同，表示网段，虚拟机IP地址的最后一位可自行设定；虚拟机端口设置为22，为SSH协议的默认接口；“描述”选项可自行设定。设定结束后选择“确定”，在上一级窗口中选择“应用”并确定，至此VMware中的NAT网络配置结束。<br><img src="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500" alt=""></li>
-<li>在CentOS中配置静态IP地址<br> 2.1 打开CentOS，输入<pre><code>  `ifconfig`
-查看网卡信息，注意信息中的网卡名：
-</code></pre><img src="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500" alt=""><pre><code>上图中“eth0”即为网卡名，表示第一块网卡
-</code></pre> 2.2 静态IP地址配置主要用到以下三个文件：<pre><code>  `/etc/sysconfig/network-scripts/ifcfg-eth0`
-  `/etc/sysconfig/network`
-  `/etc/resolv.conf`
-注意：第一个文件名中的“ifcfg-eth0”可能有所不同，实际使用时根据上一步中查看的网卡名进行设置
-</code></pre> 2.3 首先编辑<code>/etc/sysconfig/network</code>，配置如下：<br><img src="http://img.blog.csdn.net/20161015045435665?imageView/2/w/500" alt=""><pre><code>其中GATEWAY即为之前查看到的网关地址
-</code></pre> 2.4 其次编辑<code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>，若找不到该文件，则说明网卡eth0尚未启动，则可以创建该文件并配置如下：<br><img src="http://img.blog.csdn.net/20161015045508291?imageView/2/w/500" alt=""><pre><code>其中IP地址为之前在NAT设置中配置的IP地址，NETMASK为子网掩码，GATEWAY即默认网关地址
-注意：DNS1和DNS2必须填写，若不填写则无法进行域名解析，其中DNS1与GATEWAY地址相同，而DNS2则可选择常用的DNS服务器地址，这里使用的8.8.8.8是谷歌的DNS服务器
-</code></pre> 2.5 上一步配置完成后，系统会在<code>/etc/resolv.conf</code>文件中自动写入DNS服务器地址，如图：<br><img src="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500" alt=""><br> 2.6 配置完成后输入命令<code>service network restart</code>重启网络服务，至此静态IP配置完成，虚拟CentOS的IP地址为192.168.81.23</li>
-<li>打开ssh服务<br> 3.1 在配置Xshell前，要在系统中打开ssh服务，输入如下命令<br> 打开ssh服务：<code>service sshd start</code><br> 设置开机运行ssh：<code>chkconfig sshd on</code></li>
+<p>hexo-renderer-pandoc, 很强大的解析器，Pandoc的语法完全没有上述问题, 推荐使用。<br>hexo-renderer-kramed,或者hexo-renderer-marked,这两个差不多，第一个fork了第二个，改了一部分bug，但是还是有部分问题。<br>下面说一下如何使用pandoc渲染。</p>
+<p>首先安装Pandoc，官网提供了Ubuntu的deb安装包，按照官网教程就可以安装完成。<br>就是卸载hexo默认的markd,再安装新的:<br>1<br>2<br>npm uninstall hexo-renderer-marked –save<br>npm install hexo-renderer-pandoc –save<br>如果决定要换的话，还是更换为Pandoc吧，虽然比较笨重，需要首先安装Pandoc, 不过的确可以完美解决上述的不兼容问题，另外它的语法与markdown有些微的差异，需要注意。</p>
+<ol>
+<li>修改Hexo渲染源码</li>
 </ol>
-<h1 id="三、配置Xshell工具"><a href="#三、配置Xshell工具" class="headerlink" title="三、配置Xshell工具"></a>三、配置Xshell工具</h1><ol>
-<li>打开Xshell工具，选择“文件”-“新建”，在弹出窗口选择“连接”，作如下配置：<br><img src="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500" alt=""><br> a. 协议选择SSH<br> b. 由于已经将主机的10023端口映射为虚拟机的22号端口，因此主机设置为127.0.0.1，端口号设置为步骤1.5中设置的“主机端口号”，即10023</li>
-<li>在“用户身份验证”中输入登录用帐号密码：<br><img src="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500" alt=""></li>
-<li>配置成功，点击连接即可接入虚拟系统</li>
-</ol>
+<p>修改hexo的渲染源码: nodes_modules/marked/lib/marked.js:</p>
+<p>去掉\\的额外转义<br>将em标签对应的符号中，去掉_,因为markdown中有*可以表示斜体，—就去掉了。<br>具体思路参考了使Marked.js与MathJax共存, 打开nodes_modules/marked/lib/marked.js: 第一步: 找到下面的代码:</p>
+<p>1<br>escape: /^\([\`*{}[]()# +-.!_&gt;])/,<br>改为:</p>
+<p>1<br>escape: /^\([`*{}[]()# +-.!_&gt;])/,<br>这样就会去掉\\的转义了。 第二步: 找到em的符号:</p>
+<p>1<br>em: /^\b_((?:[^_]|__)+?)_\b|^*((?:**|[\s\S])+?)*(?!*)/,<br>改为:</p>
+<p>1<br>em:/^*((?:**|[\s\S])+?)*(?!*)/,<br>去掉_的斜体含义,这样就解决了。这种方式指标不治本，因为保证不了还可能有其它的字符会冲突，这样的话，还需要返回去接着修改。</p>
+<p>大家可以根据自己的情况选择，不过还是建议第三种换Markdown引擎，使用Pandoc来渲染，这样就算换了机器，直接安装一个插件就好了，没有必要再去倒腾源码了</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -140,13 +125,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  <a class="article-category-link" href="/categories/经验心得/">经验心得</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a>
+  <span></span> <a href="/tags/经验心得/">经验心得</a>
   </div>
 
 </div>
@@ -155,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/" data-title="Hexo下mathjax的转义问题——转载 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -168,19 +153,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/04/06/压缩感知算法原理/" title="压缩感知算法原理">
-  <strong>上一篇：</strong><br/>
-  <span>
-  压缩感知算法原理</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/"  title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">
+<a href="/2017/05/12/JavaWeb——Servlet异步处理支持和异步监听器/"  title="JavaWeb——Servlet异步处理支持和异步监听器">
  <strong>下一篇：</strong><br/> 
- <span>Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置
+ <span>JavaWeb——Servlet异步处理支持和异步监听器
 </span>
 </a>
 </div>
@@ -195,7 +172,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a></li></ol>
  
   </div>
 
