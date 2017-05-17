@@ -19,7 +19,7 @@
 <meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
-<meta property="og:updated_time" content="2017-05-17T01:44:02.000Z">
+<meta property="og:updated_time" content="2017-05-17T02:58:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
 <meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
@@ -169,8 +169,7 @@
 <p>&emsp;&emsp;以上图为例，最左边一层为<strong>输入层</strong>，中间一层为<strong>隐藏层</strong>，最右边一层为<strong>输出层</strong>。  </p>
 <h3 id="2-2-前向传播"><a href="#2-2-前向传播" class="headerlink" title="2.2 前向传播"></a>2.2 前向传播</h3><p>&emsp;&emsp;前向传播就是使用输入值$x$通过神经网络计算出输出值$h_{W,b}(x)$的过程。以上图神经网络为例，前向传播中每一个神经元输入输出过程如下：  </p>
 <p>&emsp;&emsp;令$z_i^{(l)}$表示第$l$层第$i$个神经元的输入值，有  </p>
-<p>&emsp;&emsp;$z_i^{(l+1)}=W_{i1}^{(l)}x_1+W_{i2}^{(l)}x_2+W_{i3}^{(l)}x_3+b_i^{(l)}$  </p>
-<p>&emsp;&emsp;（这里其实是一个<strong>线性回归</strong>模型）  </p>
+<p>&emsp;&emsp;$z_i^{(l+1)}=W_{i1}^{(l)}x_1+W_{i2}^{(l)}x_2+W_{i3}^{(l)}x_3+b_i^{(l)}$  （这里其实是一个<strong>线性回归</strong>模型）  </p>
 <p>&emsp;&emsp;$a_i^{(l)}=f(z_i^{(l)})$  </p>
 <p>&emsp;&emsp;$h_{W,b}(x)=a_1^{(3)}$  </p>
 <h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有： </p>
@@ -180,9 +179,7 @@
 <p>&emsp;&emsp;$a^{(2)}=f(z^{(2)})$  </p>
 <p>&emsp;&emsp;$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$  </p>
 <p>&emsp;&emsp;$h_{W,b}(x)=f(z^{(3)})$  </p>
-<p>&emsp;&emsp;下面以  </p>
-<p>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$  </p>
-<p>为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$$<br>\begin{pmatrix}<br>z_1^{(2)}\\<br>z_2^{(2)}\\<br>z_3^{(2)}\\<br>\end{pmatrix}=<br>\begin{pmatrix}<br>W_{11}^{(1)}&amp;W_{12}^{(1)}&amp;W_{13}^{(1)}\\<br>W_{21}^{(1)}&amp;W_{22}^{(1)}&amp;W_{23}^{(1)}\\<br>W_{31}^{(1)}&amp;W_{32}^{(1)}&amp;W_{33}^{(1)}\\<br>\end{pmatrix}<br>\begin{pmatrix}x_1\\<br>x_2\\<br>x_3\\<br>\end{pmatrix}+<br>\begin{pmatrix}<br>b_1^{(1)}\\<br>b_2^{(1)}\\<br>b_3^{(1)}\\<br>\end{pmatrix}<br>$$  </p>
+<p>下面以 $z^{(2)}=W^{(1)}x+b^{(1)}$ 为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$$<br>\begin{pmatrix}<br>z_1^{(2)}\\<br>z_2^{(2)}\\<br>z_3^{(2)}\\<br>\end{pmatrix}=<br>\begin{pmatrix}<br>W_{11}^{(1)}&amp;W_{12}^{(1)}&amp;W_{13}^{(1)}\\<br>W_{21}^{(1)}&amp;W_{22}^{(1)}&amp;W_{23}^{(1)}\\<br>W_{31}^{(1)}&amp;W_{32}^{(1)}&amp;W_{33}^{(1)}\\<br>\end{pmatrix}<br>\begin{pmatrix}x_1\\<br>x_2\\<br>x_3\\<br>\end{pmatrix}+<br>\begin{pmatrix}<br>b_1^{(1)}\\<br>b_2^{(1)}\\<br>b_3^{(1)}\\<br>\end{pmatrix}<br>$$  </p>
 <p>最终，神经网络前向传播过程可表示为：  </p>
 <p>&emsp;&emsp;$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$  </p>
 <p>&emsp;&emsp;$a^{(l+1)}=f(z^{(l+1)})$   </p>
