@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
-<meta property="og:updated_time" content="2017-05-17T04:10:55.000Z">
+<meta property="og:updated_time" content="2017-05-17T04:12:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【转载】Hexo下mathjax的转义问题">
 <meta name="twitter:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
@@ -118,16 +118,16 @@
 <p>具体思路参考了<a href="http://blog.csdn.net/emptyset110/article/details/50123231" target="_blank" rel="external">使Marked.js与MathJax共存</a>：  </p>
 <p>打开<code>nodes_modules/marked/lib/marked.js</code>:   </p>
 <p>第一步: 找到下面的代码:  </p>
-<pre><code class="javascript"><span class="built_in">escape</span>: <span class="regexp">/^\\([\\`*{}\[\]()# +\-.!_&gt;])/</span>
+<pre><code class="javascript"><span class="built_in">escape</span>: <span class="regexp">/^\\([\\`*{}\[\]()# +\-.!_&gt;])/</span>,
 </code></pre>
 <p>改为:  </p>
-<pre><code class="javascript"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*{}\[\]()# +\-.!_&gt;])/</span>
+<pre><code class="javascript"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*{}\[\]()# +\-.!_&gt;])/</span>,
 </code></pre>
 <p>这样就会去掉<code>\\</code>的转义了。<br>第二步: 找到em的符号:  </p>
-<pre><code class="javascript">em: <span class="regexp">/^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>
+<pre><code class="javascript">em: <span class="regexp">/^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,
 </code></pre>
 <p>改为:   </p>
-<pre><code class="javascript">em:<span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>
+<pre><code class="javascript">em:<span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,
 </code></pre>
 <p>去掉<code>_</code>的斜体含义，这样就解决了。这种方式指标不治本，因为保证不了还可能有其它的字符会冲突，这样的话，还需要返回去接着修改。但是通用性很高，因为我们没有修改文章的内容，可以放到别的引擎下也基本上顺利渲染。<br>建议使用最后两种方法。</p>
   
