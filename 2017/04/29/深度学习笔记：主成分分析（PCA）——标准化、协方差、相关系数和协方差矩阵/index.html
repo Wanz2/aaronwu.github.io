@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
-<meta property="og:updated_time" content="2017-05-17T02:15:00.000Z">
+<meta property="og:updated_time" content="2017-05-17T02:15:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta name="twitter:description" content="笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
@@ -91,7 +91,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.3 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.4 相关系数的意义</span></a></li></ol>
 		
 		</div>
 		
@@ -138,11 +138,11 @@
 </li>
 </ol>
 <p>在排除了这些干扰以后，随机变量$X$的一些性质就会显露出来，便于我们进行进一步的分析。  </p>
-<h2 id="1-2-如何进行标准化处理"><a href="#1-2-如何进行标准化处理" class="headerlink" title="1.2 如何进行标准化处理"></a>1.2 如何进行标准化处理</h2><p>&emsp;&emsp;令随机变量$X$均值为0，方差为1。令$X^*$和$Y^*$分别表示标准化后的$X$和$Y$，则  </p>
+<h2 id="1-3-如何进行标准化处理"><a href="#1-3-如何进行标准化处理" class="headerlink" title="1.3 如何进行标准化处理"></a>1.3 如何进行标准化处理</h2><p>&emsp;&emsp;令随机变量$X$均值为0，方差为1。令$X^*$和$Y^*$分别表示标准化后的$X$和$Y$，则  </p>
 <p>&emsp;&emsp;$X^<em>=\frac{X-E(X)}{\sqrt{D(X)}}$，$Y^</em>=\frac{Y-E(X)}{\sqrt{D(X)}}$  </p>
 <p>而标准化后的$X^<em>$和$Y^</em>$的协方差就是<strong>相关系数，用$\rho$或$\rho_{XY}$表示</strong>，即  </p>
 <p>&emsp;&emsp;$Cov(X^<em>,Y^</em>)=\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}=\rho _{xy}$</p>
-<h2 id="1-3-相关系数的意义"><a href="#1-3-相关系数的意义" class="headerlink" title="1.3 相关系数的意义"></a>1.3 相关系数的意义</h2><p>&emsp;&emsp;通过上一节中随机变量的标准化，我们引出了相关系数，那么两个随机变量的相关系数有什么意义呢？<br>&emsp;&emsp;结论：相关系数是对于随机变量相关性的度量：  </p>
+<h2 id="1-4-相关系数的意义"><a href="#1-4-相关系数的意义" class="headerlink" title="1.4 相关系数的意义"></a>1.4 相关系数的意义</h2><p>&emsp;&emsp;通过上一节中随机变量的标准化，我们引出了相关系数，那么两个随机变量的相关系数有什么意义呢？<br>&emsp;&emsp;结论：相关系数是对于随机变量相关性的度量：  </p>
 <ul>
 <li>当相关系数$\rho=1$时，随机变量$X$和$Y$之间存在线性关系，且为正线性相关  </li>
 <li>当相关系数$\rho=-1$时，两者之间为负线性关系  </li>
@@ -157,7 +157,7 @@
 </li>
 </ul>
 <p>&emsp;&emsp;笔者在这里仅给出结论，因为本文仅仅是笔者在应用到相关知识点时的复习，为了理清思路而做的记录，关于上述结论的证明，可以在任意一本概率论的书中找到。  </p>
-<p>##1.4 协方差矩阵<br>&emsp;&emsp;令$(X_1,X_2,…,X_n)$为$n$维随机向量($n\geq2$),记  </p>
+<p>##1.5 协方差矩阵<br>&emsp;&emsp;令$(X_1,X_2,…,X_n)$为$n$维随机向量($n\geq2$),记  </p>
 <p>&emsp;&emsp;$b_{ij}=Cov(X_i,X_j)=E((X_i-E(X_i))(X_j-E(X_j))), i,j=1,2,…,n$，  </p>
 <p>则矩阵  </p>
 <p>&emsp;&emsp;$B=\begin{bmatrix}b<em>{11}&amp;b</em>{12}&amp;\cdots&amp;b<em>{1n}\b</em>{21}&amp;b<em>{22}&amp;\cdots&amp;b</em>{2n}\\vdots&amp;\vdots&amp; &amp;\vdots\b<em>{n1}&amp;b</em>{n2}&amp;\cdots&amp;b_{nn}\end{bmatrix}$  </p>
@@ -271,7 +271,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.2 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.3 相关系数的意义</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-随机变量的部分数字特征"><span class="toc-number">1.</span> <span class="toc-text">1.1 随机变量的部分数字特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-随机变量的标准化"><span class="toc-number">2.</span> <span class="toc-text">1.2 随机变量的标准化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-为什么要对随机变量进行标准化处理"><span class="toc-number">2.1.</span> <span class="toc-text">1.2.1 为什么要对随机变量进行标准化处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-如何进行标准化处理"><span class="toc-number">3.</span> <span class="toc-text">1.3 如何进行标准化处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-相关系数的意义"><span class="toc-number">4.</span> <span class="toc-text">1.4 相关系数的意义</span></a></li></ol>
  
   </div>
 
