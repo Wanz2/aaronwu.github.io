@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
-<meta property="og:updated_time" content="2017-05-17T03:28:03.000Z">
+<meta property="og:updated_time" content="2017-05-17T03:52:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【转载】Hexo下mathjax的转义问题">
 <meta name="twitter:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
@@ -91,33 +91,36 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-手动escape"><span class="toc-number">3.1.</span> <span class="toc-text">1.手动escape</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-保护代码块"><span class="toc-number">3.2.</span> <span class="toc-text">2.保护代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-更换Hexo的markdown引擎"><span class="toc-number">3.3.</span> <span class="toc-text">3.更换Hexo的markdown引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-修改Hexo渲染源码"><span class="toc-number">3.4.</span> <span class="toc-text">4.修改Hexo渲染源码</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>&emsp;&emsp;我们平时使用markdown写文档的时候，免不了会碰到数学公式，好在有强大的Mathjax,可以解析网页上的数学公式，与hexo的结合也很简单，可以手动加入js，或者直接使用hexo-math插件.大部分情况下都是可以的，但是Markdwon本身的特殊符号与Latex中的符号会出现冲突的时候:<br>—的转义，在markdown中，<code>_</code>是斜体，但是在latex中，却有下标的意思，就会出现问题。<br><code>\\</code>的换行，在markdown中，<code>\\</code>会被转义为<code>\</code>这样也会影响影响mathjax对公式中的<code>\\</code>进行渲染  </p>
+		<p>&emsp;&emsp;本文转载自博客<a href="http://shomy.top/2016/10/22/hexo-markdown-mathjax/" target="_blank" rel="external">天空的城</a>。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>&emsp;&emsp;我们平时使用markdown写文档的时候，免不了会碰到数学公式，好在有强大的Mathjax,可以解析网页上的数学公式，与hexo的结合也很简单，可以手动加入js，或者直接使用hexo-math插件.大部分情况下都是可以的，但是Markdwon本身的特殊符号与Latex中的符号会出现冲突的时候:<br>—的转义，在markdown中，<code>_</code>是斜体，但是在latex中，却有下标的意思，就会出现问题。<br><code>\\</code>的换行，在markdown中，<code>\\</code>会被转义为<code>\</code>这样也会影响影响mathjax对公式中的<code>\\</code>进行渲染  </p>
 <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>&emsp;&emsp;hexo默认使用marked.js去解析我们写的markdown，比如一些符号，<code>_</code>代表斜体，会被处理为<code>&lt;em&gt;</code>标签，比如<code>x_i</code>在开始被渲染的时候，处理为<code>x&lt;em&gt;i&lt;/em&gt;</code>，这个时候mathjax就无法渲染成下标了。很多符号都有这个问题，比如粗体<code>*</code>,也是无法在mathjax渲染出来的，好在有替代的乘法等,包括<code>\\</code>同理。 所以说到底，是hexo使用的markdown引擎的锅，因为很多其它引擎在这方面处理的很好。</p>
 <h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>在网上查了一些资料，结合自己使用经验，总结为如下的方法</p>
+<h3 id="1-手动escape"><a href="#1-手动escape" class="headerlink" title="1.手动escape"></a>1.手动escape</h3><p>&emsp;&emsp;这个方法最直接，需要转义我就转义。比如我需要在公式中写下标符号，那就修改写法写为: $x_i$;需要换行就使用<code>\\</code>,即可。 很明显，这种方式虽然可以解决问题通用性很差,比如想迁移到其它地方，就无法识别了，因为大部分的markdown引擎是没有这个问题的。</p>
+<h3 id="2-保护代码块"><a href="#2-保护代码块" class="headerlink" title="2.保护代码块"></a>2.保护代码块</h3><p>&emsp;&emsp;我们知道在markdown中的两个<code>` </code>之间的东西不会转义，正好符号我们的需求，我们保护<code>\[</code>之间的代码不被markdown渲染，这样就可以，但是有一个后遗症，就是的样式问题，markdown中是code的样式的，这样也还是有问题，解决思路就是重新处理code标签,使其遇见<code>\]</code>的话，跳过，详情见:<a href="https://liam0205.me/2015/09/09/fix-conflict-between-mathjax-and-markdown/" target="_blank" rel="external">解决MathJax与Markdown的冲突</a>这个方法有个问题，就是有时候我们的代码中会有$$的出现，这时候，仍然使用mathjax就有可能出现无法预料的结果了。</p>
+<h3 id="3-更换Hexo的markdown引擎"><a href="#3-更换Hexo的markdown引擎" class="headerlink" title="3.更换Hexo的markdown引擎"></a>3.更换Hexo的markdown引擎</h3><p>&emsp;&emsp;这个是最重的方法，直接换发动机，就是把hexo默认的渲染markdown的引擎换掉。查到了有如下几个插件可以使用:</p>
+<p><em>hexo-renderer-pandoc</em>，很强大的解析器，Pandoc的语法完全没有上述问题, 推荐使用。<br><em>hexo-renderer-kramed</em>,或者<em>hexo-renderer-marked</em>，这两个差不多，第一个fork了第二个，改了一部分bug，但是还是有部分问题。  </p>
+<p>&emsp;&emsp;下面说一下如何使用pandoc渲染。</p>
 <ol>
-<li><p>手动escape<br>&emsp;&emsp;这个方法最直接，需要转义我就转义。比如我需要在公式中写下标符号，那就修改写法写为: $x_i$;需要换行就使用<code>\\</code>,即可。 很明显，这种方式虽然可以解决问题通用性很差,比如想迁移到其它地方，就无法识别了，因为大部分的markdown引擎是没有这个问题的。</p>
-</li>
-<li><p>保护代码块<br>&emsp;&emsp;我们知道在markdown中的两个`之间的东西不会转义，正好符号我们的需求，我们保护[之间的代码不被markdown渲染，这样就可以，但是有一个后遗症，就是的样式问题， markdown中是code的样式的，这样也还是有问题，解决思路就是重新处理code标签,使其遇见]的话，跳过，详情见:解决 MathJax 与 Markdown 的冲突 这个方法有个问题，就是有时候我们的代码中会有$$的出现，这时候，仍然使用mathjax就有可能出现无法预料的结果了。</p>
-</li>
-<li><p>更换Hexo的markdown引擎<br>&emsp;&emsp;这个是最直接的方法，也是我现在使用的方法，直接换发动机,就是把hexo默认的渲染markdown的引擎换掉。查到了有如下几个插件可以使用:</p>
-</li>
+<li>首先安装Pandoc，官网提供了Ubuntu的deb安装包，按照官网教程就可以安装完成。</li>
+<li>就是卸载hexo默认的markd,再安装新的:</li>
 </ol>
-<p>hexo-renderer-pandoc, 很强大的解析器，Pandoc的语法完全没有上述问题, 推荐使用。<br>hexo-renderer-kramed,或者hexo-renderer-marked,这两个差不多，第一个fork了第二个，改了一部分bug，但是还是有部分问题。<br>下面说一下如何使用pandoc渲染。</p>
-<p>首先安装Pandoc，官网提供了Ubuntu的deb安装包，按照官网教程就可以安装完成。<br>就是卸载hexo默认的markd,再安装新的:<br>1<br>2<br>npm uninstall hexo-renderer-marked –save<br>npm install hexo-renderer-pandoc –save<br>如果决定要换的话，还是更换为Pandoc吧，虽然比较笨重，需要首先安装Pandoc, 不过的确可以完美解决上述的不兼容问题，另外它的语法与markdown有些微的差异，需要注意。</p>
-<ol>
-<li>修改Hexo渲染源码</li>
-</ol>
-<p>修改hexo的渲染源码: nodes_modules/marked/lib/marked.js:</p>
-<p>去掉\\的额外转义<br>将em标签对应的符号中，去掉_,因为markdown中有*可以表示斜体，—就去掉了。<br>具体思路参考了使Marked.js与MathJax共存, 打开nodes_modules/marked/lib/marked.js: 第一步: 找到下面的代码:</p>
-<p>1<br>escape: /^\([\`*{}[]()# +-.!_&gt;])/,<br>改为:</p>
-<p>1<br>escape: /^\([`*{}[]()# +-.!_&gt;])/,<br>这样就会去掉\\的转义了。 第二步: 找到em的符号:</p>
-<p>1<br>em: /^\b_((?:[^_]|__)+?)_\b|^*((?:**|[\s\S])+?)*(?!*)/,<br>改为:</p>
-<p>1<br>em:/^*((?:**|[\s\S])+?)*(?!*)/,<br>去掉_的斜体含义,这样就解决了。这种方式指标不治本，因为保证不了还可能有其它的字符会冲突，这样的话，还需要返回去接着修改。</p>
-<p>大家可以根据自己的情况选择，不过还是建议第三种换Markdown引擎，使用Pandoc来渲染，这样就算换了机器，直接安装一个插件就好了，没有必要再去倒腾源码了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm uninstall hexo-renderer-marked --save</div><div class="line">npm install hexo-renderer-pandoc --save</div></pre></td></tr></table></figure>
+<p>如果决定要换的话，还是更换为Pandoc吧，虽然比较笨重，需要首先安装Pandoc， 不过的确可以完美解决上述的不兼容问题，另外它的语法与markdown有些微的差异，需要注意。</p>
+<h3 id="4-修改Hexo渲染源码"><a href="#4-修改Hexo渲染源码" class="headerlink" title="4.修改Hexo渲染源码"></a>4.修改Hexo渲染源码</h3><p>这个方法是我目前使用的，相对来说，通用性较高的一种方式。思路就是修改hexo的渲染源码: <code>nodes_modules/marked/lib/marked.js</code>:</p>
+<ul>
+<li>去掉<code>\\</code>的额外转义  </li>
+<li>将em标签对应的符号中，去掉<code>_</code>，因为markdown中有<code>*</code>可以表示斜体，<code>—</code>就去掉了。  </li>
+</ul>
+<p>具体思路参考了<a href="http://blog.csdn.net/emptyset110/article/details/50123231" target="_blank" rel="external">使Marked.js与MathJax共存</a>：打开<code>nodes_modules/marked/lib/marked.js</code>:<br>第一步: 找到下面的代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">escape: /^\\([\\`*&#123;&#125;\[\]()# +\-.!_&gt;])/,</div><div class="line">```  </div><div class="line">改为:</div></pre></td></tr></table></figure>
+<p>escape: /^\([`*{}[]()# +-.!_&gt;])/,<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">这样就会去掉`\\`的转义了。   </div><div class="line">第二步: 找到em的符号:</div></pre></td></tr></table></figure></p>
+<p>em: /^\b_((?:[^_]|__)+?)_\b|^*((?:**|[\s\S])+?)*(?!*)/,<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">改为:</div></pre></td></tr></table></figure></p>
+<p>em:/^*((?:**|[\s\S])+?)*(?!*)/,<br>```</p>
+<p>去掉<code>_</code>的斜体含义，这样就解决了。这种方式指标不治本，因为保证不了还可能有其它的字符会冲突，这样的话，还需要返回去接着修改。但是通用性很高，因为我们没有修改文章的内容，可以放到别的引擎下也基本上顺利渲染。<br>建议使用最后两种方法。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -172,7 +175,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-手动escape"><span class="toc-number">3.1.</span> <span class="toc-text">1.手动escape</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-保护代码块"><span class="toc-number">3.2.</span> <span class="toc-text">2.保护代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-更换Hexo的markdown引擎"><span class="toc-number">3.3.</span> <span class="toc-text">3.更换Hexo的markdown引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-修改Hexo渲染源码"><span class="toc-number">3.4.</span> <span class="toc-text">4.修改Hexo渲染源码</span></a></li></ol></li></ol>
  
   </div>
 
@@ -215,11 +218,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 			
 		
 			
