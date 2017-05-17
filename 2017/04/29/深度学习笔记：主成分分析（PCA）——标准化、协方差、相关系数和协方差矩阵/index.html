@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
-<meta property="og:updated_time" content="2017-05-17T02:32:35.000Z">
+<meta property="og:updated_time" content="2017-05-17T02:40:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度学习笔记：主成分分析（PCA）——标准化、协方差、相关系数和协方差矩阵">
 <meta name="twitter:description" content="笔者在学习主成分分析（PCA）的时候接触到了协方差矩阵的应用。这部分知识有些遗忘了，因此重新巩固一下，记录在此，希望能帮助到有需要的同学。">
@@ -139,7 +139,7 @@
 </ol>
 <p>在排除了这些干扰以后，随机变量$X$的一些性质就会显露出来，便于我们进行进一步的分析。  </p>
 <h2 id="1-3-如何进行标准化处理"><a href="#1-3-如何进行标准化处理" class="headerlink" title="1.3 如何进行标准化处理"></a>1.3 如何进行标准化处理</h2><p>&emsp;&emsp;令随机变量$X$均值为0，方差为1。令$X^*$和$Y^*$分别表示标准化后的$X$和$Y$，则  </p>
-<p>&emsp;&emsp;$X^*=\frac{X-E(X)}{\sqrt{D(X)}}$，$Y^*=\frac{Y-E(X)}{\sqrt{D(X)}}$  </p>
+<p>&emsp;&emsp;$X^*=\\frac{X-E(X)}{\\sqrt{D(X)}}$，$Y^*=\\frac{Y-E(X)}{\\sqrt{D(X)}}$  </p>
 <p>而标准化后的$X^<em>$和$Y^</em>$的协方差就是<strong>相关系数，用$\rho$或$\rho_{XY}$表示</strong>，即  </p>
 <p>&emsp;&emsp;$Cov(X^*,Y^*)=\frac{Cov(X,Y)}{\sqrt{D(X)}\sqrt{D(Y)}}=\rho_{xy}$</p>
 <h2 id="1-4-相关系数的意义"><a href="#1-4-相关系数的意义" class="headerlink" title="1.4 相关系数的意义"></a>1.4 相关系数的意义</h2><p>&emsp;&emsp;通过上一节中随机变量的标准化，我们引出了相关系数，那么两个随机变量的相关系数有什么意义呢？<br>&emsp;&emsp;结论：相关系数是对于随机变量相关性的度量：  </p>
@@ -159,7 +159,7 @@
 <p>&emsp;&emsp;笔者在这里仅给出结论，因为本文仅仅是笔者在应用到相关知识点时的复习，为了理清思路而做的记录，关于上述结论的证明，可以在任意一本概率论的书中找到。  </p>
 <h2 id="1-5-协方差矩阵"><a href="#1-5-协方差矩阵" class="headerlink" title="1.5 协方差矩阵"></a>1.5 协方差矩阵</h2><p>&emsp;&emsp;令$(X_1,X_2,…,X_n)$为$n$维随机向量($n\geq2$),记  </p>
 <p>&emsp;&emsp;$b_{ij}=Cov(X_i,X_j)=E((X_i-E(X_i))(X_j-E(X_j))), i,j=1,2,…,n$，  </p>
-<p>则矩阵<br>$$<br>B=<br>\begin{bmatrix}<br>b<em>{11}&amp;b</em>{12}&amp;\cdots&amp;b<em>{1n}\\<br>b</em>{21}&amp;b<em>{22}&amp;\cdots&amp;b</em>{2n}\\<br>\vdots&amp;\vdots&amp;&amp;\vdots\\<br>b<em>{n1}&amp;b</em>{n2}&amp;\cdots&amp;b_{nn}<br>\end{bmatrix}<br>$$  </p>
+<p>则矩阵<br>$$<br>B=<br>\begin{bmatrix}<br>b_{11}&amp;b_{12}&amp;\cdots&amp;b_{1n}\\<br>b_{21}&amp;b_{22}&amp;\cdots&amp;b_{2n}\\<br>\vdots&amp;\vdots&amp;&amp;\vdots\\<br>b_{n1}&amp;b_{n2}&amp;\cdots&amp;b_{nn}<br>\end{bmatrix}<br>$$  </p>
 <p>为$(X_1,\cdots,X_n)$的协方差矩阵。  </p>
 <h1 id="2-数理统计中的协方差和协方差矩阵概念"><a href="#2-数理统计中的协方差和协方差矩阵概念" class="headerlink" title="2.数理统计中的协方差和协方差矩阵概念"></a>2.数理统计中的协方差和协方差矩阵概念</h1><p>&emsp;&emsp;以上所说的是概率论中的协方差概念，但是我们在深度学习的实际运用中，通常是对已经获得的数据进行分析，因此类比概率论中的随机变量的数字特征，可以得到数理统计中的相关统计量，同时可以定义协方差和协方差矩阵  </p>
 <h2 id="2-1数理统计中的统计量"><a href="#2-1数理统计中的统计量" class="headerlink" title="2.1数理统计中的统计量"></a>2.1数理统计中的统计量</h2><p>&emsp;&emsp;记$(X_1,X_2,\cdots,X_n)$是来自总体$X$的样本，$(x_1,x_2,\cdots,x_n)$是样本观察值。  </p>
@@ -199,8 +199,8 @@
 <p>有样本${(X^{(1)}_1,X^{(1)}_2,\cdots,X^{(1)}_m)^{\mathrm{T} },(X^{(2)}_1,X^{(2)}_2\cdots,X^{(2)}_m)^{\mathrm{T} },\cdots,(X^{(n)}_1,X^{(n)}_2\cdots,X^{(n)}_m)^{\mathrm{T} }}$， </p>
 <p>观察值分别是${(x^{(1)}_1,x^{(1)}_2\cdots,x^{(1)}_m)^{\mathrm{T} },(x^{(2)}_1,x^{(2)}_2\cdots,x^{(2)}_m)^{\mathrm{T} },\cdots,(x^{(n)}_1,x^{(n)}_2\cdots,x^{(n)}_m)^{\mathrm{T} }}$，  </p>
 <p>我们想研究这些样本各个维度之间的相关性，可以这样定义样本协方差矩阵：  </p>
-<p>记$b_{ij}=Cov(X_i,X<em>j)=\frac{1}{n-1}\sum</em>{k=1}^{n}(X^{(k)}_i-\bar{X_i}^{(k)})(X^{(k)}_j-\bar{X_j}^{(k)})$  </p>
-<p>则矩阵<br>$B=\begin{bmatrix}b<em>{11}&amp;b</em>{12}&amp;\cdots&amp;b<em>{1n}\b</em>{21}&amp;b<em>{22}&amp;\cdots&amp;b</em>{2n}\\vdots&amp;\vdots&amp; &amp;\vdots\b<em>{n1}&amp;b</em>{n2}&amp;\cdots&amp;b_{nn}\end{bmatrix}$  </p>
+<p>记$b_{ij}=Cov(X_i,X_j)=\frac{1}{n-1}\sum_{k=1}^{n}(X^{(k)}_i-\bar{X_i}^{(k)})(X^{(k)}_j-\bar{X_j}^{(k)})$  </p>
+<p>则矩阵<br>$B=\begin{bmatrix}b_{11}&amp;b_{12}&amp;\cdots&amp;b_{1n}\\b_{21}&amp;b_{22}&amp;\cdots&amp;b_{2n}\\\vdots&amp;\vdots&amp; &amp;\vdots\\b_{n1}&amp;b_{n2}&amp;\cdots&amp;b_{nn}\end{bmatrix}$  </p>
 <p>为$X$的协方差矩阵</p>
 <p><strong>注意</strong>在计算样本协方差矩阵时，要牢记它是计算同一个样本不同维度之间的协方差，而不是计算不同样本之间的协方差，切记！  </p>
 <p>参考资料：</p>

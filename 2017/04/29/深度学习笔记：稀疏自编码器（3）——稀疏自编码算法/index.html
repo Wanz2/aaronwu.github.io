@@ -125,11 +125,11 @@
 </tr>
 <tr>
 <td>$\hat{\rho_{j}}$</td>
-<td>$\hat{\rho<em>{j}}=\frac{1}{m}\sum</em>{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度</td>
+<td>$\hat{\rho_{j}}=\frac{1}{m}\sum_{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$表示第2层第$j$个隐藏神经元在训练集上的平均活跃度</td>
 </tr>
 <tr>
 <td>$\rho$</td>
-<td>表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制</td>
+<td>表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho_{j}}=\rho$，来对神经元$a_{j}^{(2)}$的稀疏度进行限制</td>
 </tr>
 <tr>
 <td>$s_2$</td>
@@ -154,9 +154,9 @@
 </li>
 <li><p>使用$a_{j}^{(2)}(x)$表示在给定输入值为$x$的情况下，第2层第$j$个神经元的激活度。  </p>
 </li>
-<li><p>使用<br>&emsp;&emsp;$\hat{\rho<em>{j}}=\frac{1}{m}\sum</em>{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$<br>表示第2层第$j$个隐藏神经元在训练集上的平均活跃度。 </p>
+<li><p>使用<br>&emsp;&emsp;$\hat{\rho_{j}}=\frac{1}{m}\sum_{i=1}^{m}[a_{j}^{(2)}(x^{(i)})]$<br>表示第2层第$j$个隐藏神经元在训练集上的平均活跃度。 </p>
 </li>
-<li><p>使用$\rho$表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho<em>{j}}=\rho$，来对神经元$a</em>{j}^{(2)}$的稀疏度进行限制。  </p>
+<li><p>使用$\rho$表示<strong>稀疏性参数</strong>，通常是一个接近0的值（如$\rho=0.05$），可以令$\hat{\rho_{j}}=\rho$，来对神经元$a_{j}^{(2)}$的稀疏度进行限制。  </p>
 </li>
 </ol>
 <p>&emsp;&emsp;我们希望$\hat{\rho_{j}}$和$\rho$越接近越好，因此我们要对这两者有显著差异的情况进行惩罚，惩罚使用KL散度。   </p>
@@ -172,13 +172,13 @@
 <p>&emsp;&emsp;KL散度的性质是，当$P=Q$时值为0，随着$P$和$Q$差异增大而递增。  </p>
 <hr>
 <p>&emsp;&emsp;在这里，我们是要用$\hat{\rho_j}$去逼近$\rho$，这里的KL散度是：  </p>
-<p>&emsp;&emsp;$\sum_{j=1}^{s_2}KL(\rho | \hat{\rho}<em>j)=\sum</em>{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}_j}$  </p>
+<p>&emsp;&emsp;$\sum_{j=1}^{s_2}KL(\rho | \hat{\rho}_j)=\sum_{j=1}^{s_2}\rho log\frac{\rho}{\hat{\rho}_j}+(1-\rho)log\frac{1-\rho}{1-\hat{\rho}_j}$  </p>
 <p>&emsp;&emsp;于是我们在代价函数中加入这一惩罚因子，代价函数就变成：  </p>
-<p>&emsp;&emsp;$J<em>{sparse}(W,b)=J(W,b)+\beta \sum</em>{j=1}^{s_2}KL(\rho | \hat{\rho}_j)$   </p>
+<p>&emsp;&emsp;$J_{sparse}(W,b)=J(W,b)+\beta \sum_{j=1}^{s_2}KL(\rho | \hat{\rho}_j)$   </p>
 <p>代价函数改变了，在反向传导时残差公式也要做出相应的改变，之前隐藏层第$i$个结点残差为：  </p>
-<p>&emsp;&emsp;$\delta<em>{i}^{(2)}=(\sum</em>{j=1}^{s<em>{3}}W</em>{ji}^{(2)}\delta<em>{j}^{(3)})f’(z</em>{i}^{(2)})$  </p>
+<p>&emsp;&emsp;$\delta_{i}^{(2)}=(\sum_{j=1}^{s_{3}}W_{ji}^{(2)}\delta_{j}^{(3)})f’(z_{i}^{(2)})$  </p>
 <p>现在应该将其换成：  </p>
-<p>&emsp;&emsp;$\delta<em>{i}^{(2)}=(\sum</em>{j=1}^{s<em>{3}}W</em>{ji}^{(2)}\delta_{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}<em>i}))f’(z</em>{i}^{(2)})$  </p>
+<p>&emsp;&emsp;$\delta_{i}^{(2)}=(\sum_{j=1}^{s_{3}}W_{ji}^{(2)}\delta_{j}^{(3)}+\beta (-\frac{\rho}{\hat{\rho}_i}+\frac{1-\rho}{1-\hat{\rho}_i}))f’(z_{i}^{(2)})$  </p>
 <hr>
 <p>注意：在ufldl的<a href="http://deeplearning.stanford.edu/wiki/index.php/%E8%87%AA%E7%BC%96%E7%A0%81%E7%AE%97%E6%B3%95%E4%B8%8E%E7%A8%80%E7%96%8F%E6%80%A7" target="_blank" rel="external">自编码算法和稀疏性</a>中的后向传播算法里，提到隐藏层第$i$个结点残差为：  </p>
 <p><img src="http://odnk9as2f.bkt.clouddn.com/%E9%9A%90%E5%B1%82%E6%AE%8B%E5%B7%AE%E5%85%AC%E5%BC%8F" alt="隐藏层结点残差">  </p>
