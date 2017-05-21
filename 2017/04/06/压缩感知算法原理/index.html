@@ -19,7 +19,7 @@
 <meta property="og:description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/L1.png?imageView/2/w/300/q/90">
-<meta property="og:updated_time" content="2017-05-21T12:26:01.000Z">
+<meta property="og:updated_time" content="2017-05-21T12:29:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="压缩感知算法原理">
 <meta name="twitter:description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
@@ -218,7 +218,7 @@
 <p><img src="http://odnk9as2f.bkt.clouddn.com/L1.png?imageView/2/w/300/q/90" alt="">  </p>
 <p>我们将菱形边长从原点开始逐渐增大，直到与直线$y=Ts$相切位置，菱形与直线的交点即为$s$的两个分量值，此时有很大可能性该交点在坐标轴上，因此所求$s$很可能是稀疏的。  </p>
 <h4 id="5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><a href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法" class="headerlink" title="5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"></a>5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</h4><p>&emsp;&emsp;对于$y=Ts$,由于$s$是$K$稀疏的，我们要找其$K$个分量，这$K$个分量系数的绝对值应该比其他$N-K$个分量的系数大得多。  </p>
-<p>&emsp;&emsp;我们先假设$K=1$，此时唯一非零元素$s_q$在$s$中对应的位置在$q$。则$Ts$就是恢复矩阵$T$的第$q$列$T_q$与$s$中的非零元素$s_q$的乘积，即$T_qs_q=y_q$，且$\frac{\Vert y-y_q\Vert _2}{\Vert y\Vert _2}&lt;\delta$。换句话说，$T$的第$q$列与$y$的相似程度最高，即$\vert \langle T_q,y\rangle \vert =\vert T_q^\mathrm{H}y\vert &gt;&gt;\vert T_r^\mathrm{H}y\vert =\vert \langle T_r,y\rangle \vert , r\neq q$。所以，我们只要计算恢复矩阵$T$的所有列与$y$的内积，找到内积绝对值最大的那列就行了，该列对应的位置就是$q$。根据最小二乘法，$s_q=(T_q^\mathrm{H}T_q)^{-1}T_q^\mathrm{H}y$，就是使$\Vert y-T_qs_q\Vert _2$最小的那个$s_q$。此时余量$r_n=y-\frac{<t_q,y>}{<t_q,t_q>}T_q$，始终同$T_q$正交，很像施密特正交化方法。  </t_q,t_q></t_q,y></p>
+<p>&emsp;&emsp;我们先假设$K=1$，此时唯一非零元素$s_q$在$s$中对应的位置在$q$。则$Ts$就是恢复矩阵$T$的第$q$列$T_q$与$s$中的非零元素$s_q$的乘积，即$T_qs_q=y_q$，且$\frac{\Vert y-y_q\Vert _2}{\Vert y\Vert _2}&lt;\delta$。换句话说，$T$的第$q$列与$y$的相似程度最高，即$\vert \langle T_q,y\rangle \vert =\vert T_q^\mathrm{H}y\vert \gg \vert T_r^\mathrm{H}y\vert =\vert \langle T_r,y\rangle \vert , r\neq q$。所以，我们只要计算恢复矩阵$T$的所有列与$y$的内积，找到内积绝对值最大的那列就行了，该列对应的位置就是$q$。根据最小二乘法，$s_q=(T_q^\mathrm{H}T_q)^{-1}T_q^\mathrm{H}y$，就是使$\Vert y-T_qs_q\Vert _2$最小的那个$s_q$。此时余量$r_n=y-\frac{<t_q,y>}{<t_q,t_q>}T_q$，始终同$T_q$正交，很像施密特正交化方法。  </t_q,t_q></t_q,y></p>
 <p>&emsp;&emsp;当$K=2$，则$s$有两个非零元素$s_{q1}$和$s_{q2}$，其在$s$中的位置分别为$q1$和$q2$。则$T$的第$q1$和$q2$列与$y$的相似程度最高。我们要找到使$\Vert y-(T_{q2},T_{q1})\begin{pmatrix} s_{q2}\ s_{q1} \end{pmatrix}\Vert _2$最小的那个$\begin{pmatrix} s_{q2}\ s_{q1} \end{pmatrix}$。这里$T_{q1}$是我们第一次找到的那一列，$T_{q2}$是我们要重新找的那一列。此时我们找到两个在变换域最关键的元素和其在$s$中对应的位置了。令$T_q=(T_{q2},T_{q1})$，余量$r_n$又一次被写为$r_n=y-\frac{<t_q,y>}{<t_q,t_q>}T_q$。  </t_q,t_q></t_q,y></p>
 <p>&emsp;&emsp;当$K&gt;1$时，类似上面的步骤，迭代找到变换域中$K$个最重要的分量。正交匹配的迭代次数$m\geq K$，实际上操作只要满足$\frac{\Vert r_n\Vert _2}{\Vert y\Vert _2}&lt;\delta$，迭代就可以中止了。</p>
 <p>  主要参考：  </p>
@@ -343,11 +343,11 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 		</ul>
