@@ -19,7 +19,7 @@
 <meta property="og:description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/L1.png?imageView/2/w/300/q/90">
-<meta property="og:updated_time" content="2017-05-21T12:07:45.000Z">
+<meta property="og:updated_time" content="2017-05-21T12:10:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="压缩感知算法原理">
 <meta name="twitter:description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
@@ -100,8 +100,83 @@
 		
 		<p>&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  </p>
 <a id="more"></a>
-<h2 id="1-本文中使用的符号一览"><a href="#1-本文中使用的符号一览" class="headerlink" title="1. 本文中使用的符号一览"></a>1. 本文中使用的符号一览</h2><h3 id="传统正交变换中："><a href="#传统正交变换中：" class="headerlink" title="传统正交变换中："></a>传统正交变换中：</h3><p>\vert 符号   \vert 维度    \vert 描述    \vert<br>\vert —\vert —\vert —\vert<br>\vert $x$\vert $R^{N\times 1}$\vert 原始信号\vert<br>\vert $y$\vert $R^{N\times 1}$\vert 压缩后的信号，不稀疏\vert<br>\vert $\hat{y}$\vert $R^{N\times 1}$\vert 由$y$中$K$个分量放在对应位置构成，其余位置为0，是$K$-稀疏的\vert </p>
-<h3 id="压缩感知算法中："><a href="#压缩感知算法中：" class="headerlink" title="压缩感知算法中："></a>压缩感知算法中：</h3><p>\vert 符号   \vert 维度    \vert 描述    \vert<br>\vert —\vert —\vert —\vert<br>\vert $x$\vert $R^{N\times 1}$\vert 原始信号\vert<br>\vert $y$\vert $R^{M\times 1}$\vert 压缩感知的<strong>观测向量</strong>，是$x$的$M$个线性度量\vert<br>\vert $s$\vert $R^{N\times 1}$\vert 信号$x$在$\Psi$域的稀疏表示，是$K$-稀疏的\vert<br>\vert $\Psi$\vert $C^{N\times N}$\vert <strong>稀疏矩阵</strong>，为正交变换矩阵\vert<br>\vert $\Psi^\mathrm{H}$\vert $C^{N\times N}$\vert 正交变换矩阵$\Psi$的转置矩阵\vert<br>\vert $\Phi$\vert $R^{M\times N}$\vert 称为<strong>测量矩阵</strong>，有$M\ll N$\vert<br>\vert $T$\vert $R^{M\times N}$\vert $T=\Phi\Psi^\mathrm{H}$，称为<strong>传感矩阵</strong>\vert<br>\vert $\delta$\vert $1\times 1$\vert 一个较小的正的常数\vert   </p>
+<h2 id="1-本文中使用的符号一览"><a href="#1-本文中使用的符号一览" class="headerlink" title="1. 本文中使用的符号一览"></a>1. 本文中使用的符号一览</h2><h3 id="传统正交变换中："><a href="#传统正交变换中：" class="headerlink" title="传统正交变换中："></a>传统正交变换中：</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>$R^{N\times 1}$</td>
+<td>原始信号</td>
+</tr>
+<tr>
+<td>$y$</td>
+<td>$R^{N\times 1}$</td>
+<td>压缩后的信号，不稀疏</td>
+</tr>
+<tr>
+<td>$\hat{y}$</td>
+<td>$R^{N\times 1}$</td>
+<td>由$y$中$K$个分量放在对应位置构成，其余位置为0，是$K$-稀疏的</td>
+</tr>
+</tbody>
+</table>
+<h3 id="压缩感知算法中："><a href="#压缩感知算法中：" class="headerlink" title="压缩感知算法中："></a>压缩感知算法中：</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>$R^{N\times 1}$</td>
+<td>原始信号</td>
+</tr>
+<tr>
+<td>$y$</td>
+<td>$R^{M\times 1}$</td>
+<td>压缩感知的<strong>观测向量</strong>，是$x$的$M$个线性度量</td>
+</tr>
+<tr>
+<td>$s$</td>
+<td>$R^{N\times 1}$</td>
+<td>信号$x$在$\Psi$域的稀疏表示，是$K$-稀疏的</td>
+</tr>
+<tr>
+<td>$\Psi$</td>
+<td>$C^{N\times N}$</td>
+<td><strong>稀疏矩阵</strong>，为正交变换矩阵</td>
+</tr>
+<tr>
+<td>$\Psi^\mathrm{H}$</td>
+<td>$C^{N\times N}$</td>
+<td>正交变换矩阵$\Psi$的转置矩阵</td>
+</tr>
+<tr>
+<td>$\Phi$</td>
+<td>$R^{M\times N}$</td>
+<td>称为<strong>测量矩阵</strong>，有$M\ll N$</td>
+</tr>
+<tr>
+<td>$T$</td>
+<td>$R^{M\times N}$</td>
+<td>$T=\Phi\Psi^\mathrm{H}$，称为<strong>传感矩阵</strong></td>
+</tr>
+<tr>
+<td>$\delta$</td>
+<td>$1\times 1$</td>
+<td>一个较小的正的常数</td>
+</tr>
+</tbody>
+</table>
 <h2 id="2-压缩感知算法目的"><a href="#2-压缩感知算法目的" class="headerlink" title="2. 压缩感知算法目的"></a>2. 压缩感知算法目的</h2><p>&emsp;&emsp;压缩感知算法的目的是采集很少一部分数据，并希望从中“解压缩”出大量信息，达到恢复原信号的效果  </p>
 <h2 id="3-采集策略"><a href="#3-采集策略" class="headerlink" title="3. 采集策略"></a>3. 采集策略</h2><p>&emsp;&emsp;a. 少量的采集到的数据包含了原信号的全局信息<br>&emsp;&emsp;b. 存在一种算法能够从这些少量的数据中还原出原先的信息来  </p>
 <h2 id="4-传统解决思路——正交变换"><a href="#4-传统解决思路——正交变换" class="headerlink" title="4. 传统解决思路——正交变换"></a>4. 传统解决思路——正交变换</h2><h3 id="4-1-步骤"><a href="#4-1-步骤" class="headerlink" title="4.1 步骤"></a>4.1 步骤</h3><ol>
@@ -112,7 +187,7 @@
 </ol>
 <h3 id="4-2-编码解码策略"><a href="#4-2-编码解码策略" class="headerlink" title="4.2 编码解码策略"></a>4.2 编码解码策略</h3><p>&emsp;&emsp;编码：构造$\Psi $，做正变换$y=\Psi x$，保留$y$中最重要的$K$个分量和其对应位置。  </p>
 <p>&emsp;&emsp;解码：把$K$个分量放回到对应位置，其他位置填上0，构造$\Psi^\mathrm{H}$，反变换$\hat{x}=\Psi^\mathrm{H} \hat{y}$。  </p>
-<h3 id="4-3-压缩误差分析"><a href="#4-3-压缩误差分析" class="headerlink" title="4.3 压缩误差分析"></a>4.3 压缩误差分析</h3><p>&emsp;&emsp;显然，我们希望$\Vert x-\hat{x}\vert \vert _2=\Vert y-\hat{y}\Vert _2\leq \delta$，$\delta$是一个小的常数。  </p>
+<h3 id="4-3-压缩误差分析"><a href="#4-3-压缩误差分析" class="headerlink" title="4.3 压缩误差分析"></a>4.3 压缩误差分析</h3><p>&emsp;&emsp;显然，我们希望$\Vert x-\hat{x}\Vert _2=\Vert y-\hat{y}\Vert _2\leq \delta$，$\delta$是一个小的常数。  </p>
 <p>&emsp;&emsp;但更有效的是利用<font style="color:red;">相对误差</font> $\frac{\Vert y-\hat{y}\Vert _2}{\Vert y\Vert _2}\leq\delta$。  </p>
 <h2 id="5-新的思路——压缩传感"><a href="#5-新的思路——压缩传感" class="headerlink" title="5. 新的思路——压缩传感"></a>5. 新的思路——压缩传感</h2><h3 id="5-1-压缩传感思想："><a href="#5-1-压缩传感思想：" class="headerlink" title="5.1 压缩传感思想："></a>5.1 压缩传感思想：</h3><p>&emsp;&emsp;对于信号，$x\in R^{N\times 1}$，我们可以找到它的$M$个线性测量（Linear Measurement，意即降维后的信号为$M$维），$y=\Phi x，\Phi\in R^{M\times N}$。  </p>
 <p>&emsp;&emsp;$\Phi$中的每一行看作一个传感器，它与信号相乘，拾取了信号的一部分信息。拥有了这$M$个测量（即$y$）和$\Phi$，我们就可以近乎完美的重构原始信号了。  </p>
@@ -256,11 +331,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
