@@ -1,5 +1,6 @@
 
-<!DOCTYPE HTML>
+  
+    <!DOCTYPE HTML>
 <html lang="zh-CN">
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
@@ -17,7 +18,7 @@
 <meta property="og:url" content="https://wanz2.github.io/search/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;Sorry，搜索功能尚未开放，请移步“分类”对文章进行分类查找。">
-<meta property="og:updated_time" content="2017-05-29T07:08:30.000Z">
+<meta property="og:updated_time" content="2017-05-29T07:12:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="search">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;Sorry，搜索功能尚未开放，请移步“分类”对文章进行分类查找。">
@@ -30,9 +31,9 @@
     <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
-    <body>
-      <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
-        
+      <body>
+        <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+          
 <div>
 		
 			<div id="textlogo">
@@ -66,11 +67,56 @@
 				</ul>
 			</nav>			
 </div>
-      </header>
-      <div id="container">
-        
-      </div>
-      <footer><div id="footer" >
+        </header>
+        <div id="container">
+          <div id="main" class="page" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/search/index.html" title="search" itemprop="url">search</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-29T07:12:25.000Z" itemprop="datePublished"> 发表于 2017-05-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<p>&emsp;&emsp;Sorry，搜索功能尚未开放，请移步“分类”对文章进行分类查找。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://wanz2.github.io/search/index.html" data-title="search | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+	
+
+</div>  
+        </div>
+        <footer><div id="footer" >
 	
 	<div class="line">
 		<span></span>
@@ -111,7 +157,7 @@
 		</p>
 </div>
 </footer>
-      <script src="/js/jquery-2.0.3.min.js"></script>
+        <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
@@ -161,6 +207,55 @@ $(document).ready(function(){
 });
 </script>
 
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
 
 
 
@@ -268,5 +363,6 @@ $(document).ready(function(){
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-    </body>
-   </html>
+      </body>
+     </html>
+     
