@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png">
-<meta property="og:updated_time" content="2017-05-31T16:05:57.000Z">
+<meta property="og:updated_time" content="2017-05-31T16:15:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——模板方法模式">
 <meta name="twitter:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
@@ -101,11 +101,15 @@
 <blockquote>
 <p>模板方法模式是类的行为模式。准备一个抽象类，将部分逻辑以具体方法以及具体构造函数的形式实现，然后声明一些抽象方法来迫使子类实现剩余的逻辑。不同的子类可以以不同的方式实现这些抽象方法，从而对剩余的逻辑有不同的实现。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。  </p>
 </blockquote>
-<p>&emsp;&emsp;模板方法模式在很多地方都会用到，但看起来不一定会和标准的模板方法模式一样，我们这里先讲标准模板方法模式。模板方法模式的UML类图结构如下：  </p>
-<p align="center"><br><img src="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png" width="450px" value="模板方法模式类图"><br></p>
-
-
-
+<p>&emsp;&emsp;模板方法模式在很多地方都会用到，但看起来不一定会和标准的模板方法模式一样，我们这里先讲标准模板方法模式。模板方法模式的UML类图结构如下：    </p>
+<p></p><p align="center"><br><img src="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png" width="400px" name="模板方法模式类图"><br></p><br>如上图所示，模板方法模式中有两个类角色，分别是抽象类和具体类，这两个类的作用分别如下： <p></p>
+<ul>
+<li>抽象类<code>AbstractClass</code>：<ul>
+<li>定义了一个或多个抽象操作，以便让子类实现，如上图中的<code>primitiveOperation1()</code>和<code>primitiveOperation2()</code>。这些抽象操作叫做基本操作，它们是一个顶级逻辑的组成步骤。</li>
+<li>定义并实现了一个或多个模板方法，如上图中的<code>templateMethod()</code>。这个模板方法一般是一个具体方法，它给出了一个顶级逻辑的骨架，而逻辑的组成步骤在相应的抽象操作中，推迟到子类实现。顶级逻辑也有可能调用一些具体方法。</li>
+</ul>
+</li>
+</ul>
 <h2 id="模板方法模式案例"><a href="#模板方法模式案例" class="headerlink" title="模板方法模式案例"></a>模板方法模式案例</h2><p>## </p>
   
 	</div>
@@ -212,11 +216,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 			
 		
 			
