@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png">
-<meta property="og:updated_time" content="2017-05-31T16:15:53.000Z">
+<meta property="og:updated_time" content="2017-05-31T16:23:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——模板方法模式">
 <meta name="twitter:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
@@ -105,8 +105,16 @@
 <p></p><p align="center"><br><img src="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png" width="400px" name="模板方法模式类图"><br></p><br>如上图所示，模板方法模式中有两个类角色，分别是抽象类和具体类，这两个类的作用分别如下： <p></p>
 <ul>
 <li>抽象类<code>AbstractClass</code>：<ul>
-<li>定义了一个或多个抽象操作，以便让子类实现，如上图中的<code>primitiveOperation1()</code>和<code>primitiveOperation2()</code>。这些抽象操作叫做基本操作，它们是一个顶级逻辑的组成步骤。</li>
-<li>定义并实现了一个或多个模板方法，如上图中的<code>templateMethod()</code>。这个模板方法一般是一个具体方法，它给出了一个顶级逻辑的骨架，而逻辑的组成步骤在相应的抽象操作中，推迟到子类实现。顶级逻辑也有可能调用一些具体方法。</li>
+<li>定义并实现了一个或多个模板方法，如上图中的<code>templateMethod()</code>。这个模板方法一般是一个具体方法，它给出了一个顶级逻辑的骨架，而逻辑的部分组成步骤在相应的抽象操作中，推迟到子类实现。顶级逻辑也有可能调用一些具体方法。</li>
+<li>定义了一个或多个具体方法，如上图中的<code>concreteOperation()</code>，这些具体方法可以是顶级逻辑中的组成部分，且不需要被子类实现或重写。<ul>
+<li>定义了一个或多个抽象方法，以便让子类实现，如上图中的<code>primitiveOperation1()</code>和<code>primitiveOperation2()</code>。这些抽象操作叫做基本操作，它们是一个顶级逻辑的组成步骤。</li>
+<li>定义了一个钩子方法，如上图中的<code>hook()</code>。钩子方法声明在抽象类中，但只有空的或者默认的实现，钩子的存在可以让子类有能力对算法的不同点进行挂钩，具体是否要挂钩由子类自行决定。钩子方法的命名通常以do开头，如<code>HttpServlet</code>类中的<code>doGet()</code>和<code>doPost()</code>等方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>具体类<code>ConcreteClass</code>:<ul>
+<li></li>
 </ul>
 </li>
 </ul>
