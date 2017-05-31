@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/Strategy.png">
-<meta property="og:updated_time" content="2017-05-31T07:02:23.000Z">
+<meta property="og:updated_time" content="2017-05-31T07:04:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——策略模式">
 <meta name="twitter:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
@@ -102,7 +102,7 @@
 <p>策略模式定义了算法族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化独立于使用算法的客户。  </p>
 </blockquote>
 <p>&emsp;&emsp;策略模式将对象本身和对象的行为分开，一个对象可能会拥有一组功能相似的算法，它使用“组合”将对象和算法结合，它的核心思想就是面向对象的多态思想。</p>
-<h2 id="策略模式案例"><a href="#策略模式案例" class="headerlink" title="策略模式案例"></a>策略模式案例</h2><p>&emsp;&emsp;首先给出一个策略模式的例子，假设一个场景：模拟一组鸭子和它们的行为。鸭子的种类有很多，鸭子都有一些共同的行为，如：叫(quack)、飞(fly)等，假设不同种类的鸭子的<strong>鸣叫（quack）</strong>和<strong>飞行（fly）</strong>的实现方法不同，那么怎样才能将不同的鸭子与不同的行为进行整合呢？<br>&emsp;&emsp;本例的UML图如下：<br><img src="http://odnk9as2f.bkt.clouddn.com/Strategy.png" alt="模拟鸭子程序的类图"><br>&emsp;&emsp;首先定义一个鸭子的抽象类，其中定义了所有鸭子共同的方法，此外，还有两个引用类型变量<code>flyBehavior</code>和<code>quackBehavior</code>，分别引用鸭子的两个行为接口<code>FlyBehavior</code>和<code>QuackBehavior</code>的对象；然后定义两个行为族接口<code>FlyBehavior</code>和<code>QuackBehavior</code>，而不同的飞行方法和不同的鸣叫方法分别使用类继承上述的接口来实现，鸭子和鸭子的行为通过类之间的组合来实现。<br>&emsp;&emsp;以上的模式有几个值得注意的点：    </p>
+<h2 id="策略模式案例"><a href="#策略模式案例" class="headerlink" title="策略模式案例"></a>策略模式案例</h2><p>&emsp;&emsp;首先给出一个策略模式的例子，假设一个场景：模拟一组鸭子和它们的行为。鸭子的种类有很多，但不同种类鸭子有一些共同的行为，如：<strong>鸣叫（quack）</strong>和<strong>飞行（fly）</strong>等，假设不同种类的鸭子的<strong>鸣叫（quack）</strong>和<strong>飞行（fly）</strong>的实现方法不同，那么怎样才能将不同的鸭子与不同的行为进行整合呢？<br>&emsp;&emsp;本例的UML图如下：<br><img src="http://odnk9as2f.bkt.clouddn.com/Strategy.png" alt="模拟鸭子程序的类图"><br>&emsp;&emsp;首先定义一个鸭子的抽象类，其中定义了所有鸭子共同的方法，此外，还有两个引用类型变量<code>flyBehavior</code>和<code>quackBehavior</code>，分别引用鸭子的两个行为接口<code>FlyBehavior</code>和<code>QuackBehavior</code>的对象；然后定义两个行为族接口<code>FlyBehavior</code>和<code>QuackBehavior</code>，而不同的飞行方法和不同的鸣叫方法分别使用类继承上述的接口来实现，鸭子和鸭子的行为通过类之间的组合来实现。<br>&emsp;&emsp;以上的模式有几个值得注意的点：    </p>
 <ol>
 <li><strong>面向接口编程而不是针对具体的实现类编程。</strong>这里的“接口”不仅指接口，还可以指超类，这里利用了<strong>多态</strong>的思想。可以看到Duck类中的行为变量类型是接口类型<code>QuackBehavior</code>和<code>FlyBehavior</code>，而非其具体的实现类，这样做的话可以使得该对象运行时能够根据实际状况选择不同的行为，不会被绑死在超类行为上。面向接口编程具体的操作方式是：在声明变量时将其声明为接口类型，在为变量赋值时使用具体的实现类型。  </li>
 <li><strong>使用“组合”而非“继承”。</strong>这里并没有将鸣叫和飞行作为Duck类的行为，而是将其分别当做一个类，然后通过Duck类和行为类的组合来对鸭子和鸭子的行为进行整合。使用“组合”建立系统有很大的弹性，不仅可以将算法族封装成不同的类，更可以在运行时动态改变行为，只要组合的行为对象符合正确的接口标准。  </li>
@@ -456,11 +456,11 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 			
