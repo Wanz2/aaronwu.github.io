@@ -4,39 +4,24 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>Aaron Wu</title>
+    <title>设计模式——策略模式 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="title: 设计模式——策略模式date: 2017-05-31 10:19:31tags:
-- 设计模式
-categories:
-- 设计模式
-mathjax: true
-description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。&amp;emsp;&amp;emsp;策略模式（Strategy Patt">
+    <meta name="description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Aaron Wu">
+<meta property="og:title" content="设计模式——策略模式">
 <meta property="og:url" content="https://wanz2.github.io/2017/05/31/设计模式——策略模式/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="title: 设计模式——策略模式date: 2017-05-31 10:19:31tags:
-- 设计模式
-categories:
-- 设计模式
-mathjax: true
-description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。&amp;emsp;&amp;emsp;策略模式（Strategy Patt">
+<meta property="og:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/Strategy.png">
-<meta property="og:updated_time" content="2017-05-31T03:39:40.000Z">
+<meta property="og:updated_time" content="2017-05-31T06:01:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Aaron Wu">
-<meta name="twitter:description" content="title: 设计模式——策略模式date: 2017-05-31 10:19:31tags:
-- 设计模式
-categories:
-- 设计模式
-mathjax: true
-description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。&amp;emsp;&amp;emsp;策略模式（Strategy Patt">
+<meta name="twitter:title" content="设计模式——策略模式">
+<meta name="twitter:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/Strategy.png">
 
     
@@ -91,7 +76,7 @@ description: 策略模式（Strategy Pattern）是设计模式中常用的一个
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/05/31/设计模式——策略模式/" title="" itemprop="url"></a>
+      <a href="/2017/05/31/设计模式——策略模式/" title="设计模式——策略模式" itemprop="url">设计模式——策略模式</a>
   </h1>
   <p class="article-author">By
        
@@ -107,17 +92,11 @@ description: 策略模式（Strategy Pattern）是设计模式中常用的一个
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#description-策略模式（Strategy-Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。"><span class="toc-number">1.</span> <span class="toc-text">description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">2.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">3.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">3.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">4.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
 		
 		</div>
 		
-		<hr>
-<p>title: 设计模式——策略模式<br>date: 2017-05-31 10:19:31<br>tags:</p>
-<pre><code>- 设计模式
-</code></pre><p>categories:</p>
-<pre><code>- 设计模式
-</code></pre><p>mathjax: true</p>
-<h2 id="description-策略模式（Strategy-Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。"><a href="#description-策略模式（Strategy-Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。" class="headerlink" title="description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。"></a>description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。</h2><p>&emsp;&emsp;策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。</p>
+		<p>&emsp;&emsp;策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。</p>
 <h2 id="什么是策略模式"><a href="#什么是策略模式" class="headerlink" title="什么是策略模式"></a>什么是策略模式</h2><p>&emsp;&emsp;首先给出策略模式的概念：  </p>
 <blockquote>
 <p>策略模式定义了算法族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化独立于使用算法的客户。  </p>
@@ -140,7 +119,7 @@ description: 策略模式（Strategy Pattern）是设计模式中常用的一个
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/05/31/设计模式——策略模式/" data-title="Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/05/31/设计模式——策略模式/" data-title="设计模式——策略模式 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -172,7 +151,7 @@ description: 策略模式（Strategy Pattern）是设计模式中常用的一个
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#description-策略模式（Strategy-Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。"><span class="toc-number">1.</span> <span class="toc-text">description: 策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">2.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">3.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">3.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">4.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
  
   </div>
 
@@ -239,11 +218,11 @@ description: 策略模式（Strategy Pattern）是设计模式中常用的一个
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 		</ul>
