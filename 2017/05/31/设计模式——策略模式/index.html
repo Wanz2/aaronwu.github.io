@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/Strategy.png">
-<meta property="og:updated_time" content="2017-05-31T07:04:52.000Z">
+<meta property="og:updated_time" content="2017-05-31T07:07:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——策略模式">
 <meta name="twitter:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
@@ -92,7 +92,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例代码"><span class="toc-number">3.</span> <span class="toc-text">案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例代码"><span class="toc-number">3.</span> <span class="toc-text">案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点："><span class="toc-number">4.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点："><span class="toc-number">4.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
 		
 		</div>
 		
@@ -312,13 +312,11 @@
 <p>&emsp;&emsp;最后输出的结果为：</p>
 <p><code><br>I am a model duck!<br>—–鸭子开始行动—–<br>I can’t Fly!<br>Quack<br>—–运行时改变鸭子的行为—–<br>I’m flying with a rocket!<br>Squeak<br></code></p>
 
-<h2 id="策略模式的优缺点"><a href="#策略模式的优缺点" class="headerlink" title="策略模式的优缺点"></a>策略模式的优缺点</h2><p>&emsp;&emsp;优点： </p>
-<ol>
+<h2 id="策略模式的优缺点"><a href="#策略模式的优缺点" class="headerlink" title="策略模式的优缺点"></a>策略模式的优缺点</h2><h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><ol>
 <li>封装了相关算法。如果将上面的每一个鸭子行为看做是一个算法，那么策略模式能够封装一组功能相似的算法形成一个个<strong>策略类</strong>，有助于抽取出这些算法的公共部分放在上层接口中，也使得客户可以根据不同要求从不同算法中进行选择使用。  </li>
 <li>使用组合替换继承关系。设计的原则之一就是多使用组合而少使用继承。上例中若使用继承，则是令<code>ModelDuck</code>继承<code>Duck</code>然后在<code>ModelDuck</code>中重写鸭子的行为，但这样就将算法的实现写死在了子类中，从而使<code>ModelDuck</code>难以理解，难以维护，难以扩展，且不能够动态改变，而使用组合则避免了这些问题。 </li>
 </ol>
-<p>&emsp;&emsp;缺点： </p>
-<ol>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ol>
 <li>客户端必须要知道所有策略类。客户必须知道所有策略类，才可能了解每个算法有什么不同以便进行选择，因此需要向客户暴露所有策略类的实现。  </li>
 <li>策略类和主体类之间有通信开销。上例中，无论各个鸭子行为实现的算法是简单还是复杂, 它们都共享<code>FlyBehavior</code>和<code>QuackBehavior</code>定义的接口。因此很可能某些具体行为不会都用到所有通过这个接口传递给它们的信息；一些简单的算法可能不使用其中的任何信息！这就意味着有时主体类会创建和初始化一些永远不会用到的参数。如果存在这样问题，那么将需要在策略类和主体类之间更进行紧密的耦合。  </li>
 <li>策略模式将产生很多策略类。可以通过使用<strong>享元模式</strong>在一定程度上减少对象的数量。  </li>
@@ -385,7 +383,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例代码"><span class="toc-number">3.</span> <span class="toc-text">案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例代码"><span class="toc-number">3.</span> <span class="toc-text">案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优点："><span class="toc-number">4.1.</span> <span class="toc-text">优点：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点："><span class="toc-number">4.2.</span> <span class="toc-text">缺点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
  
   </div>
 
@@ -436,11 +434,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
@@ -456,11 +454,11 @@
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
