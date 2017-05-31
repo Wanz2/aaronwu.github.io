@@ -19,7 +19,7 @@
 <meta property="og:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/CaffeinBeverageWithHook-2.png">
-<meta property="og:updated_time" content="2017-05-31T16:56:15.000Z">
+<meta property="og:updated_time" content="2017-05-31T17:00:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——模板方法模式">
 <meta name="twitter:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
@@ -142,7 +142,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> cn.edu.whu;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 测试类</div><div class="line"> * Created by wuwenan on 31/05/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeverageTest</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        CoffeeWithHook coffeeHook = <span class="keyword">new</span> CoffeeWithHook();</div><div class="line">        System.out.println(<span class="string">"开始制作咖啡..."</span>);</div><div class="line">        coffeeHook.prepareRecipe();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;最后的输出结果为：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">开始制作咖啡...</div><div class="line">Boiling water</div><div class="line">Brewing the coffee</div><div class="line">Pouring into cup</div><div class="line">咖啡要加调料吗？(y/n)</div><div class="line">y</div><div class="line">Adding coffee condiments</div></pre></td></tr></table></figure>  
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">开始制作咖啡...</div><div class="line">Boiling water</div><div class="line">Brewing the coffee</div><div class="line">Pouring into cup</div><div class="line">咖啡要加调料吗？(y/n)</div><div class="line">y</div><div class="line">Adding coffee condiments</div></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -247,11 +247,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
 			
 		
 			

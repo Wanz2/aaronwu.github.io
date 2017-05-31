@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2017-05-31T16:59:14.000Z</lastmod>
+    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2017-05-31T17:00:49.000Z</lastmod>
     <data>
         <display>
-        <title>设计模式——策略模式</title>
-        <pubTime>2017-05-31T02:19:31.000Z</pubTime>
+        <title>设计模式——模板方法模式</title>
+        <pubTime>2017-05-31T15:24:52.000Z</pubTime>
         
         <tag>设计模式</tag>
          
@@ -24,12 +24,12 @@
 
     
   <url>
-    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2017-05-31T16:56:15.000Z</lastmod>
+    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2017-05-31T17:00:25.000Z</lastmod>
     <data>
         <display>
-        <title>设计模式——模板方法模式</title>
-        <pubTime>2017-05-31T15:24:52.000Z</pubTime>
+        <title>设计模式——策略模式</title>
+        <pubTime>2017-05-31T02:19:31.000Z</pubTime>
         
         <tag>设计模式</tag>
          
@@ -137,9 +137,9 @@
         <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</title>
         <pubTime>2017-03-31T19:29:51.000Z</pubTime>
         
-        <tag>经验心得</tag>
-         
         <tag>Linux</tag>
+         
+        <tag>经验心得</tag>
          
          
            
