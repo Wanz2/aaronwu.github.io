@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/Strategy.png">
-<meta property="og:updated_time" content="2017-05-31T06:33:31.000Z">
+<meta property="og:updated_time" content="2017-05-31T06:38:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——策略模式">
 <meta name="twitter:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
@@ -108,6 +108,9 @@
 <li><strong>使用“组合”而非“继承”。</strong>这里并没有将鸣叫和飞行作为Duck类的行为，而是将其分别当做一个类，然后通过Duck类和行为类的组合来对鸭子和鸭子的行为进行整合。使用“组合”建立系统有很大的弹性，不仅可以将算法族封装成不同的类，更可以在运行时动态改变行为，只要组合的行为对象符合正确的接口标准。  </li>
 <li><strong>通过setter方法在运行时改变对象的行为。</strong>注意到Duck抽象类中有两个方法<code>setFlyBehafior(FlyBehavior fb)</code>和<code>setQuackBehavior(QuackBehavior qb)</code>，这两个方法可以在运行时设置变量<code>flyBehavior</code>和<code>quackBehavior</code>的值，通过注入不同的行为对象改变Duck类实例对象的行为。  <h2 id="案例代码"><a href="#案例代码" class="headerlink" title="案例代码"></a>案例代码</h2>&emsp;&emsp;下面来看一看上面例子的具体代码，为了说明方便，下面代码中不会给出<code>MallardDuck</code>，仅以<code>ModelDuck</code>类为例：  </li>
 </ol>
+<ul>
+<li><code>Duck</code>抽象类：  </li>
+</ul>
 <pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
 
 <span class="comment">/**
@@ -146,6 +149,9 @@
     }
 }
 </code></pre>
+<ul>
+<li><code>ModelDuck</code>类：  </li>
+</ul>
 <pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
 
 <span class="comment">/**
@@ -165,6 +171,9 @@
     }
 }
 </code></pre>
+<ul>
+<li><code>FlyBehavior</code>接口及其实现类：  </li>
+</ul>
 <pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
 
 <span class="comment">/**
@@ -216,6 +225,9 @@
     }
 }
 </code></pre>
+<ul>
+<li>QuackBehavior接口及其实现类：</li>
+</ul>
 <pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
 
 <span class="comment">/**
@@ -268,6 +280,9 @@
     }
 }
 </code></pre>
+<ul>
+<li>测试类：  </li>
+</ul>
 <pre><code class="java"><span class="keyword">package</span> cn.edu.whu.test;
 
 <span class="keyword">import</span> cn.edu.whu.Duck;
@@ -294,8 +309,8 @@
     }
 }
 </code></pre>
-<p>&emsp;&emsp;最后输出的结果为：    </p>
-<p><br><code><br>I am a model duck!<br>—–鸭子开始行动—–<br>I can’t Fly!<br>Quack<br>—–运行时改变鸭子的行为—–<br>I’m flying with a rocket!<br>Squeak<br></code><br></p>
+<p>&emsp;&emsp;最后输出的结果为：</p>
+<p><code><br>I am a model duck!<br>—–鸭子开始行动—–<br>I can’t Fly!<br>Quack<br>—–运行时改变鸭子的行为—–<br>I’m flying with a rocket!<br>Squeak<br></code></p>
 
 <h2 id="策略模式的优缺点"><a href="#策略模式的优缺点" class="headerlink" title="策略模式的优缺点"></a>策略模式的优缺点</h2><h2 id="什么情况下适用策略模式"><a href="#什么情况下适用策略模式" class="headerlink" title="什么情况下适用策略模式"></a>什么情况下适用策略模式</h2>  
 	</div>
