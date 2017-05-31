@@ -4,6 +4,21 @@
 
     
   <url>
+    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2017-05-31T03:21:18.000Z</lastmod>
+    <data>
+        <display>
+        <title></title>
+        <pubTime>2017-05-31T02:19:31.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://wanz2.github.io/2017/05/30/OJ%E2%80%94%E2%80%94%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/</loc>
     <lastmod>2017-05-29T19:35:09.000Z</lastmod>
     <data>
@@ -77,9 +92,9 @@
         <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</title>
         <pubTime>2017-03-31T19:29:51.000Z</pubTime>
         
-        <tag>Linux</tag>
-         
         <tag>经验心得</tag>
+         
+        <tag>Linux</tag>
          
          
            
