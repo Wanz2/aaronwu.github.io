@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/Strategy.png">
-<meta property="og:updated_time" content="2017-05-31T06:11:54.000Z">
+<meta property="og:updated_time" content="2017-05-31T06:33:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——策略模式">
 <meta name="twitter:description" content="策略模式（Strategy Pattern）是设计模式中常用的一个，也是非常强大的一个，本文对策略模式进行了介绍并通过案例对其进行分析。">
@@ -92,7 +92,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">3.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">4.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例代码"><span class="toc-number">3.</span> <span class="toc-text">案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
 		
 		</div>
 		
@@ -102,12 +102,201 @@
 <p>策略模式定义了算法族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化独立于使用算法的客户。  </p>
 </blockquote>
 <p>&emsp;&emsp;策略模式将对象本身和对象的行为分开，一个对象可能会拥有一组功能相似的算法，它使用“组合”将对象和算法结合，它的核心思想就是面向对象的多态思想。</p>
-<h2 id="策略模式案例"><a href="#策略模式案例" class="headerlink" title="策略模式案例"></a>策略模式案例</h2><p>&emsp;&emsp;首先给出一个策略模式的例子，假设一个场景：模拟一组鸭子和它们的行为。鸭子的种类有很多，鸭子都有一些共同的行为，如：叫(quack)、飞(fly)等，假设不同种类的鸭子的<strong>鸣叫（quack）</strong>和<strong>飞行（fly）</strong>的实现方法不同，那么怎样才能将不同的鸭子与不同的行为进行整合呢？<br>&emsp;&emsp;本例的UML图如下：<br><img src="http://odnk9as2f.bkt.clouddn.com/Strategy.png" alt="模拟鸭子程序的类图"><br>&emsp;&emsp;首先定义一个鸭子的抽象类，其中定义了所有鸭子共同的方法，此外，还有两个引用类型变量<code>flyBehafior</code>和<code>quackBehavior</code>，分别引用鸭子的两个行为接口<code>FlyBehavior</code>和<code>QuackBehavior</code>的对象；然后定义两个行为族接口<code>FlyBehavior</code>和<code>QuackBehavior</code>，而不同的飞行方法和不同的鸣叫方法分别使用类继承上述的接口来实现，鸭子和鸭子的行为通过类之间的组合来实现。<br>&emsp;&emsp;以上的模式有几个值得注意的点：    </p>
+<h2 id="策略模式案例"><a href="#策略模式案例" class="headerlink" title="策略模式案例"></a>策略模式案例</h2><p>&emsp;&emsp;首先给出一个策略模式的例子，假设一个场景：模拟一组鸭子和它们的行为。鸭子的种类有很多，鸭子都有一些共同的行为，如：叫(quack)、飞(fly)等，假设不同种类的鸭子的<strong>鸣叫（quack）</strong>和<strong>飞行（fly）</strong>的实现方法不同，那么怎样才能将不同的鸭子与不同的行为进行整合呢？<br>&emsp;&emsp;本例的UML图如下：<br><img src="http://odnk9as2f.bkt.clouddn.com/Strategy.png" alt="模拟鸭子程序的类图"><br>&emsp;&emsp;首先定义一个鸭子的抽象类，其中定义了所有鸭子共同的方法，此外，还有两个引用类型变量<code>flyBehavior</code>和<code>quackBehavior</code>，分别引用鸭子的两个行为接口<code>FlyBehavior</code>和<code>QuackBehavior</code>的对象；然后定义两个行为族接口<code>FlyBehavior</code>和<code>QuackBehavior</code>，而不同的飞行方法和不同的鸣叫方法分别使用类继承上述的接口来实现，鸭子和鸭子的行为通过类之间的组合来实现。<br>&emsp;&emsp;以上的模式有几个值得注意的点：    </p>
 <ol>
 <li><strong>面向接口编程而不是针对具体的实现类编程。</strong>这里的“接口”不仅指接口，还可以指超类，这里利用了<strong>多态</strong>的思想。可以看到Duck类中的行为变量类型是接口类型<code>QuackBehavior</code>和<code>FlyBehavior</code>，而非其具体的实现类，这样做的话可以使得该对象运行时能够根据实际状况选择不同的行为，不会被绑死在超类行为上。面向接口编程具体的操作方式是：在声明变量时将其声明为接口类型，在为变量赋值时使用具体的实现类型。  </li>
 <li><strong>使用“组合”而非“继承”。</strong>这里并没有将鸣叫和飞行作为Duck类的行为，而是将其分别当做一个类，然后通过Duck类和行为类的组合来对鸭子和鸭子的行为进行整合。使用“组合”建立系统有很大的弹性，不仅可以将算法族封装成不同的类，更可以在运行时动态改变行为，只要组合的行为对象符合正确的接口标准。  </li>
-<li></li>
+<li><strong>通过setter方法在运行时改变对象的行为。</strong>注意到Duck抽象类中有两个方法<code>setFlyBehafior(FlyBehavior fb)</code>和<code>setQuackBehavior(QuackBehavior qb)</code>，这两个方法可以在运行时设置变量<code>flyBehavior</code>和<code>quackBehavior</code>的值，通过注入不同的行为对象改变Duck类实例对象的行为。  <h2 id="案例代码"><a href="#案例代码" class="headerlink" title="案例代码"></a>案例代码</h2>&emsp;&emsp;下面来看一看上面例子的具体代码，为了说明方便，下面代码中不会给出<code>MallardDuck</code>，仅以<code>ModelDuck</code>类为例：  </li>
 </ol>
+<pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * Duck抽象类
+ * Created by wuwenan on 30/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Duck</span> </span>{
+
+    FlyBehavior flyBehavior;
+
+    QuackBehavior quackbehavior;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">Duck</span><span class="params">()</span> </span>{
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">swim</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"All ducks can swim."</span>);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">()</span></span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performFly</span><span class="params">()</span> </span>{
+        flyBehavior.fly();
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">performQuack</span><span class="params">()</span> </span>{
+        quackbehavior.quack();
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFlyBehavior</span><span class="params">(FlyBehavior fb)</span> </span>{
+        <span class="keyword">this</span>.flyBehavior = fb;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setQuackbehavior</span><span class="params">(QuackBehavior qb)</span> </span>{
+        <span class="keyword">this</span>.quackbehavior = qb;
+    }
+}
+</code></pre>
+<pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * ModelDuck类，继承自Duck抽象类
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ModelDuck</span> <span class="keyword">extends</span> <span class="title">Duck</span> </span>{
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"I am a model duck!"</span>);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="title">ModelDuck</span><span class="params">()</span> </span>{
+        flyBehavior = <span class="keyword">new</span> FlyNoWay();
+        quackbehavior = <span class="keyword">new</span> Quack();
+    }
+}
+</code></pre>
+<pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * FlyBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FlyBehavior</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;
+}
+
+<span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * FlyNoWay类，继承自FlyBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlyNoWay</span> <span class="keyword">implements</span> <span class="title">FlyBehavior</span> </span>{
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"I can't Fly! "</span>);
+    }
+}
+
+<span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * FlyWithWings类，继承自FlyBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlyWithWings</span> <span class="keyword">implements</span> <span class="title">FlyBehavior</span> </span>{
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"I'm flying!"</span>);
+    }
+}
+
+<span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * FlyRocketPowered类，继承自FlyBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlyRocketPowered</span> <span class="keyword">implements</span> <span class="title">FlyBehavior</span> </span>{
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"I'm flying with a rocket!"</span>);
+    }
+}
+</code></pre>
+<pre><code class="java"><span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * QuackBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">QuackBehavior</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span></span>;
+}
+
+<span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * Quack类，继承自QuackBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Quack</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span> </span>{
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"Quack"</span>);
+    }
+}
+
+<span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * Squeak类，继承自QuackBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Squeak</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span> </span>{
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"Squeak"</span>);
+    }
+}
+
+<span class="keyword">package</span> cn.edu.whu;
+
+<span class="comment">/**
+ * MuteQuack类，继承自QuackBehavior接口
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MuteQuack</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span> </span>{
+
+    <span class="meta">@Override</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"&lt;&lt; Silence &gt;&gt;"</span>);
+    }
+}
+</code></pre>
+<pre><code class="java"><span class="keyword">package</span> cn.edu.whu.test;
+
+<span class="keyword">import</span> cn.edu.whu.Duck;
+<span class="keyword">import</span> cn.edu.whu.FlyRocketPowered;
+<span class="keyword">import</span> cn.edu.whu.ModelDuck;
+<span class="keyword">import</span> cn.edu.whu.Squeak;
+
+<span class="comment">/**
+ * Duck测试类
+ * Created by wuwenan on 31/05/2017.
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DuckTest</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        Duck duck = <span class="keyword">new</span> ModelDuck();
+        duck.display();
+        System.out.println(<span class="string">"-----鸭子开始行动-----"</span>);
+        duck.performFly();
+        duck.performQuack();
+        System.out.println(<span class="string">"-----运行时改变鸭子的行为-----"</span>);
+        duck.setFlyBehavior(<span class="keyword">new</span> FlyRocketPowered());
+        duck.performFly();
+        duck.setQuackbehavior(<span class="keyword">new</span> Squeak());
+        duck.performQuack();
+    }
+}
+</code></pre>
+<p>&emsp;&emsp;最后输出的结果为：    </p>
+<p><br><code><br>I am a model duck!<br>—–鸭子开始行动—–<br>I can’t Fly!<br>Quack<br>—–运行时改变鸭子的行为—–<br>I’m flying with a rocket!<br>Squeak<br></code><br></p>
+
 <h2 id="策略模式的优缺点"><a href="#策略模式的优缺点" class="headerlink" title="策略模式的优缺点"></a>策略模式的优缺点</h2><h2 id="什么情况下适用策略模式"><a href="#什么情况下适用策略模式" class="headerlink" title="什么情况下适用策略模式"></a>什么情况下适用策略模式</h2>  
 	</div>
 		<footer class="article-footer clearfix">
@@ -162,7 +351,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">3.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">4.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是策略模式"><span class="toc-number">1.</span> <span class="toc-text">什么是策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式案例"><span class="toc-number">2.</span> <span class="toc-text">策略模式案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#案例代码"><span class="toc-number">3.</span> <span class="toc-text">案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#策略模式的优缺点"><span class="toc-number">4.</span> <span class="toc-text">策略模式的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下适用策略模式"><span class="toc-number">5.</span> <span class="toc-text">什么情况下适用策略模式</span></a></li></ol>
  
   </div>
 
@@ -225,6 +414,14 @@
 			
 		
 			
+				<li><a href="/tags/算法/" title="算法">算法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OJ/" title="OJ">OJ<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
@@ -234,14 +431,6 @@
 		
 			
 				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/算法/" title="算法">算法<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/OJ/" title="OJ">OJ<sup>1</sup></a></li>
 			
 		
 		</ul>
