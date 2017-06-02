@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>https://wanz2.github.io/2017/06/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89%EF%BC%9A%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/</loc>
-    <lastmod>2017-06-02T08:03:09.000Z</lastmod>
+    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2017-06-02T08:05:18.000Z</lastmod>
     <data>
         <display>
-        <title>设计模式——工厂模式（1）：简单工厂</title>
-        <pubTime>2017-06-01T15:24:52.000Z</pubTime>
+        <title>设计模式——策略模式</title>
+        <pubTime>2017-05-31T02:19:31.000Z</pubTime>
         
         <tag>设计模式</tag>
          
@@ -25,7 +25,7 @@
     
   <url>
     <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2017-06-02T06:43:28.000Z</lastmod>
+    <lastmod>2017-06-02T08:04:34.000Z</lastmod>
     <data>
         <display>
         <title>设计模式——模板方法模式</title>
@@ -44,12 +44,12 @@
 
     
   <url>
-    <loc>https://wanz2.github.io/2017/05/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2017-05-31T17:00:25.000Z</lastmod>
+    <loc>https://wanz2.github.io/2017/06/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89%EF%BC%9A%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/</loc>
+    <lastmod>2017-06-02T08:04:13.000Z</lastmod>
     <data>
         <display>
-        <title>设计模式——策略模式</title>
-        <pubTime>2017-05-31T02:19:31.000Z</pubTime>
+        <title>设计模式——工厂模式（1）：简单工厂</title>
+        <pubTime>2017-06-01T15:24:52.000Z</pubTime>
         
         <tag>设计模式</tag>
          
@@ -157,9 +157,9 @@
         <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</title>
         <pubTime>2017-03-31T19:29:51.000Z</pubTime>
         
-        <tag>Linux</tag>
-         
         <tag>经验心得</tag>
+         
+        <tag>Linux</tag>
          
          
            
