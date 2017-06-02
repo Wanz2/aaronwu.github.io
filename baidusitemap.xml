@@ -5,18 +5,18 @@
     
   <url>
     <loc>https://wanz2.github.io/2017/06/01/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%EF%BC%881%EF%BC%89%EF%BC%9A%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82/</loc>
-    <lastmod>2017-06-02T06:49:37.000Z</lastmod>
+    <lastmod>2017-06-02T06:51:56.000Z</lastmod>
     <data>
         <display>
         <title>设计模式——工厂模式（1）：简单工厂</title>
         <pubTime>2017-06-01T15:24:52.000Z</pubTime>
         
-        <tag>-设计模式</tag>
+        <tag>设计模式</tag>
          
          
            
              
-              <breadCrumb title="-设计模式" url="https://wanz2.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+              <breadCrumb title="设计模式" url="https://wanz2.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
           
         </display>
     </data>
@@ -157,9 +157,9 @@
         <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</title>
         <pubTime>2017-03-31T19:29:51.000Z</pubTime>
         
-        <tag>经验心得</tag>
-         
         <tag>Linux</tag>
+         
+        <tag>经验心得</tag>
          
          
            
