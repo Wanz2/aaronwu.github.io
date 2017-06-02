@@ -4,40 +4,25 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>Aaron Wu</title>
+    <title>设计模式——模板方法模式 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="title: 设计模式——模板方法模式date: 2017-05-31 23:24:52categories:
-- 设计模式
-tags:
-- 设计模式
-mathjax: true
-description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。&amp;emsp;&amp;emsp;模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
+    <meta name="description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Aaron Wu">
+<meta property="og:title" content="设计模式——模板方法模式">
 <meta property="og:url" content="https://wanz2.github.io/2017/05/31/设计模式——模板方法模式/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="title: 设计模式——模板方法模式date: 2017-05-31 23:24:52categories:
-- 设计模式
-tags:
-- 设计模式
-mathjax: true
-description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。&amp;emsp;&amp;emsp;模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
+<meta property="og:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/CaffeinBeverageWithHook-2.png">
-<meta property="og:updated_time" content="2017-06-02T06:41:14.000Z">
+<meta property="og:updated_time" content="2017-06-02T06:43:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Aaron Wu">
-<meta name="twitter:description" content="title: 设计模式——模板方法模式date: 2017-05-31 23:24:52categories:
-- 设计模式
-tags:
-- 设计模式
-mathjax: true
-description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。&amp;emsp;&amp;emsp;模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
+<meta name="twitter:title" content="设计模式——模板方法模式">
+<meta name="twitter:description" content="模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。">
 <meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/AbstractClass.png">
 
     
@@ -92,7 +77,7 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/05/31/设计模式——模板方法模式/" title="" itemprop="url"></a>
+      <a href="/2017/05/31/设计模式——模板方法模式/" title="设计模式——模板方法模式" itemprop="url">设计模式——模板方法模式</a>
   </h1>
   <p class="article-author">By
        
@@ -108,17 +93,11 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#description-模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。"><span class="toc-number">1.</span> <span class="toc-text">description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式的概念"><span class="toc-number">2.</span> <span class="toc-text">模板方法模式的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式案例"><span class="toc-number">3.</span> <span class="toc-text">模板方法模式案例</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式的概念"><span class="toc-number">1.</span> <span class="toc-text">模板方法模式的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式案例"><span class="toc-number">2.</span> <span class="toc-text">模板方法模式案例</span></a></li></ol>
 		
 		</div>
 		
-		<hr>
-<p>title: 设计模式——模板方法模式<br>date: 2017-05-31 23:24:52<br>categories:</p>
-<pre><code>- 设计模式
-</code></pre><p>tags:</p>
-<pre><code>- 设计模式
-</code></pre><p>mathjax: true</p>
-<h2 id="description-模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。"><a href="#description-模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。" class="headerlink" title="description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。"></a>description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。</h2><p>&emsp;&emsp;模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。  </p>
+		<p>&emsp;&emsp;模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。  </p>
 <h2 id="模板方法模式的概念"><a href="#模板方法模式的概念" class="headerlink" title="模板方法模式的概念"></a>模板方法模式的概念</h2><p>&emsp;&emsp;模板方法模式（Template Method Pattern）的概念如下：  </p>
 <blockquote>
 <p>模板方法模式是类的行为模式。准备一个抽象类，将部分逻辑以具体方法以及具体构造函数的形式实现，然后声明一些抽象方法来迫使子类实现剩余的逻辑。不同的子类可以以不同的方式实现这些抽象方法，从而对剩余的逻辑有不同的实现。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。  </p>
@@ -168,6 +147,16 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/设计模式/">设计模式</a>
+  </div>
 
 </div>
 
@@ -175,7 +164,7 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/05/31/设计模式——模板方法模式/" data-title="Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/05/31/设计模式——模板方法模式/" data-title="设计模式——模板方法模式 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -215,7 +204,7 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#description-模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。"><span class="toc-number">1.</span> <span class="toc-text">description: 模板方法模式是最常用的设计模式，本文对模板方法模式进行了介绍并通过案例对其进行分析。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式的概念"><span class="toc-number">2.</span> <span class="toc-text">模板方法模式的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式案例"><span class="toc-number">3.</span> <span class="toc-text">模板方法模式案例</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式的概念"><span class="toc-number">1.</span> <span class="toc-text">模板方法模式的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板方法模式案例"><span class="toc-number">2.</span> <span class="toc-text">模板方法模式案例</span></a></li></ol>
  
   </div>
 
@@ -253,7 +242,7 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 		  
 		
 		  
-			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
 		  
 		
 		</ul>
@@ -266,15 +255,19 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Java/" title="Java">Java<sup>6</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
 			
 		
 			
@@ -286,15 +279,11 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -305,7 +294,7 @@ description: 模板方法模式是最常用的设计模式，本文对模板方�
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/OJ/" style="font-size: 10px;">OJ</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/经验心得/" style="font-size: 15px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+       <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/OJ/" style="font-size: 10px;">OJ</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/经验心得/" style="font-size: 15px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
     </div>
   </div>
 
