@@ -11,33 +11,33 @@
     
 
     
-    <meta name="description" content="title: 设计模式——工厂模式（1）：简单工厂date: 2017-05-31 23:24:52categories:
+    <meta name="description" content="title: 设计模式——工厂模式（1）：简单工厂date: 2017-06-1 23:24:52categories:
 - 设计模式
 tags:
 - 设计模式
 mathjax: true
-description: 工厂模式共分为三类，简单工厂、工厂方法模式和抽象工厂模式。本文介绍第一种，简单工厂。&amp;emsp;&amp;emsp;工厂模式共分为三类，简单工厂（Simple Factory）、工厂方法模">
+description: 工厂模式共分为三类，简单工厂、工厂方法模式和抽象工厂模式。本文介绍第一种，简单工厂。&amp;emsp;&amp;emsp;工厂模式共分为三类，简单工厂（Simple Factory）、工厂方法模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Aaron Wu">
 <meta property="og:url" content="https://wanz2.github.io/2017/06/01/设计模式——工厂模式（1）：简单工厂/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="title: 设计模式——工厂模式（1）：简单工厂date: 2017-05-31 23:24:52categories:
+<meta property="og:description" content="title: 设计模式——工厂模式（1）：简单工厂date: 2017-06-1 23:24:52categories:
 - 设计模式
 tags:
 - 设计模式
 mathjax: true
-description: 工厂模式共分为三类，简单工厂、工厂方法模式和抽象工厂模式。本文介绍第一种，简单工厂。&amp;emsp;&amp;emsp;工厂模式共分为三类，简单工厂（Simple Factory）、工厂方法模">
+description: 工厂模式共分为三类，简单工厂、工厂方法模式和抽象工厂模式。本文介绍第一种，简单工厂。&amp;emsp;&amp;emsp;工厂模式共分为三类，简单工厂（Simple Factory）、工厂方法模式">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/SimpleFactory.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/SimpleFactory1.png">
-<meta property="og:updated_time" content="2017-06-02T06:38:54.000Z">
+<meta property="og:updated_time" content="2017-06-02T06:40:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Aaron Wu">
-<meta name="twitter:description" content="title: 设计模式——工厂模式（1）：简单工厂date: 2017-05-31 23:24:52categories:
+<meta name="twitter:description" content="title: 设计模式——工厂模式（1）：简单工厂date: 2017-06-1 23:24:52categories:
 - 设计模式
 tags:
 - 设计模式
 mathjax: true
-description: 工厂模式共分为三类，简单工厂、工厂方法模式和抽象工厂模式。本文介绍第一种，简单工厂。&amp;emsp;&amp;emsp;工厂模式共分为三类，简单工厂（Simple Factory）、工厂方法模">
+description: 工厂模式共分为三类，简单工厂、工厂方法模式和抽象工厂模式。本文介绍第一种，简单工厂。&amp;emsp;&amp;emsp;工厂模式共分为三类，简单工厂（Simple Factory）、工厂方法模式">
 <meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/SimpleFactory.png">
 
     
@@ -113,7 +113,7 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
 		</div>
 		
 		<hr>
-<p>title: 设计模式——工厂模式（1）：简单工厂<br>date: 2017-05-31 23:24:52<br>categories:</p>
+<p>title: 设计模式——工厂模式（1）：简单工厂<br>date: 2017-06-1 23:24:52<br>categories:</p>
 <pre><code>- 设计模式
 </code></pre><p>tags:</p>
 <pre><code>- 设计模式
@@ -165,7 +165,7 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">要创建的pizza类型是：cheese</div><div class="line">Preparing Cheese Pizza</div><div class="line">Tossing dough...</div><div class="line">Adding sauce...</div><div class="line">Adding toppings: </div><div class="line">  Cheese Pizza topping1</div><div class="line">  Cheese Pizza topping2</div><div class="line">Baking...</div><div class="line">Cutting the pizza...</div><div class="line">Placing the pizza in box...</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;若将简单工厂类中的工厂方法修改为静态方法，则可以将<code>SimplePizzaFactory</code>类中的<code>createPizza</code>类改写为：  </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Pizza <span class="title">createPizza</span><span class="params">(String type)</span></span>&#123;</div><div class="line">	<span class="comment">//具体的创建步骤...</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>然后将客户端的<code>PizzaStore</code>类改写为：</p>
+<p>然后将客户端的<code>PizzaStore</code>方法改写为：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PizzaStore</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> Pizza <span class="title">orderPizza</span><span class="params">(String type)</span> </span>&#123;</div><div class="line">        Pizza pizza;</div><div class="line"></div><div class="line">        pizza = SimplePizzaFactory.createPizza(type);</div><div class="line"></div><div class="line">        pizza.prepare();</div><div class="line">        pizza.bake();</div><div class="line">        pizza.cut();</div><div class="line">        pizza.box();</div><div class="line">        <span class="keyword">return</span> pizza;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>同样可以得到测试的结果。</p>
   
@@ -195,9 +195,9 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
  
 
 <div class="next">
-<a href="/2017/05/31/设计模式——模板方法模式/"  title="设计模式——模板方法模式">
+<a href="/2017/05/31/设计模式——模板方法模式/"  title="">
  <strong>下一篇：</strong><br/> 
- <span>设计模式——模板方法模式
+ <span>(no title)
 </span>
 </a>
 </div>
@@ -250,7 +250,7 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
 		  
 		
 		  
-			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
 		  
 		
 		</ul>
@@ -275,10 +275,6 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
 			
 		
 			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/算法/" title="算法">算法<sup>1</sup></a></li>
 			
 		
@@ -287,11 +283,15 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -302,7 +302,7 @@ description: 工厂模式共分为三类，简单工厂、工厂方法模式和�
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/OJ/" style="font-size: 10px;">OJ</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/经验心得/" style="font-size: 15px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+       <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/OJ/" style="font-size: 10px;">OJ</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/机器学习/" style="font-size: 20px;">机器学习</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/经验心得/" style="font-size: 15px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
     </div>
   </div>
 
