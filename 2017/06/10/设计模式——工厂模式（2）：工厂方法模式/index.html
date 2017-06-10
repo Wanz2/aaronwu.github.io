@@ -19,7 +19,7 @@
 <meta property="og:description" content="本文为工厂模式整理的第二篇，主要介绍工厂方法模式。工厂方法模式是面向对象编程中常用的一种模式，它能够使代码结构清晰，降低耦合度。">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/FactoryMethodPattern1.png">
 <meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/FactoryMethodPattern2.png">
-<meta property="og:updated_time" content="2017-06-10T10:46:38.000Z">
+<meta property="og:updated_time" content="2017-06-10T10:48:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式——工厂模式（2）：工厂方法模式">
 <meta name="twitter:description" content="本文为工厂模式整理的第二篇，主要介绍工厂方法模式。工厂方法模式是面向对象编程中常用的一种模式，它能够使代码结构清晰，降低耦合度。">
@@ -110,7 +110,7 @@
 <li>具体产品实现<code>ConcretProduct</code>，它是实现产品的具体类。</li>
 </ul>
 <h1 id="工厂方法模式示例"><a href="#工厂方法模式示例" class="headerlink" title="工厂方法模式示例"></a>工厂方法模式示例</h1><p>&emsp;&emsp;根据上一节中的工厂方法模式的四要素，我们假设这样一个场景：比萨类型有两个种类：<strong>纽约风味比萨</strong>和<strong>芝加哥风味比萨</strong>，不同的风味下又各有四个不同原料的比萨，纽约和芝加哥两地均有比萨店的分店，需要提供以上两类的四个不同原料的比萨。让我们来看看类图：</p>
-<p></p><p align="center"><br><img src="http://odnk9as2f.bkt.clouddn.com/FactoryMethodPattern2.png"><br></p><br>&emsp;&emsp;下面将以令纽约比萨分店<code>NYStylePizzaStore</code>创建纽约风味的cheese比萨<code>NYStyleCheesePizza</code>为例，来实现我们的工厂方法模式的demo：<p></p>
+<p></p><p align="center"><br><img src="http://odnk9as2f.bkt.clouddn.com/FactoryMethodPattern2.png" alt="Pizza工厂示例类图"><br></p><br>&emsp;&emsp;下面将以令纽约比萨分店<code>NYStylePizzaStore</code>创建纽约风味的cheese比萨<code>NYStyleCheesePizza</code>为例，来实现我们的工厂方法模式的demo：<p></p>
 <ul>
 <li>工厂接口：<em><code>PizzaStore</code></em>类：</li>
 </ul>
