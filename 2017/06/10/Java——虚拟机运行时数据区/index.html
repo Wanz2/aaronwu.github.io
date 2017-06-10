@@ -4,26 +4,25 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>深度学习笔记：稀疏自编码器（1）——神经元与神经网络 | Aaron Wu</title>
+    <title>Java——虚拟机运行时数据区 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
+    <meta name="description" content="Java虚拟机在执行Java程序的过程中会将其管理的内存分为多个不同的区域，了解这些区域，有助于编码时规避一些内存管理的错误。本文为笔者对于它的一些归纳，以便于今后的复习查找。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
-<meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/index.html">
+<meta property="og:title" content="Java——虚拟机运行时数据区">
+<meta property="og:url" content="https://wanz2.github.io/2017/06/10/Java——虚拟机运行时数据区/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png">
-<meta property="og:updated_time" content="2017-05-17T02:58:05.000Z">
+<meta property="og:description" content="Java虚拟机在执行Java程序的过程中会将其管理的内存分为多个不同的区域，了解这些区域，有助于编码时规避一些内存管理的错误。本文为笔者对于它的一些归纳，以便于今后的复习查找。">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.png">
+<meta property="og:updated_time" content="2017-06-10T05:21:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
-<meta name="twitter:description" content="笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记。">
-<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png">
+<meta name="twitter:title" content="Java——虚拟机运行时数据区">
+<meta name="twitter:description" content="Java虚拟机在执行Java程序的过程中会将其管理的内存分为多个不同的区域，了解这些区域，有助于编码时规避一些内存管理的错误。本文为笔者对于它的一些归纳，以便于今后的复习查找。">
+<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.png">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -77,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络" itemprop="url">深度学习笔记：稀疏自编码器（1）——神经元与神经网络</a>
+      <a href="/2017/06/10/Java——虚拟机运行时数据区/" title="Java——虚拟机运行时数据区" itemprop="url">Java——虚拟机运行时数据区</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-29T15:38:52.000Z" itemprop="datePublished"> 发表于 2017-04-29</time>
+    <time datetime="2017-06-10T04:32:56.000Z" itemprop="datePublished"> 发表于 2017-06-10</time>
     
   </p>
 </header>
@@ -93,109 +92,31 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中使用的符号一览及本文中的一些约定"><span class="toc-number">1.</span> <span class="toc-text">0. 本文中使用的符号一览及本文中的一些约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-神经元"><span class="toc-number">2.</span> <span class="toc-text">1. 神经元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-神经元定义"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 神经元定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-激活函数"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 激活函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-神经网络"><span class="toc-number">3.</span> <span class="toc-text">2. 神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-神经网络定义"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 神经网络定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-前向传播"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 前向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-前向传播的矩阵表示"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 前向传播的矩阵表示</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java运行时数据区域划分"><span class="toc-number">1.</span> <span class="toc-text">Java运行时数据区域划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各区域介绍"><span class="toc-number">2.</span> <span class="toc-text">各区域介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程序计数器"><span class="toc-number">2.1.</span> <span class="toc-text">程序计数器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java虚拟机栈和本地方法栈"><span class="toc-number">2.2.</span> <span class="toc-text">Java虚拟机栈和本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java堆"><span class="toc-number">2.3.</span> <span class="toc-text">Java堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区"><span class="toc-number">2.4.</span> <span class="toc-text">方法区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时常量池"><span class="toc-number">2.5.</span> <span class="toc-text">运行时常量池</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<p>&emsp;&emsp;笔者在很久以前就已经学习过UFLDL深度学习教程中的稀疏自编码器，近期需要用到的时候发现有些遗忘，温习了一遍之后决定在这里做一下笔记，本文不是对神经元与神经网络的介绍，而是笔者学习之后做的归纳和整理，打算分为几篇记录。详细教程请见<a href="http://deeplearning.stanford.edu/wiki/index.php/UFLDL%E6%95%99%E7%A8%8B" target="_blank" rel="external">UFLDL教程</a>，看完教程之后再来看本文可能会更加清晰。  </p>
-<a id="more"></a>
-<h2 id="0-本文中使用的符号一览及本文中的一些约定"><a href="#0-本文中使用的符号一览及本文中的一些约定" class="headerlink" title="0. 本文中使用的符号一览及本文中的一些约定"></a>0. 本文中使用的符号一览及本文中的一些约定</h2><table>
-<thead>
-<tr>
-<th>符号</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$x$</td>
-<td>输入值向量，为$n$维</td>
-</tr>
-<tr>
-<td>$x_i$</td>
-<td>第$i$个输入值</td>
-</tr>
-<tr>
-<td>$f()$</td>
-<td>神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$</td>
-</tr>
-<tr>
-<td>$W_{ij}^{(l)}$</td>
-<td>神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值</td>
-</tr>
-<tr>
-<td>$b_i^{(l)}$</td>
-<td>第$l+1$层第$i$个神经元输入的偏置项</td>
-</tr>
-<tr>
-<td>$n_l$</td>
-<td>神经网络的总层数</td>
-</tr>
-<tr>
-<td>$L_l$</td>
-<td>第$l$层，则输入层为$L_1$，输出层为$L_{nl}$</td>
-</tr>
-<tr>
-<td>$s_l$</td>
-<td>第$l$层的节点数（不包括偏置单元）</td>
-</tr>
-<tr>
-<td>$a_i^{l}$</td>
-<td>第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$</td>
-</tr>
-<tr>
-<td>$z_i^{(l)}$</td>
-<td>第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z_i^{(l)})$</td>
-</tr>
-<tr>
-<td>$h_{W,b}(x)$</td>
-<td>输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值</td>
-</tr>
-</tbody>
-</table>
-<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：  </p>
-<p>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$  </p>
-<p>&emsp;&emsp;$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$  </p>
-<h2 id="1-神经元"><a href="#1-神经元" class="headerlink" title="1. 神经元"></a>1. 神经元</h2><h3 id="1-1-神经元定义"><a href="#1-1-神经元定义" class="headerlink" title="1.1 神经元定义"></a>1.1 神经元定义</h3><p>&emsp;&emsp;神经元是以$x$为输入，$h_{W,b}$为输出的运算单元，如图所示：      </p>
-<p><img src="http://odnk9as2f.bkt.clouddn.com/300px-SingleNeuron.png" alt="神经元">  </p>
-<h3 id="1-2-激活函数"><a href="#1-2-激活函数" class="headerlink" title="1.2 激活函数"></a>1.2 激活函数</h3><p>&emsp;&emsp;通常在神经元中输出值为0表示神经元被激活，输出为1表示神经元被抑制，而计算输出值所用的函数则被称为“激活函数”。本文中所用的激活函数为sigmoid函数：  </p>
-<p>&emsp;&emsp;&emsp;&emsp;$f(z)=\frac{1}{1+e^{(-z)}}$，其定义域为$(-\infty,+\infty)$，值域为$(0,1)$。  </p>
-<p>&emsp;&emsp;以上图神经元为例，假设第$i$个输入值与神经元连线上的权重为$w_1$，输入值偏置项为$b_1$，在单个神经元中，有： </p>
-<p>&emsp;&emsp;$h_{W,b}(x)=f(x_1w_1+x_2w_2+x_3w_3+b_1)$   </p>
-<p>&emsp;&emsp;观察可以发现，单个神经元就是一个<strong>逻辑回归</strong>模型。  </p>
-<h2 id="2-神经网络"><a href="#2-神经网络" class="headerlink" title="2. 神经网络"></a>2. 神经网络</h2><h3 id="2-1-神经网络定义"><a href="#2-1-神经网络定义" class="headerlink" title="2.1 神经网络定义"></a>2.1 神经网络定义</h3><p>&emsp;&emsp;神经网络就是将多个神经元连在一起，前一层神经元的输出就是后一层神经元的输入，下图是一个三层神经网络：  </p>
-<p><img src="http://odnk9as2f.bkt.clouddn.com/400px-Network331.png" alt="三层神经网络模型">  </p>
-<p>&emsp;&emsp;以上图为例，最左边一层为<strong>输入层</strong>，中间一层为<strong>隐藏层</strong>，最右边一层为<strong>输出层</strong>。  </p>
-<h3 id="2-2-前向传播"><a href="#2-2-前向传播" class="headerlink" title="2.2 前向传播"></a>2.2 前向传播</h3><p>&emsp;&emsp;前向传播就是使用输入值$x$通过神经网络计算出输出值$h_{W,b}(x)$的过程。以上图神经网络为例，前向传播中每一个神经元输入输出过程如下：  </p>
-<p>&emsp;&emsp;令$z_i^{(l)}$表示第$l$层第$i$个神经元的输入值，有  </p>
-<p>&emsp;&emsp;$z_i^{(l+1)}=W_{i1}^{(l)}x_1+W_{i2}^{(l)}x_2+W_{i3}^{(l)}x_3+b_i^{(l)}$  （这里其实是一个<strong>线性回归</strong>模型）  </p>
-<p>&emsp;&emsp;$a_i^{(l)}=f(z_i^{(l)})$  </p>
-<p>&emsp;&emsp;$h_{W,b}(x)=a_1^{(3)}$  </p>
-<h3 id="2-3-前向传播的矩阵表示"><a href="#2-3-前向传播的矩阵表示" class="headerlink" title="2.3 前向传播的矩阵表示"></a>2.3 前向传播的矩阵表示</h3><p>&emsp;&emsp;本文中扩展了函数$f()$针对向量参数的约定，即有： </p>
-<p>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$  </p>
-<p>则上图神经网络中的前向传播过程可表示为： </p>
-<p>&emsp;&emsp;$z^{(2)}=W^{(1)}x+b^{(1)}$  </p>
-<p>&emsp;&emsp;$a^{(2)}=f(z^{(2)})$  </p>
-<p>&emsp;&emsp;$z^{(3)}=W^{(2)}a^{(2)}+b^{(2)}$  </p>
-<p>&emsp;&emsp;$h_{W,b}(x)=f(z^{(3)})$  </p>
-<p>下面以 $z^{(2)}=W^{(1)}x+b^{(1)}$ 为例，展开一下具体的矩阵表示，其他式子略：<br>&emsp;&emsp;<br>$$<br>\begin{pmatrix}<br>z_1^{(2)}\\<br>z_2^{(2)}\\<br>z_3^{(2)}\\<br>\end{pmatrix}=<br>\begin{pmatrix}<br>W_{11}^{(1)}&amp;W_{12}^{(1)}&amp;W_{13}^{(1)}\\<br>W_{21}^{(1)}&amp;W_{22}^{(1)}&amp;W_{23}^{(1)}\\<br>W_{31}^{(1)}&amp;W_{32}^{(1)}&amp;W_{33}^{(1)}\\<br>\end{pmatrix}<br>\begin{pmatrix}x_1\\<br>x_2\\<br>x_3\\<br>\end{pmatrix}+<br>\begin{pmatrix}<br>b_1^{(1)}\\<br>b_2^{(1)}\\<br>b_3^{(1)}\\<br>\end{pmatrix}<br>$$  </p>
-<p>最终，神经网络前向传播过程可表示为：  </p>
-<p>&emsp;&emsp;$z^{(l+1)}=W^{(l)}a^{(l)}+b^{(l)}$  </p>
-<p>&emsp;&emsp;$a^{(l+1)}=f(z^{(l+1)})$   </p>
-  
+		<p>&emsp;&emsp;Java虚拟机在执行Java程序的过程中会将其管理的内存分为多个不同的区域，了解这些区域，有助于编码时规避和排查一些内存管理的错误。  </p>
+<h2 id="Java运行时数据区域划分"><a href="#Java运行时数据区域划分" class="headerlink" title="Java运行时数据区域划分"></a>Java运行时数据区域划分</h2><p>&emsp;&emsp;在《Java虚拟机规范》中，对于运行时数据区域有以下划分，但在具体的不同虚拟机的实现中，可能有所不同，本文将整理最基本的划分情况，同时会涉及到目前应用最广泛的虚拟机——HotSpot虚拟机中的使用情况。<br>&emsp;&emsp;首先给出Java虚拟机运行时数据区的划分情况图：  </p>
+<p align="center"><br><img src="http://odnk9as2f.bkt.clouddn.com/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.png" width="600px" alt="Java虚拟机运行时数据区"><br></p>
+
+<p>&emsp;&emsp;如上图所示，虚拟机将运行时数据区分为五块，其中由所有线程共享的区域有：方法区、堆；线程隔离的数据区有：虚拟机栈、本地方法栈、程序计数器。在HotSpot虚拟机中，将虚拟机栈和本地方法栈合二为一，因此HotSpot虚拟机的运行时数据区共有四块。</p>
+<h2 id="各区域介绍"><a href="#各区域介绍" class="headerlink" title="各区域介绍"></a>各区域介绍</h2><h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>&emsp;&emsp;程序计数器为线程私有，该区域是一块较小的内存空间，指示了当前线程所执行的字节码行号。若正在执行Java方法，则该计数器执行的是正在执行的虚拟机字节码指令地址；若正在执行Native方法，则该计数器为空（Undifined）。</p>
+<h3 id="Java虚拟机栈和本地方法栈"><a href="#Java虚拟机栈和本地方法栈" class="headerlink" title="Java虚拟机栈和本地方法栈"></a>Java虚拟机栈和本地方法栈</h3><p>&emsp;&emsp;Java虚拟机栈为线程私有，其生命周期与线程相同。它存储了一个个栈帧(Stack Frame)，每个方法在执行时都会创建一栈帧，栈帧中存储了：局部变量表、操作数栈、动态链接、方法出口（即返回地址）等信息。<br>&emsp;&emsp;人们常说的<code>栈内存(Stack)</code>，严格来说就是指的虚拟机栈栈帧中的<code>局部变量表</code>部分。  </p>
+<h3 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h3><h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/机器学习/">机器学习</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -204,7 +125,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" data-title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/06/10/Java——虚拟机运行时数据区/" data-title="Java——虚拟机运行时数据区 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -217,19 +138,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" title="深度学习笔记：稀疏自编码器（2）——反向传导">
-  <strong>上一篇：</strong><br/>
-  <span>
-  深度学习笔记：稀疏自编码器（2）——反向传导</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/04/06/压缩感知算法原理/"  title="压缩感知算法原理">
+<a href="/2017/06/01/设计模式——工厂模式（1）：简单工厂/"  title="设计模式——工厂模式（1）：简单工厂">
  <strong>下一篇：</strong><br/> 
- <span>压缩感知算法原理
+ <span>设计模式——工厂模式（1）：简单工厂
 </span>
 </a>
 </div>
@@ -244,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中使用的符号一览及本文中的一些约定"><span class="toc-number">1.</span> <span class="toc-text">0. 本文中使用的符号一览及本文中的一些约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-神经元"><span class="toc-number">2.</span> <span class="toc-text">1. 神经元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-神经元定义"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 神经元定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-激活函数"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 激活函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-神经网络"><span class="toc-number">3.</span> <span class="toc-text">2. 神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-神经网络定义"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 神经网络定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-前向传播"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 前向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-前向传播的矩阵表示"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 前向传播的矩阵表示</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java运行时数据区域划分"><span class="toc-number">1.</span> <span class="toc-text">Java运行时数据区域划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#各区域介绍"><span class="toc-number">2.</span> <span class="toc-text">各区域介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程序计数器"><span class="toc-number">2.1.</span> <span class="toc-text">程序计数器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java虚拟机栈和本地方法栈"><span class="toc-number">2.2.</span> <span class="toc-text">Java虚拟机栈和本地方法栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java堆"><span class="toc-number">2.3.</span> <span class="toc-text">Java堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法区"><span class="toc-number">2.4.</span> <span class="toc-text">方法区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行时常量池"><span class="toc-number">2.5.</span> <span class="toc-text">运行时常量池</span></a></li></ol></li></ol>
  
   </div>
 
