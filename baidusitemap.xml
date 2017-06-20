@@ -145,28 +145,6 @@
     </url>
 
     
-  <url>
-    <loc>https://wanz2.github.io/2017/05/30/OJ%E2%80%94%E2%80%94%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/</loc>
-    <lastmod>2017-05-29T19:35:09.000Z</lastmod>
-    <data>
-        <display>
-        <title>重建二叉树</title>
-        <pubTime>2017-05-29T19:27:00.000Z</pubTime>
-        
-        <tag>算法</tag>
-         
-        <tag>OJ</tag>
-         
-         
-           
-             
-              <breadCrumb title="OJ" url="https://wanz2.github.io/categories/OJ/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
     
     
     
@@ -219,9 +197,9 @@
         <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</title>
         <pubTime>2017-03-31T19:29:51.000Z</pubTime>
         
-        <tag>Linux</tag>
-         
         <tag>经验心得</tag>
+         
+        <tag>Linux</tag>
          
          
            
