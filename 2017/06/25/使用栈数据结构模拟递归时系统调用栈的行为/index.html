@@ -4,23 +4,23 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>深度学习笔记：稀疏自编码器（2）——反向传导 | Aaron Wu</title>
+    <title>使用栈数据结构模拟递归时系统调用栈的行为 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+    <meta name="description" content="本文通过利用栈数据结构将一个简单的递归方法改写为为使用循环的方法，模拟了系统调用栈在处理递归时的行为。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
-<meta property="og:url" content="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/index.html">
+<meta property="og:title" content="使用栈数据结构模拟递归时系统调用栈的行为">
+<meta property="og:url" content="https://wanz2.github.io/2017/06/25/使用栈数据结构模拟递归时系统调用栈的行为/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
-<meta property="og:updated_time" content="2017-05-17T01:47:19.000Z">
+<meta property="og:description" content="本文通过利用栈数据结构将一个简单的递归方法改写为为使用循环的方法，模拟了系统调用栈在处理递归时的行为。">
+<meta property="og:updated_time" content="2017-06-25T10:40:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度学习笔记：稀疏自编码器（2）——反向传导">
-<meta name="twitter:description" content="本文是深度学习笔记的第二篇，上一篇文章《神经元与神经网络》中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。">
+<meta name="twitter:title" content="使用栈数据结构模拟递归时系统调用栈的行为">
+<meta name="twitter:description" content="本文通过利用栈数据结构将一个简单的递归方法改写为为使用循环的方法，模拟了系统调用栈在处理递归时的行为。">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -74,14 +74,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" title="深度学习笔记：稀疏自编码器（2）——反向传导" itemprop="url">深度学习笔记：稀疏自编码器（2）——反向传导</a>
+      <a href="/2017/06/25/使用栈数据结构模拟递归时系统调用栈的行为/" title="使用栈数据结构模拟递归时系统调用栈的行为" itemprop="url">使用栈数据结构模拟递归时系统调用栈的行为</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-29T15:41:01.000Z" itemprop="datePublished"> 发表于 2017-04-29</time>
+    <time datetime="2017-06-25T10:23:40.000Z" itemprop="datePublished"> 发表于 2017-06-25</time>
     
   </p>
 </header>
@@ -90,110 +90,29 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中所使用的符号和一些约定"><span class="toc-number">1.</span> <span class="toc-text">0.本文中所使用的符号和一些约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-代价函数"><span class="toc-number">2.</span> <span class="toc-text">1.代价函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-梯度下降"><span class="toc-number">3.</span> <span class="toc-text">2.梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-反向传导"><span class="toc-number">4.</span> <span class="toc-text">3.反向传导</span></a></li></ol>
+			
 		
 		</div>
 		
-		<p>&emsp;&emsp;本文是深度学习笔记的第二篇，上一篇文章<a href="http://blog.csdn.net/wanz2/article/details/52926736" target="_blank" rel="external">《神经元与神经网络》</a>中讲到了前向传播算法，本文中将介绍如何进行参数的优化，即用反向传导。   </p>
-<a id="more"></a>
-<h2 id="0-本文中所使用的符号和一些约定"><a href="#0-本文中所使用的符号和一些约定" class="headerlink" title="0.本文中所使用的符号和一些约定"></a>0.本文中所使用的符号和一些约定</h2><p>&emsp;&emsp;本文中所使用的样本集：  </p>
-<p>${(x^{(1)},y^{(1)}),(x^{(2)},y^{(2)}),…,(x^{(m)},y^{(m)})}$  </p>
-<p>&emsp;&emsp;其他符号：  </p>
-<table>
-<thead>
-<tr>
-<th>符号</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$(x^{(j)},y^{(j)})$</td>
-<td>第$j$个样本</td>
-</tr>
-<tr>
-<td>$m$</td>
-<td>样本总数</td>
-</tr>
-<tr>
-<td>$(x,y)$</td>
-<td>单个样本</td>
-</tr>
-<tr>
-<td>$x_i$</td>
-<td>第$i$个输入值</td>
-</tr>
-<tr>
-<td>$f()$</td>
-<td>神经元激活函数，本文中为sigmoid函数，即$f(z)=\frac{1}{1+e^{(-z)}}$</td>
-</tr>
-<tr>
-<td>$W_{ij}^{(l)}$</td>
-<td>神经网络中第$l$层第$j$个神经元和第$l+1$层第$i$个神经元连线上的权值</td>
-</tr>
-<tr>
-<td>$b_i^{(l)}$</td>
-<td>第$l+1$层第$i$个神经元输入的偏置项</td>
-</tr>
-<tr>
-<td>$n_l$</td>
-<td>神经网络的总层数</td>
-</tr>
-<tr>
-<td>$L_l$</td>
-<td>第$l$层，则输入层为$L_1$，输出层为$L_{nl}$</td>
-</tr>
-<tr>
-<td>$s_l$</td>
-<td>第$l$层的节点数（不包括偏置单元）</td>
-</tr>
-<tr>
-<td>$a_i^{l}$</td>
-<td>第$l$层第$i$单元的激活值（输出值），当$l=1$时，$a_i^{(1)}=x_i$</td>
-</tr>
-<tr>
-<td>$z_i^{(l)}$</td>
-<td>第$l$层第$i$单元输入加权和（包括偏置单元），有$a_i^{(l)}=f(z_i^{(l)})$</td>
-</tr>
-<tr>
-<td>$h_{W,b}(x)$</td>
-<td>输入值为$x$，神经网络中权值和偏置项分别为$W,b$的情况下的输出值</td>
-</tr>
-</tbody>
-</table>
-<p>&emsp;&emsp;<strong>约定</strong> 本文中将函数$f()$以及偏导数$f’()$进行了针对向量参数的扩展，即：  </p>
-<p>&emsp;&emsp;$f([z_1,z_2,z_3])=[f(z_1),f(z_2),f(z_3)]$  </p>
-<p>&emsp;&emsp;$f’([z_1,z_2,z_3])=[f’(z_1),f’(z_2),f’(z_3)]$  </p>
-<h2 id="1-代价函数"><a href="#1-代价函数" class="headerlink" title="1.代价函数"></a>1.代价函数</h2><p>&emsp;&emsp;要求解神经网络，就要通过最优化神经网络的代价函数(cost function)而得出其中的参数$W$和$b$的值。<br>&emsp;&emsp;对于单个样例$(x,y)$下，代价函数为：  </p>
-<p>&emsp;&emsp;$J(W,b;x,y)=\frac{1}{2}|h_{w,b}(x)-y|^{2}$  </p>
-<p>&emsp;&emsp;对于一个包含$m$个样例的数据集，整体代价函数为：  </p>
-<p>$J(W,b)<br>=[\frac{1}{m}\sum_{i=1}^{m}J(W,b;x^{(i)},y^{(i)})]+\frac{\lambda}{2}\sum_{l=1}^{n_{l}-1}\sum_{i=1}^{s_{l}}\sum_{j=1}^{s_{l+1}}(W_{ji}^{(l)})^{2}$  </p>
-<p>&emsp;&emsp;&emsp;$=[\frac{1}{m}\sum_{i=1}^{m}(\frac{1}{2}|h_{w,b}(x^{(i)})-y^{(i)}|^{2})]+\frac{\lambda}{2}\sum_{l=1}^{n_{l}-1}\sum_{i=1}^{s_{l}}\sum_{j=1}^{s_{l+1}}(W_{ji}^{(l)})^{2}$  </p>
-<p>&emsp;&emsp;其中第二项是一个规则化项（也叫权重衰减项），其目的是减小权重的幅度，防止过拟合，而$\lambda$则用来控制第一项和第二项的相对重要性  </p>
-<h2 id="2-梯度下降"><a href="#2-梯度下降" class="headerlink" title="2.梯度下降"></a>2.梯度下降</h2><p>&emsp;&emsp;为了优化代价函数，要进行以下几步：  </p>
-<ol>
-<li>初始化每一个参数$W_{ij}^{(l)}$和$b_i^{(l)}$为很小的接近零的随机值  </li>
-<li>使用最优化算法，诸如批量梯度下降法，梯度下降公式如下：  </li>
-</ol>
-<p>&emsp;&emsp;$W_{ij}^{(l)}=W_{ij}^{(l)}-\alpha\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b)$  </p>
-<p>&emsp;&emsp;$b_{i}^{(l)}=b_{i}^{(l)}-\alpha\frac{\partial}{\partial b_{i}^{(l)}}J(W,b)$   </p>
-<p>其中$\alpha$是学习速率。    </p>
-<p>&emsp;&emsp;<strong>计算梯度下降的关键步骤是计算偏导数，此时反向传导算法就要登场了。</strong>其实反向传导算法的思想和高数里复合函数求导的思想是一样的。  </p>
-<h2 id="3-反向传导"><a href="#3-反向传导" class="headerlink" title="3.反向传导"></a>3.反向传导</h2><p>&emsp;&emsp;我们将求偏导的项单独拿出来看：  </p>
-<p>&emsp;&emsp;$\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b)=[\frac{1}{m}\sum_{i=1}^{m}\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b;x^{(i)},y^{(i)})]+\lambda W_{ij}^{(l)}$&emsp;&emsp;&emsp;(1)  </p>
-<p>&emsp;&emsp;$\frac{\partial}{\partial b_{i}^{(l)}}J(W,b)$=$\frac{1}{m}\sum_{i=1}^{m}\frac{\partial}{\partial b_{i}^{(l)}}J(W,b;x^{(i)},y^{(i)})$&emsp;&emsp;&emsp;(2)  </p>
-<p>显然，求出$\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b;x,y)$和$\frac{\partial}{\partial b_{i}^{(l)}}J(W,b;x,y)$即可求出$\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b)$和$\frac{\partial}{\partial b_{i}^{(l)}}J(W,b)$。  </p>
-<p>由于：  </p>
-<p>&emsp;&emsp;$\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z_{i}^{(l+1)}}\frac{\partial z_{i}^{l+1}}{\partial W_{ij}^{l}}$&emsp;&emsp;&emsp;(3)   </p>
-<p>&emsp;&emsp;$\frac{\partial}{\partial b_{i}^{(l)}}J(W,b;x,y)=\frac{\partial J(W,b;x,y)}{\partial z_{i}^{(l+1)}}\frac{\partial z_{i}^{(l+1)}}{\partial b_{i}^{(l)}}$&emsp;&emsp;&emsp;(4)  </p>
-<p>因此要先求$\frac{\partial J(W,b;x,y)}{\partial z_{i}^{(l)}}$,在UFLDL中，将之称为“残差”，用$\delta_{i}^{(l)}$表示，该残差表示第$l$层的第$i$个结点对最终输出值的残差产生了多少影响。  </p>
-<p>&emsp;&emsp;计算$\frac{\partial J(W,b;x,y)}{\partial z_{i}^{(l)}}$可得：  </p>
-<p>&emsp;&emsp;$\delta_{i}^{(n_l)}=-(y_{i}-a_{i}^{(n_l)})f’(z_{i}^{(n_l)})$  </p>
-<p>&emsp;&emsp;$\delta_{i}^{(l)}=(\sum_{j=1}^{s_{l+1}}W_{ji}^{(l)}\delta_{j}^{(l+1)})f’(z_{i}^{(l)})$  </p>
-<p>通过以上第一式可以求出第$n_l$层结点的残差，而第二式则表达了第$l$层结点残差与第$l+1$层结点残差的关系，通过将两式回代进式(3)和式(4)，则可以得到：  </p>
-<p>&emsp;&emsp;$\frac{\partial}{\partial W_{ij}^{(l)}}J(W,b;x,y)=\delta _{i}^{(l+1)}a_{j}^{(l)}$&emsp;&emsp;&emsp;(5)  </p>
-<p>&emsp;&emsp;$\frac{\partial}{\partial b_{i}^{(l)}}J(W,b;x,y)=\delta_{i}^{(l+1)}$&emsp;&emsp;&emsp;(6)    </p>
-<p>再将上面两式代入(1)和(2)就能够求出整体的偏导数了。   </p>
+		<p>&emsp;&emsp;递归是经典的算法思想，递归的代码优美而简洁易懂。系统在处理递归时，使用系统调用栈来保存递归调用点的内存地址，以保证在返回时能够回到上一层方法的调用点继续执行。本文通过利用栈数据结构将一个简单的递归方法改写为为使用循环的方法，模拟了系统调用栈在处理递归时的行为。理解系统调用栈的行为，有助于我们对递归有更加深刻的理解。<br>&emsp;&emsp;下面给出递归方法的代码和改写后的代码：  </p>
+<ul>
+<li>递归方法：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> systemStack;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Created by wuwenan on 25/06/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Recursion</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">Foo</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span>(n&lt;=<span class="number">1</span>)&#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            <span class="keyword">return</span> n*Foo(n-<span class="number">1</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        System.out.println(Foo(<span class="number">10</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这是一个简单的递归方法，其中递归的部分为<strong>f(n)=n*f(n-1)</strong>，下面将该方法改写为使用循环的方法。递归的调用分为两个阶段，第一阶段为<code>call</code>阶段，是从上层向下层一层层调用的阶段；第二阶段为<code>return</code>阶段，是从递归边界开始从下层想上层一层层返回的阶段。</p>
+<ul>
+<li>改写后的循环方法：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> systemStack;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.Stack;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * java模拟递归调用的系统栈</div><div class="line"> * Created by wuwenan on 25/06/2017.</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SystemStack</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">Foo</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</div><div class="line">        <span class="comment">//使用栈模拟系统栈的行为</span></div><div class="line">        Stack&lt;Integer&gt; systemStack = <span class="keyword">new</span> Stack&lt;&gt;();</div><div class="line">        <span class="comment">//back为true，表示递归调用的返回过程；back若为false，表示递归调用的调用过程</span></div><div class="line">        <span class="keyword">boolean</span> back = <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">int</span> result=<span class="number">0</span>;</div><div class="line">        <span class="keyword">do</span>&#123;</div><div class="line">            <span class="keyword">if</span>(!back)&#123;</div><div class="line">                <span class="comment">//调用过程</span></div><div class="line">                <span class="keyword">if</span>(n&lt;=<span class="number">1</span>)&#123;</div><div class="line">                    back = <span class="keyword">true</span>;</div><div class="line">                    result = <span class="number">1</span>;</div><div class="line">                &#125;</div><div class="line">                systemStack.push(n);</div><div class="line">                n--;</div><div class="line">            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                <span class="comment">//返回过程</span></div><div class="line">                result*=systemStack.pop();</div><div class="line">            &#125;</div><div class="line">        &#125;<span class="keyword">while</span>(!systemStack.isEmpty());</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        System.out.println(Foo(<span class="number">10</span>));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;上面的代码中使用了栈的数据结构模拟了系统调用栈的过程。这段代码有以下几个注意点：</p>
+<ul>
+<li>使用boolean类型变量<code>back</code>标识递归的调用和返回过程，若back值为true，表示当前的过程为return过程；若back值为false，表示当前过程为call过程。</li>
+<li>在call过程中将每一层使用到的n值放入栈中</li>
+<li>在return过程中将栈中的值一个个取出以和之前一次执行的结果相乘。</li>
+<li><p>递归的边界是<strong>n&lt;=1</strong>。</p>
+<p>&emsp;&emsp;两段代码输出的结果均为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">3628800</span></div></pre></td></tr></table></figure></li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -201,13 +120,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  <a class="article-category-link" href="/categories/算法/">算法</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/机器学习/">机器学习</a>
+  <span></span> <a href="/tags/Java/">Java</a><a href="/tags/栈/">栈</a>
   </div>
 
 </div>
@@ -216,7 +135,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/04/29/深度学习笔记：稀疏自编码器（2）——反向传导/" data-title="深度学习笔记：稀疏自编码器（2）——反向传导 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/06/25/使用栈数据结构模拟递归时系统调用栈的行为/" data-title="使用栈数据结构模拟递归时系统调用栈的行为 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -229,19 +148,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/04/29/深度学习笔记：稀疏自编码器（3）——稀疏自编码算法/" title="深度学习笔记：稀疏自编码器（3）——稀疏自编码算法">
-  <strong>上一篇：</strong><br/>
-  <span>
-  深度学习笔记：稀疏自编码器（3）——稀疏自编码算法</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/"  title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+<a href="/2017/06/16/Java——Java虚拟机指令集/"  title="Java——Java虚拟机指令集">
  <strong>下一篇：</strong><br/> 
- <span>深度学习笔记：稀疏自编码器（1）——神经元与神经网络
+ <span>Java——Java虚拟机指令集
 </span>
 </a>
 </div>
@@ -256,7 +167,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-本文中所使用的符号和一些约定"><span class="toc-number">1.</span> <span class="toc-text">0.本文中所使用的符号和一些约定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-代价函数"><span class="toc-number">2.</span> <span class="toc-text">1.代价函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-梯度下降"><span class="toc-number">3.</span> <span class="toc-text">2.梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-反向传导"><span class="toc-number">4.</span> <span class="toc-text">3.反向传导</span></a></li></ol>
+ 
  
   </div>
 
