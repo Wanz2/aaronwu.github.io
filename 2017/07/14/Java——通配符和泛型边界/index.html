@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/07/14/Java——通配符和泛型边界/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
-<meta property="og:updated_time" content="2017-07-14T13:24:03.000Z">
+<meta property="og:updated_time" content="2017-07-14T13:26:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——通配符和泛型边界">
 <meta name="twitter:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
@@ -95,66 +95,16 @@
 		</div>
 		
 		<p>&emsp;&emsp;本文源起于笔者在阅读《Thinking in Java》泛型章节的时候，遇到的关于泛型边界的时候思考的一个问题，笔者就该问题分别询问了三位硕士小伙伴，大家都没有回答正确，因此笔者觉得有必要对此进行一个辨析。问题本身并不复杂，且听我细细道来。<br>&emsp;&emsp;首先，假设有四个类存在如下的继承关系：  </p>
-<pre><code class="java"><span class="class"><span class="keyword">class</span> <span class="title">Fruit</span> </span>{
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>{
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">Jonathan</span> <span class="keyword">extends</span> <span class="title">Apple</span> </span>{
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">Orange</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>{
-}
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fruit</span> </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Jonathan</span> <span class="keyword">extends</span> <span class="title">Apple</span> </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Orange</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;<code>Fruit</code>类是超类，<code>Apple</code>和<code>Orange</code>继承了<code>Fruit</code>，而<code>Jonathan</code>继承了<code>Apple</code>。  </p>
 <h1 id="泛型不存在协变"><a href="#泛型不存在协变" class="headerlink" title="泛型不存在协变"></a>泛型不存在协变</h1><p>&emsp;&emsp;首先我们来看这样一段代码：  </p>
-<pre><code class="java"><span class="keyword">package</span> generics;<span class="comment">//: generics/NonCovariantGenerics.java</span>
-<span class="comment">// {CompileTimeError} (Won't compile)</span>
-
-<span class="keyword">import</span> java.util.ArrayList;
-<span class="keyword">import</span> java.util.List;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonCovariantGenerics</span> </span>{
-    <span class="comment">// Compile Error: incompatible types:</span>
-    List&lt;Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();
-} <span class="comment">///:~</span>
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> generics;<span class="comment">//: generics/NonCovariantGenerics.java</span></div><div class="line"><span class="comment">// &#123;CompileTimeError&#125; (Won't compile)</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonCovariantGenerics</span> </span>&#123;</div><div class="line">    <span class="comment">// Compile Error: incompatible types:</span></div><div class="line">    List&lt;Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</div><div class="line">&#125; <span class="comment">///:~</span></div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;从注释上可以看到，这段代码是无法通过编译的。你可能以为在第9行里，用<code>Apple</code>类型的ArrayList来初始化<code>Fruit</code>类型的List是向上转型，然而这并不是向上转型，<code>Apple</code>类型的List不是<code>Fruit</code>类型的List，因为<code>Apple</code>类型的List可以持有<code>Apple</code>对象及其子类对象，而<code>Fruit</code>类型的List将持有<code>Fruit</code>类型对象及其子类对象，包括<code>Apple</code>类型对象，它可持有的范围更大。<br>&emsp;&emsp;因此<strong>不能用<code>Apple</code>类型的List初始化<code>Fruit</code>类型的List</strong>，这说明<strong>泛型不存在协变类型</strong>。  </p>
 <h1 id="通配符表示的泛型的下界"><a href="#通配符表示的泛型的下界" class="headerlink" title="通配符表示的泛型的下界"></a>通配符表示的泛型的下界</h1><p>&emsp;&emsp;但你还是想建立某种向上转型的关系，于是你想到了通配符：<code>？</code>，你可能会想到像下面这样来使用它：  </p>
-<pre><code class="java"><span class="keyword">package</span> generics;<span class="comment">//: generics/GenericsAndCovariance.java</span>
-
-<span class="keyword">import</span> java.util.ArrayList;
-<span class="keyword">import</span> java.util.List;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsAndCovariance</span> </span>{
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        <span class="comment">// Wildcards allow covariance:</span>
-        List&lt;? extends Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();
-        <span class="comment">// Compile Error: can't add any type of object:</span>
-        <span class="comment">// flist.add(new Apple());</span>
-        <span class="comment">// flist.add(new Fruit());</span>
-        <span class="comment">// flist.add(new Object());</span>
-        flist.add(<span class="keyword">null</span>); <span class="comment">// Legal but uninteresting</span>
-        <span class="comment">// We know that it returns at least Fruit:</span>
-        Fruit f = flist.get(<span class="number">0</span>);
-    }
-} <span class="comment">///:~</span>
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> generics;<span class="comment">//: generics/GenericsAndCovariance.java</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsAndCovariance</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">// Wildcards allow covariance:</span></div><div class="line">        List&lt;? extends Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</div><div class="line">        <span class="comment">// Compile Error: can't add any type of object:</span></div><div class="line">        <span class="comment">// flist.add(new Apple());</span></div><div class="line">        <span class="comment">// flist.add(new Fruit());</span></div><div class="line">        <span class="comment">// flist.add(new Object());</span></div><div class="line">        flist.add(<span class="keyword">null</span>); <span class="comment">// Legal but uninteresting</span></div><div class="line">        <span class="comment">// We know that it returns at least Fruit:</span></div><div class="line">        Fruit f = flist.get(<span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">&#125; <span class="comment">///:~</span></div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;很遗憾，从注释中你可以看到，像上面那样使用<code>extends</code>关键字，虽然可以通过编译，但在为List中添加对象的时候，是无法成功的，不论你添加的是<code>Fruit</code>本身，还是它的子类，甚至是<code>Object</code>，都无法添加成功。你唯一可以做的是从List中读取对象。<br>&emsp;&emsp;那么为什么不可以往该容器中装对象呢？因为<code>List&lt;? extends Fruit&gt;</code>表示该List持有的是<strong>“Fruit类的某个不确定的子类型”</strong>，但编译器并不知道该List中持有的究竟是<code>Fruit</code>的哪个子类型，因此无法将诸如<code>Apple</code>的<code>Fruit</code>的某个具体子类型装入该List，同时<code>Fruit</code>本身也不能被装入，当然，<code>Fruit</code>的父类型<code>Object</code>就更加不可以了，装入这些类时的转型都不是类型安全的。因此，这个通配符表示的泛型下界可以说是无下限的。<br>&emsp;&emsp;那么为什么可以调用<code>get()</code>方法来读取该List呢？我们已经知道该List中持有的一定是<code>Fruit</code>的某个子类型，因此它的上界是确定的，就是<code>Fruit</code>，因此当取出的时候，将它赋值给一个静态类型为<code>Fruit</code>的对象，就属于向上转型，因此是没有问题的。  </p>
 <h1 id="通配符表示的泛型上界"><a href="#通配符表示的泛型上界" class="headerlink" title="通配符表示的泛型上界"></a>通配符表示的泛型上界</h1><p>&emsp;&emsp;通配符还有一种用法，就是表示泛型的上界，如下面所示：    </p>
-<pre><code class="java"><span class="keyword">package</span> generics;<span class="comment">//: generics/SuperTypeWildcards.java</span>
-
-<span class="keyword">import</span> java.util.List;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTypeWildcards</span> </span>{
-    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writeTo</span><span class="params">(List&lt;? <span class="keyword">super</span> Apple&gt; apples)</span> </span>{
-        apples.add(<span class="keyword">new</span> Apple());
-        apples.add(<span class="keyword">new</span> Jonathan());
-        <span class="comment">// apples.add(new Fruit()); // Error</span>
-    }
-} <span class="comment">///:~</span>
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> generics;<span class="comment">//: generics/SuperTypeWildcards.java</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTypeWildcards</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writeTo</span><span class="params">(List&lt;? <span class="keyword">super</span> Apple&gt; apples)</span> </span>&#123;</div><div class="line">        apples.add(<span class="keyword">new</span> Apple());</div><div class="line">        apples.add(<span class="keyword">new</span> Jonathan());</div><div class="line">        <span class="comment">// apples.add(new Fruit()); // Error</span></div><div class="line">    &#125;</div><div class="line">&#125; <span class="comment">///:~</span></div></pre></td></tr></table></figure>
 <p>&emsp;&emsp;像上面这样使用<code>List&lt;? super Apple&gt;</code>，就可以向List中添加<code>Apple</code>及其子类<code>Jonathan</code>了，但向其中添加<code>Apple</code>的父类<code>Fruit</code>则是不安全的。原因是<code>List&lt;? super Apple&gt;</code>表示该List持有的是<strong>Apple的某个不确定的超类型</strong>，既然该List中持有的一定是<code>Apple</code>的某个超类型，那么使用<code>add()</code>方法向其中添加<code>Apple</code>及其子类型，一定是类型安全的；但由于编译器只知道这个List持有的是<code>Apple</code>的某个超类型，但不能确定究竟是哪个超类型，因此向其中添加<code>Fruit</code>类型是不安全的。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>&emsp;&emsp;总结一下就是：  </p>
 <ul>
@@ -282,11 +232,11 @@
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 			
