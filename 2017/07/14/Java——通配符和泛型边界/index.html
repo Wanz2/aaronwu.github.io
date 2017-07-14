@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/07/14/Java——通配符和泛型边界/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
-<meta property="og:updated_time" content="2017-07-14T12:25:59.000Z">
+<meta property="og:updated_time" content="2017-07-14T12:35:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——通配符和泛型边界">
 <meta name="twitter:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
@@ -94,7 +94,9 @@
 		
 		</div>
 		
-		  
+		<p>&emsp;&emsp;本文源起于笔者在阅读《Thinking in Java》泛型章节的时候，遇到的关于泛型边界的时候思考的一个问题，笔者就该问题分别询问了三名硕士的同学，大家都没有回答正确，因此笔者觉得有必要对此进行一个辨析。问题本身并不复杂，且听我细细道来。<br>&emsp;&emsp;首先看这样一段代码：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> generics;<span class="comment">//: generics/NonCovariantGenerics.java</span></div><div class="line"><span class="comment">// &#123;CompileTimeError&#125; (Won't compile)</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.ArrayList;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonCovariantGenerics</span> </span>&#123;</div><div class="line">    <span class="comment">// Compile Error: incompatible types:</span></div><div class="line">    List&lt;Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();</div><div class="line">&#125; <span class="comment">///:~</span></div></pre></td></tr></table></figure>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -223,11 +225,11 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
 			
 		
 			
