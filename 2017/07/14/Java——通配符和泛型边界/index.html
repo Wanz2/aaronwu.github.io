@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/07/14/Java——通配符和泛型边界/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
-<meta property="og:updated_time" content="2017-07-14T13:04:31.000Z">
+<meta property="og:updated_time" content="2017-07-14T13:23:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——通配符和泛型边界">
 <meta name="twitter:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
@@ -90,7 +90,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型的下界"><span class="toc-number">2.</span> <span class="toc-text">通配符表示的泛型的下界</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型的下界"><span class="toc-number">2.</span> <span class="toc-text">通配符表示的泛型的下界</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型上界"><span class="toc-number">3.</span> <span class="toc-text">通配符表示的泛型上界</span></a></li></ol>
 		
 		</div>
 		
@@ -141,7 +141,26 @@
     }
 } <span class="comment">///:~</span>
 </code></pre>
-<p>&emsp;&emsp;很遗憾，从注释中你可以看到，像上面那样使用<code>extends</code>关键字，虽然可以通过编译，但在为List中添加对象的时候，是无法成功的，不论你添加的是<code>Fruit</code>本身，还是它的子类，甚至是<code>Object</code>，都无法添加成功。你唯一可以做的是从List中读取对象。<br>&emsp;&emsp;</p>
+<p>&emsp;&emsp;很遗憾，从注释中你可以看到，像上面那样使用<code>extends</code>关键字，虽然可以通过编译，但在为List中添加对象的时候，是无法成功的，不论你添加的是<code>Fruit</code>本身，还是它的子类，甚至是<code>Object</code>，都无法添加成功。你唯一可以做的是从List中读取对象。<br>&emsp;&emsp;那么为什么不可以往该容器中装对象呢？因为<code>List&lt;? extends Fruit&gt;</code>表示该List持有的是<strong>“Fruit类的某个不确定的子类型”</strong>，但编译器并不知道该List中持有的究竟是<code>Fruit</code>的哪个子类型，因此无法将诸如<code>Apple</code>的<code>Fruit</code>的某个具体子类型装入该List，同时<code>Fruit</code>本身也不能被装入，当然，<code>Fruit</code>的父类型<code>Object</code>就更加不可以了，装入这些类时的转型都不是类型安全的。因此，这个通配符表示的泛型下界可以说是无下限的。<br>&emsp;&emsp;那么为什么可以调用<code>get()</code>方法来读取该List呢？我们已经知道该List中持有的一定是<code>Fruit</code>的某个子类型，因此它的上界是确定的，就是<code>Fruit</code>，因此当取出的时候，将它赋值给一个静态类型为<code>Fruit</code>的对象，就属于向上转型，因此是没有问题的。  </p>
+<h1 id="通配符表示的泛型上界"><a href="#通配符表示的泛型上界" class="headerlink" title="通配符表示的泛型上界"></a>通配符表示的泛型上界</h1><p>&emsp;&emsp;通配符还有一种用法，就是表示泛型的上界，如下面所示：    </p>
+<pre><code class="java"><span class="keyword">package</span> generics;<span class="comment">//: generics/SuperTypeWildcards.java</span>
+
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SuperTypeWildcards</span> </span>{
+    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writeTo</span><span class="params">(List&lt;? <span class="keyword">super</span> Apple&gt; apples)</span> </span>{
+        apples.add(<span class="keyword">new</span> Apple());
+        apples.add(<span class="keyword">new</span> Jonathan());
+        <span class="comment">// apples.add(new Fruit()); // Error</span>
+    }
+} <span class="comment">///:~</span>
+</code></pre>
+<p>&emsp;&emsp;像上面这样使用<code>List&lt;? super Apple&gt;</code>，就可以向List中添加<code>Apple</code>及其子类<code>Jonathan</code>了，但向其中添加<code>Apple</code>的父类<code>Fruit</code>则是不安全的。原因是<code>List&lt;? super Apple&gt;</code>表示该List持有的是<strong>Apple的某个不确定的超类型</strong>，既然该List中持有的一定是<code>Apple</code>的某个超类型，那么使用<code>add()</code>方法向其中添加<code>Apple</code>及其子类型，一定是类型安全的；但由于编译器只知道这个List持有的是<code>Apple</code>的某个超类型，但不能确定究竟是哪个超类型，因此向其中添加<code>Fruit</code>类型是不安全的。</p>
+<p>&emsp;&emsp;总结一下就是：  </p>
+<ul>
+<li><strong>&lt;? extends T&gt;</strong> 表示T的某个不确定的子类，因此不能存放具体的T类对象及其子类，更不能存放T的父类，因此<code>Object</code>类不能存放。</li>
+<li><strong>&lt;? super T&gt;</strong> 表示T的某个不确定的超类，因此可以存放T类对象及T的子类对象。</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -196,7 +215,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型的下界"><span class="toc-number">2.</span> <span class="toc-text">通配符表示的泛型的下界</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型的下界"><span class="toc-number">2.</span> <span class="toc-text">通配符表示的泛型的下界</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型上界"><span class="toc-number">3.</span> <span class="toc-text">通配符表示的泛型上界</span></a></li></ol>
  
   </div>
 
@@ -263,11 +282,11 @@
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
@@ -275,11 +294,11 @@
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 		</ul>
