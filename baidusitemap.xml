@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://wanz2.github.io/2017/07/14/Java%E2%80%94%E2%80%94%E9%80%9A%E9%85%8D%E7%AC%A6%E5%92%8C%E6%B3%9B%E5%9E%8B%E8%BE%B9%E7%95%8C/</loc>
-    <lastmod>2017-07-14T12:35:21.000Z</lastmod>
+    <lastmod>2017-07-14T12:38:56.000Z</lastmod>
     <data>
         <display>
         <title>Java——通配符和泛型边界</title>
@@ -241,9 +241,9 @@
         <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</title>
         <pubTime>2017-03-31T19:29:51.000Z</pubTime>
         
-        <tag>经验心得</tag>
-         
         <tag>Linux</tag>
+         
+        <tag>经验心得</tag>
          
          
            
