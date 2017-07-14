@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/07/14/Java——通配符和泛型边界/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
-<meta property="og:updated_time" content="2017-07-14T12:58:46.000Z">
+<meta property="og:updated_time" content="2017-07-14T13:02:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——通配符和泛型边界">
 <meta name="twitter:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
@@ -141,7 +141,7 @@
     }
 } <span class="comment">///:~</span>
 </code></pre>
-<p>&emsp;&emsp;请看第很遗憾，从注释中你可以看到，使`</p>
+<p>&emsp;&emsp;很遗憾，从注释中你可以看到，像上面那样使用<code>extends</code>关键字，虽然可以通过编译，但在为List中添加对象的时候，是无法成功的，不论你添加的是<code>Fruit</code>本身，还是它的子类，甚至是<code>Object</code>，都无法添加成功。你唯一可以做的是从List中读取对象。<br>&emsp;&emsp;</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -263,19 +263,19 @@
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
 			
 		
 			
