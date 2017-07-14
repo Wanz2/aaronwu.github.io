@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/07/14/Java——通配符和泛型边界/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
-<meta property="og:updated_time" content="2017-07-14T12:47:42.000Z">
+<meta property="og:updated_time" content="2017-07-14T12:49:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——通配符和泛型边界">
 <meta name="twitter:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
@@ -90,12 +90,36 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li></ol>
 		
 		</div>
 		
-		<p>&emsp;&emsp;本文源起于笔者在阅读《Thinking in Java》泛型章节的时候，遇到的关于泛型边界的时候思考的一个问题，笔者就该问题分别询问了三名硕士的同学，大家都没有回答正确，因此笔者觉得有必要对此进行一个辨析。问题本身并不复杂，且听我细细道来。<br>&emsp;&emsp;首先，假设有四个类存在如下的继承关系：  </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">class Fruit &#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Apple extends Fruit &#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Jonathan extends Apple &#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Orange extends Fruit &#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">```  </div><div class="line"></div><div class="line">&amp;emsp;&amp;emsp;`Fruit`类是超类，`Apple`和`Orange`继承了`Fruit`，而`Jonathan`继承了`Apple`。  </div><div class="line"></div><div class="line"># 泛型不存在协变  </div><div class="line"></div><div class="line">&amp;emsp;&amp;emsp;首先我们来看这样一段代码：  </div><div class="line"></div><div class="line">```java</div><div class="line">package generics;//: generics/NonCovariantGenerics.java</div><div class="line">// &#123;CompileTimeError&#125; (Won't compile)</div><div class="line"></div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">public class NonCovariantGenerics &#123;</div><div class="line">    // Compile Error: incompatible types:</div><div class="line">    List&lt;Fruit&gt; flist = new ArrayList&lt;Apple&gt;();</div><div class="line">&#125; ///:~</div></pre></td></tr></table></figure>
+		<p>&emsp;&emsp;本文源起于笔者在阅读《Thinking in Java》泛型章节的时候，遇到的关于泛型边界的时候思考的一个问题，笔者就该问题分别询问了三位硕士小伙伴，大家都没有回答正确，因此笔者觉得有必要对此进行一个辨析。问题本身并不复杂，且听我细细道来。<br>&emsp;&emsp;首先，假设有四个类存在如下的继承关系：  </p>
+<pre><code class="java"><span class="class"><span class="keyword">class</span> <span class="title">Fruit</span> </span>{
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">Apple</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>{
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">Jonathan</span> <span class="keyword">extends</span> <span class="title">Apple</span> </span>{
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">Orange</span> <span class="keyword">extends</span> <span class="title">Fruit</span> </span>{
+}
+</code></pre>
+<p>&emsp;&emsp;<code>Fruit</code>类是超类，<code>Apple</code>和<code>Orange</code>继承了<code>Fruit</code>，而<code>Jonathan</code>继承了<code>Apple</code>。  </p>
+<h1 id="泛型不存在协变"><a href="#泛型不存在协变" class="headerlink" title="泛型不存在协变"></a>泛型不存在协变</h1><p>&emsp;&emsp;首先我们来看这样一段代码：  </p>
+<pre><code class="java"><span class="keyword">package</span> generics;<span class="comment">//: generics/NonCovariantGenerics.java</span>
+<span class="comment">// {CompileTimeError} (Won't compile)</span>
+
+<span class="keyword">import</span> java.util.ArrayList;
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonCovariantGenerics</span> </span>{
+    <span class="comment">// Compile Error: incompatible types:</span>
+    List&lt;Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();
+} <span class="comment">///:~</span>
+</code></pre>
 <p>&emsp;&emsp;从注释上可以看到，这段代码是无法通过编译的。你可能以为在第9行里，用<code>Apple</code>类型的ArrayList来初始化<code>Fruit</code>类型的List是向上转型，然而这并不是向上转型，<code>Apple</code>类型的List不是<code>Fruit</code>类型的List，因为<code>Apple</code>类型的List可以持有<code>Apple</code>对象及其子类对象，而<code>Fruit</code>类型的List将持有<code>Fruit</code>类型对象及其子类对象，包括<code>Apple</code>类型对象，它可持有的范围更大。<br>&emsp;&emsp;这说明<strong>泛型不存在协变类型</strong>。</p>
   
 	</div>
@@ -151,7 +175,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li></ol>
  
   </div>
 
@@ -218,11 +242,11 @@
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
@@ -230,11 +254,11 @@
 			
 		
 			
-				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 		</ul>
