@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/07/14/Java——通配符和泛型边界/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
-<meta property="og:updated_time" content="2017-07-14T12:49:03.000Z">
+<meta property="og:updated_time" content="2017-07-14T12:58:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java——通配符和泛型边界">
 <meta name="twitter:description" content="Java泛型中有一个比较容易令人困惑的知识点：泛型的边界，而讨论泛型的边界则要涉及到通配符“？”的使用，本文将对此进行讲解。">
@@ -90,7 +90,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型的下界"><span class="toc-number">2.</span> <span class="toc-text">通配符表示的泛型的下界</span></a></li></ol>
 		
 		</div>
 		
@@ -120,7 +120,28 @@
     List&lt;Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();
 } <span class="comment">///:~</span>
 </code></pre>
-<p>&emsp;&emsp;从注释上可以看到，这段代码是无法通过编译的。你可能以为在第9行里，用<code>Apple</code>类型的ArrayList来初始化<code>Fruit</code>类型的List是向上转型，然而这并不是向上转型，<code>Apple</code>类型的List不是<code>Fruit</code>类型的List，因为<code>Apple</code>类型的List可以持有<code>Apple</code>对象及其子类对象，而<code>Fruit</code>类型的List将持有<code>Fruit</code>类型对象及其子类对象，包括<code>Apple</code>类型对象，它可持有的范围更大。<br>&emsp;&emsp;这说明<strong>泛型不存在协变类型</strong>。</p>
+<p>&emsp;&emsp;从注释上可以看到，这段代码是无法通过编译的。你可能以为在第9行里，用<code>Apple</code>类型的ArrayList来初始化<code>Fruit</code>类型的List是向上转型，然而这并不是向上转型，<code>Apple</code>类型的List不是<code>Fruit</code>类型的List，因为<code>Apple</code>类型的List可以持有<code>Apple</code>对象及其子类对象，而<code>Fruit</code>类型的List将持有<code>Fruit</code>类型对象及其子类对象，包括<code>Apple</code>类型对象，它可持有的范围更大。<br>&emsp;&emsp;因此<strong>不能用<code>Apple</code>类型的List初始化<code>Fruit</code>类型的List</strong>，这说明<strong>泛型不存在协变类型</strong>。  </p>
+<h1 id="通配符表示的泛型的下界"><a href="#通配符表示的泛型的下界" class="headerlink" title="通配符表示的泛型的下界"></a>通配符表示的泛型的下界</h1><p>&emsp;&emsp;但你还是想建立某种向上转型的关系，于是你想到了通配符：<code>？</code>，你可能会想到像下面这样来使用它：  </p>
+<pre><code class="java"><span class="keyword">package</span> generics;<span class="comment">//: generics/GenericsAndCovariance.java</span>
+
+<span class="keyword">import</span> java.util.ArrayList;
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericsAndCovariance</span> </span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        <span class="comment">// Wildcards allow covariance:</span>
+        List&lt;? extends Fruit&gt; flist = <span class="keyword">new</span> ArrayList&lt;Apple&gt;();
+        <span class="comment">// Compile Error: can't add any type of object:</span>
+        <span class="comment">// flist.add(new Apple());</span>
+        <span class="comment">// flist.add(new Fruit());</span>
+        <span class="comment">// flist.add(new Object());</span>
+        flist.add(<span class="keyword">null</span>); <span class="comment">// Legal but uninteresting</span>
+        <span class="comment">// We know that it returns at least Fruit:</span>
+        Fruit f = flist.get(<span class="number">0</span>);
+    }
+} <span class="comment">///:~</span>
+</code></pre>
+<p>&emsp;&emsp;请看第很遗憾，从注释中你可以看到，使`</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -175,7 +196,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#泛型不存在协变"><span class="toc-number">1.</span> <span class="toc-text">泛型不存在协变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#通配符表示的泛型的下界"><span class="toc-number">2.</span> <span class="toc-text">通配符表示的泛型的下界</span></a></li></ol>
  
   </div>
 
@@ -242,11 +263,11 @@
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 			
