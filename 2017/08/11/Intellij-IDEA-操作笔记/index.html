@@ -4,27 +4,23 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置 | Aaron Wu</title>
+    <title>Intellij IDEA 操作笔记 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="本文为Windows(64位)+VS2013下的Caffe(CPU Only)安装配置过程记，并非安装教程。">
+    <meta name="description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">
-<meta property="og:url" content="https://wanz2.github.io/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/index.html">
+<meta property="og:title" content="Intellij IDEA 操作笔记">
+<meta property="og:url" content="https://wanz2.github.io/2017/08/11/Intellij-IDEA-操作笔记/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="本文为Windows(64位)+VS2013下的Caffe(CPU Only)安装配置过程记，并非安装教程。">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/caffe1.png?imageView/2/w/500">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/caffe2.png?imageView/2/w/500">
-<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/caffe3.png?imageView/2/w/500">
-<meta property="og:updated_time" content="2017-05-08T03:32:43.000Z">
+<meta property="og:description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
+<meta property="og:updated_time" content="2017-08-11T15:04:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">
-<meta name="twitter:description" content="本文为Windows(64位)+VS2013下的Caffe(CPU Only)安装配置过程记，并非安装教程。">
-<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/caffe1.png?imageView/2/w/500">
+<meta name="twitter:title" content="Intellij IDEA 操作笔记">
+<meta name="twitter:description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -78,14 +74,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/" title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置" itemprop="url">Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置</a>
+      <a href="/2017/08/11/Intellij-IDEA-操作笔记/" title="Intellij IDEA 操作笔记" itemprop="url">Intellij IDEA 操作笔记</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-31T19:27:21.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
+    <time datetime="2017-08-11T14:54:49.000Z" itemprop="datePublished"> 发表于 2017-08-11</time>
     
   </p>
 </header>
@@ -94,41 +90,40 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、环境准备"><span class="toc-number">1.</span> <span class="toc-text">一、环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#windows-10-64位-专业版（非必须）"><span class="toc-number">1.0.1.</span> <span class="toc-text">windows 10 64位 专业版（非必须）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#visual-studio-2013（墙裂推荐此版本）"><span class="toc-number">1.0.2.</span> <span class="toc-text">visual studio 2013（墙裂推荐此版本）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、配置步骤"><span class="toc-number">2.</span> <span class="toc-text">二、配置步骤</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h1><h3 id="windows-10-64位-专业版（非必须）"><a href="#windows-10-64位-专业版（非必须）" class="headerlink" title="windows 10 64位 专业版（非必须）"></a>windows 10 64位 专业版（非必须）</h3><h3 id="visual-studio-2013（墙裂推荐此版本）"><a href="#visual-studio-2013（墙裂推荐此版本）" class="headerlink" title="visual studio 2013（墙裂推荐此版本）"></a>visual studio 2013（墙裂推荐此版本）</h3><ol>
-<li>笔者使用的操作系统为win10 64位，在其他版本的64位windows系统上应该同样可行。</li>
-<li>visual studio 2013（以下简称vs2013）中需要安装NuGet，安装方法如下：<br>a. 打开vs2013，点击“工具”-“扩展和更新”<br>b. 在弹出的对话框中点击“联机”，在右上角搜索框中搜索NuGet，在搜索结果中“NuGet Package Manager”项上面的“下载”，开始下载NuGet，下载完后进行安装<br>c. 安装完后重启vs2013，重启后点击“工具”-“扩展和更新”，选择“已安装”，可以看到NuGet Package Manager已经安装好了。<a id="more"></a>  
+		<p>&emsp;&emsp;Intellij IDEA被认为是目前最优秀的java开发IDE，但其使用习惯与Eclipse存在较大的差异，笔者将自己学习和使用过程中所用到的一些操作记录下来，以便查阅，本文中记录的均为不使用maven等构建工具的操作情况。  </p>
+<ul>
+<li><p><strong>IntelliJ导入jar包：</strong></p>
+<ul>
+<li>File-&gt;Project Structure-&gt;Modules-&gt;Dependencies-&gt;add-&gt;JARs or directories  </li>
+</ul>
 </li>
-</ol>
-<h1 id="二、配置步骤"><a href="#二、配置步骤" class="headerlink" title="二、配置步骤"></a>二、配置步骤</h1><ol>
-<li><p>下载代码<br>从<a href="https://github.com/Microsoft/caffe" target="_blank" rel="external">https://github.com/Microsoft/caffe</a><br>得到文件“caffe-master.zip”<br>或从<a href="https://github.com/BVLC/caffe/tree/windows" target="_blank" rel="external">https://github.com/BVLC/caffe/tree/windows</a><br>得到文件“caffe-windows.zip”<br>二者的配置步骤相同，均能编译成功，本文以源码“caffe-master.zip”为例</p>
+<li><p><strong>IntelliJ连接 tomcat 服务器：</strong></p>
+<ul>
+<li>Edit Configuration-&gt;Tomcat Server-&gt;add-&gt;Deployment-&gt;add-&gt;Artifact-&gt;选择 Module-&gt; 在右边窗口填写 Application context</li>
+</ul>
 </li>
-<li><p>解压后进入如下路径：\caffe-master\windows 之后的操作均在该目录下进行，因此之后省略\caffe-master的路径</p>
+<li><p><strong>IntelliJ连接 MySQL 数据库：</strong></p>
+<ul>
+<li>导入 MySQL 数据库 jdbc 的 jar 包：File-&gt;Project Structure-&gt;Modules-&gt;Dependencies-&gt;add-&gt;JARs or directories选择jdbc 驱动 jar 包</li>
+<li>Web 项目连接数据库：导入 jdbc的 jar 包-&gt;File-&gt;Project Structure-&gt;Artifacts-&gt;将右边的 jar 包拖入左边的WEB-INF中的 lib 文件夹</li>
+</ul>
 </li>
-<li><p>在\windows目录下复制文件 CommonSettings.props.example(应该会以副本形式出现CommonSettings.props - 副本.example),并将该副本改名为CommonSettings.props。(请确认显示文件扩展名这个选项已生效)</p>
+<li><p><strong>IntelliJ查看 Web 项目编译输出地址：</strong></p>
+<ul>
+<li>File-&gt;Project Structure-&gt;Project-&gt;查看Project compiler output路径</li>
+</ul>
 </li>
-<li><p>用vs（或其他编辑器）打开CommonSettings.props，将第7行<code>CpuOnlyBuild</code>标签中的值改为true，将第8行<code>UseCuDNN</code>标签中的值改为false，更改完毕后保存并退出。<br>（这两步是将caffe的GPU版本关闭，仅使用CPU版本。由于打开GPU会出现其他错误，作为初学者，我们先从CPU版本开始，等熟悉caffe之后再深入研究GPU版本）</p>
+<li><p><strong>IntelliJ导入javax.servlet包：</strong></p>
+<ul>
+<li>File-&gt;Project Structure-&gt;Modules-&gt;add-&gt;Libraries-&gt; 选择 Tomcat文件夹下的lib文件夹-&gt;选择servlet-api.jar</li>
+<li>Intellij中的web项目，jsp页面里面部分内置对象的方法无法解析，如request.getParameter()，需要导入tomcat下的servlet-api.jar            </li>
+</ul>
 </li>
-<li><p>用vs打开\windows下的Caffe.sln，可以看到该解决方案中共有16个项目，请注意核对。（若下载的源码为BVLC的“caffe-windows.zip”，则该解决方案中只有15个项目，所缺少的项目为“caffe.managed”，但经过笔者测试，在编译时并没有影响）右击“解决方案‘Caffe’”，选择“属性”，将“配置属性”-“配置”修改成Release和x64，如下图所示<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe1.png?imageView/2/w/500" alt="这里写图片描述"><br>（这一步是使用Release来进行编译，若用Debug，则之后每次都要打开vs，会不方便）<br>注意：在上图顶部工具栏中的“解决方案配置”和“解决方案平台”框，若你的vs2013中将这两个框在工具栏中显示，则要在工具栏中将配置改成Release和x64，否则直接右击“解决方案Caffe”来更改配置是无效的。</p>
-</li>
-<li><p>右击解决方案中的libcaffe项目，选择“属性”，在打开的属性页中选择“C/C++”-“常规”，将“将警告视为错误”设为“否”，如下图所示：<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe2.png?imageView/2/w/500" alt="这里写图片描述"></p>
-</li>
-<li><p>右击“libcaffe”项目，选择“生成”，之后是一段时间的等待。<br>注意：点击“生成”后会出现如下图的窗口，此时vs正在使用NuGet对caffe的一些依赖文件进行自动还原<br><img src="http://odnk9as2f.bkt.clouddn.com/caffe3.png?imageView/2/w/500" alt="这里写图片描述"><br>还原成功后，会在caffe-master的同级目录生成文件夹NugetPackages。</p>
-</li>
-<li><p>右击“解决方案Caffe”，选择“生成解决方案”，之后又是一段时间的等待</p>
-</li>
-<li><p>等待过后生成成功，到此windows下的caffe配置完成，此时在\caffe-master目录下会生成Build文件夹，即为我们编译成功的文件夹，而\caffe-master\Build\x64\Release目录下则会有我们编译出的caffe.exe执行文件，到此caffe配置完成。</p>
-</li>
-</ol>
-<p>主要参考</p>
-<ol>
-<li><a href="http://www.cnblogs.com/yixuan-xu/p/5858595.html" target="_blank" rel="external">http://www.cnblogs.com/yixuan-xu/p/5858595.html</a></li>
-<li><a href="http://m.blog.csdn.net/article/details?id=51355143" target="_blank" rel="external">http://m.blog.csdn.net/article/details?id=51355143</a></li>
-<li><a href="http://blog.csdn.net/qq_14845119/article/details/52415090" target="_blank" rel="external">http://blog.csdn.net/qq_14845119/article/details/52415090</a></li>
-</ol>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -136,13 +131,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  <a class="article-category-link" href="/categories/经验心得/">经验心得</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/机器学习/">机器学习</a>
+  <span></span> <a href="/tags/经验心得/">经验心得</a>
   </div>
 
 </div>
@@ -151,7 +146,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/" data-title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2017/08/11/Intellij-IDEA-操作笔记/" data-title="Intellij IDEA 操作笔记 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -164,14 +159,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
-  <strong>上一篇：</strong><br/>
-  <span>
-  VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</span>
+
+<div class="next">
+<a href="/2017/07/14/Java——通配符和泛型边界/"  title="Java——通配符和泛型边界">
+ <strong>下一篇：</strong><br/> 
+ <span>Java——通配符和泛型边界
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -183,7 +178,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、环境准备"><span class="toc-number">1.</span> <span class="toc-text">一、环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#windows-10-64位-专业版（非必须）"><span class="toc-number">1.0.1.</span> <span class="toc-text">windows 10 64位 专业版（非必须）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#visual-studio-2013（墙裂推荐此版本）"><span class="toc-number">1.0.2.</span> <span class="toc-text">visual studio 2013（墙裂推荐此版本）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、配置步骤"><span class="toc-number">2.</span> <span class="toc-text">二、配置步骤</span></a></li></ol>
+ 
  
   </div>
 
