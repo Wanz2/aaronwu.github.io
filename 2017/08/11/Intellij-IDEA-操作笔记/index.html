@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/08/11/Intellij-IDEA-操作笔记/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
-<meta property="og:updated_time" content="2017-08-11T15:12:51.000Z">
+<meta property="og:updated_time" content="2017-08-11T15:14:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Intellij IDEA 操作笔记">
 <meta name="twitter:description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
@@ -130,31 +130,37 @@
 <li>Run/Debug Configurations -&gt;Server-&gt;VM options中填写-Dfile.encoding=UTF-8</li>
 </ul>
 </li>
-<li><strong>IntelliJ生成javadoc：</strong><ul>
+<li><p><strong>IntelliJ生成javadoc：</strong></p>
+<ul>
 <li>在 “Tools-&gt;Gerenate JavaDoc” 面版的 “Other command line arguments:” 栏里输入 “-encoding utf-8 -charset utf-8”以更改生成的javadoc的字符集</li>
 </ul>
 </li>
-<li><strong>IntelliJ为java程序输入运行时的参数：</strong><ul>
+<li><p><strong>IntelliJ为java程序输入运行时的参数：</strong></p>
+<ul>
 <li>Edit Configurations —&gt; 在Program arguments中输入参数</li>
 <li>e.g. 在SortCompare 用例类的 Program arguments中输入参数”1000”效果等于在终端输入“java SortCompare 1000”</li>
 </ul>
 </li>
-<li><strong>IntelliJ为项目添加JUnit：</strong><ul>
+<li><p><strong>IntelliJ为项目添加JUnit：</strong></p>
+<ul>
 <li>方法一：自定义生成测试类 cmd+shift+T—&gt;create new test…</li>
 <li>方法二：使用junit generator生成测试类 control+return—&gt;JUnit Test</li>
 <li>方法三：使用junit generator生成测试类 工具栏code—&gt;Generate，然后同方法二</li>
 </ul>
 </li>
-<li><strong>IntelliJ运行Maven命令：</strong><ul>
+<li><p><strong>IntelliJ运行Maven命令：</strong></p>
+<ul>
 <li>在Maven项目界面右边Maven Projects—&gt;Lifecycle—&gt;选择Maven命令</li>
 </ul>
 </li>
-<li><strong>IntelliJ创建Maven管理的Web项目的两种方式：</strong><ul>
+<li><p><strong>IntelliJ创建Maven管理的Web项目的两种方式：</strong></p>
+<ul>
 <li>第一种：先创建普通maven项目，再增加框架支持</li>
 <li>第二种：直接通过archetype创建maven项目（推荐）</li>
 </ul>
 </li>
-<li><strong>IntelliJ自己创建命令工具宏：</strong><ul>
+<li><p><strong>IntelliJ自己创建命令工具宏：</strong></p>
+<ul>
 <li>Preference -&gt; Tools -&gt; External Tools -&gt; “+” -&gt; 编辑各个参数</li>
 <li>具体参数内容查看<a href="https://www.jetbrains.com/help/idea/create-edit-copy-tool-dialog.html" target="_blank" rel="external">官方文档</a></li>
 </ul>
