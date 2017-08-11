@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/08/11/Intellij-IDEA-操作笔记/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
-<meta property="og:updated_time" content="2017-08-11T15:04:56.000Z">
+<meta property="og:updated_time" content="2017-08-11T15:12:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Intellij IDEA 操作笔记">
 <meta name="twitter:description" content="本文为笔者在学习和使用Intellij IDEA过程中踩坑的记录。">
@@ -94,7 +94,7 @@
 		
 		</div>
 		
-		<p>&emsp;&emsp;Intellij IDEA被认为是目前最优秀的java开发IDE，但其使用习惯与Eclipse存在较大的差异，笔者将自己学习和使用过程中所用到的一些操作记录下来，以便查阅，本文中记录的均为不使用maven等构建工具的操作情况。  </p>
+		<p>&emsp;&emsp;Intellij IDEA被认为是目前最优秀的java开发IDE，但其使用习惯与Eclipse存在较大的差异，笔者将自己学习和使用过程中所用到的一些操作记录下来，以便查阅。  </p>
 <ul>
 <li><p><strong>IntelliJ导入jar包：</strong></p>
 <ul>
@@ -108,8 +108,10 @@
 </li>
 <li><p><strong>IntelliJ连接 MySQL 数据库：</strong></p>
 <ul>
-<li>导入 MySQL 数据库 jdbc 的 jar 包：File-&gt;Project Structure-&gt;Modules-&gt;Dependencies-&gt;add-&gt;JARs or directories选择jdbc 驱动 jar 包</li>
+<li>导入 MySQL 数据库 jdbc 的 jar 包：File-&gt;Project Structure-&gt;Modules-&gt;Dependencies-&gt;add-&gt;JARs or directories选择jdbc 驱动 jar 包<ul>
 <li>Web 项目连接数据库：导入 jdbc的 jar 包-&gt;File-&gt;Project Structure-&gt;Artifacts-&gt;将右边的 jar 包拖入左边的WEB-INF中的 lib 文件夹</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p><strong>IntelliJ查看 Web 项目编译输出地址：</strong></p>
@@ -121,6 +123,40 @@
 <ul>
 <li>File-&gt;Project Structure-&gt;Modules-&gt;add-&gt;Libraries-&gt; 选择 Tomcat文件夹下的lib文件夹-&gt;选择servlet-api.jar</li>
 <li>Intellij中的web项目，jsp页面里面部分内置对象的方法无法解析，如request.getParameter()，需要导入tomcat下的servlet-api.jar            </li>
+</ul>
+</li>
+<li><p><strong>解决运行Web Server时控制台中文输出乱码问题：</strong></p>
+<ul>
+<li>Run/Debug Configurations -&gt;Server-&gt;VM options中填写-Dfile.encoding=UTF-8</li>
+</ul>
+</li>
+<li><strong>IntelliJ生成javadoc：</strong><ul>
+<li>在 “Tools-&gt;Gerenate JavaDoc” 面版的 “Other command line arguments:” 栏里输入 “-encoding utf-8 -charset utf-8”以更改生成的javadoc的字符集</li>
+</ul>
+</li>
+<li><strong>IntelliJ为java程序输入运行时的参数：</strong><ul>
+<li>Edit Configurations —&gt; 在Program arguments中输入参数</li>
+<li>e.g. 在SortCompare 用例类的 Program arguments中输入参数”1000”效果等于在终端输入“java SortCompare 1000”</li>
+</ul>
+</li>
+<li><strong>IntelliJ为项目添加JUnit：</strong><ul>
+<li>方法一：自定义生成测试类 cmd+shift+T—&gt;create new test…</li>
+<li>方法二：使用junit generator生成测试类 control+return—&gt;JUnit Test</li>
+<li>方法三：使用junit generator生成测试类 工具栏code—&gt;Generate，然后同方法二</li>
+</ul>
+</li>
+<li><strong>IntelliJ运行Maven命令：</strong><ul>
+<li>在Maven项目界面右边Maven Projects—&gt;Lifecycle—&gt;选择Maven命令</li>
+</ul>
+</li>
+<li><strong>IntelliJ创建Maven管理的Web项目的两种方式：</strong><ul>
+<li>第一种：先创建普通maven项目，再增加框架支持</li>
+<li>第二种：直接通过archetype创建maven项目（推荐）</li>
+</ul>
+</li>
+<li><strong>IntelliJ自己创建命令工具宏：</strong><ul>
+<li>Preference -&gt; Tools -&gt; External Tools -&gt; “+” -&gt; 编辑各个参数</li>
+<li>具体参数内容查看<a href="https://www.jetbrains.com/help/idea/create-edit-copy-tool-dialog.html" target="_blank" rel="external">官方文档</a></li>
 </ul>
 </li>
 </ul>
@@ -245,11 +281,11 @@
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 			
