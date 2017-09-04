@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2017/09/04/FreeMarker模板引擎实战/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="FreeMarker是一个模板引擎：它是一个Java库，基于模板和要改变的数据生成输出文本（HTML网页、电子邮件、配置文件、源代码等）。本文通过一个小demo来说明FreeMarker的使用方式。">
-<meta property="og:updated_time" content="2017-09-04T11:36:02.000Z">
+<meta property="og:updated_time" content="2017-09-04T11:38:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FreeMarker模板引擎实战">
 <meta name="twitter:description" content="FreeMarker是一个模板引擎：它是一个Java库，基于模板和要改变的数据生成输出文本（HTML网页、电子邮件、配置文件、源代码等）。本文通过一个小demo来说明FreeMarker的使用方式。">
@@ -128,7 +128,7 @@
 </pre>  
 
 <p>&emsp;&emsp;其中有一些术语，上图中的根节点、mouse、elephant、python、misc这些非叶子结点，在上图中类似于一个目录，它们被称为<strong>hash</strong>，它们保存其他的叶子变量。<br>&emsp;&emsp;上图中保存单个值的变量，如size、price、message、foo，被称为<strong>scalar</strong>，scalar支持的数据类型为：String、数字、日期时间、布尔值。要读取scalar，可以通过“.”符号，如要读取上图中的foo，可以写成misc.foo。<br>&emsp;&emsp;如果上图中的animals目录下的mouse、elephant、python均没有具体的名字，则animals被称为<strong>sequences</strong>，sequence下的目录均为hash，但它们没有具体的名字，表示存在于一个列表中的项，可以通过索引来取到，如要取上图中的animals.python.size，也可以通过animals[2].size取到，就像Java中的列表一样。  </p>
-<h1 id="模板引擎的使用"><a href="#模板引擎的使用" class="headerlink" title="模板引擎的使用"></a>模板引擎的使用</h1><h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><p>&emsp;&emsp;使用FreeMarker主要有以下几个步骤：  </p>
+<h1 id="模板引擎的使用"><a href="#模板引擎的使用" class="headerlink" title="模板引擎的使用"></a>模板引擎的使用</h1><h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><p>&emsp;&emsp;使用FreeMarker主要有以下几个步骤：</p>
 <pre><code>1. 创建freemarker.template.Configuration类的实例并设置其属性。Configuration类的实例是用来存储freemarer应用级设置的核心容器，它负责创建和捕获预解析的模板（即Template对象）。  
 2. 创建数据模型，数据模型中的hash（用来存储其他有名字的数据项）可以是Map也可以是JavaBeans，只要它拥有public的getXxx或isXxx方法。
 3. 获取模板文件，模板由freemarker.template.Template类的实例所表示，Template类实例通过Configuration类实例的getTemplate()方法获得。Template实例用一种解析过后的格式来存储模板，而非纯文本。如果模板文件丢失或语法错误，则getTemplate()方法将会抛出异常。Configuration实例容器会缓存Template实例，下次通过getTemplate()获取同一个模板时，不会重新解析，而是返回缓存中的同一个Template实例。  
@@ -272,7 +272,7 @@
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
@@ -288,7 +288,7 @@
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 		</ul>
