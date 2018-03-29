@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://wanz2.github.io/2018/03/29/LDA（1）——前置知识/index.html">
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="LDA（Latent Dirichlet Allocation）文档主题生成模型的一种，它通过文档生成文档到主题的分布和主题到词的分布。本文介绍与其相关的概率论中的前置知识。">
-<meta property="og:updated_time" content="2018-03-29T07:59:20.160Z">
+<meta property="og:updated_time" content="2018-03-29T08:25:52.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LDA（1）——前置知识">
 <meta name="twitter:description" content="LDA（Latent Dirichlet Allocation）文档主题生成模型的一种，它通过文档生成文档到主题的分布和主题到词的分布。本文介绍与其相关的概率论中的前置知识。">
@@ -95,7 +95,14 @@
 		</div>
 		
 		<p>&emsp;&emsp;近期的研究中使用到了LDA模型（Latent Dirichlet Allocation）,它是被广泛使用的文档主体生成模型。笔者将要分两篇来介绍该模型，本篇为理解该模型所需要的前置知识。  </p>
-<h1 id="贝叶斯模型"><a href="#贝叶斯模型" class="headerlink" title="贝叶斯模型"></a>贝叶斯模型</h1><h1 id="二项分布与Beta分布"><a href="#二项分布与Beta分布" class="headerlink" title="二项分布与Beta分布"></a>二项分布与Beta分布</h1><h1 id="多项式分布与狄利克雷分布"><a href="#多项式分布与狄利克雷分布" class="headerlink" title="多项式分布与狄利克雷分布"></a>多项式分布与狄利克雷分布</h1>  
+<h1 id="贝叶斯模型"><a href="#贝叶斯模型" class="headerlink" title="贝叶斯模型"></a>贝叶斯模型</h1><p>&emsp;&emsp;首先要提到机器学习与模式识别中扮演核心角色的公式：<strong>贝叶斯公式</strong>。贝叶斯公式的形式如下：  </p>
+<center>$$p(Y|X) = \frac{p(X|Y)p(Y)}{p(X)}$$</center><br>其中$p(X)$可以用全概率公式来表示：<br><center>$$p(X) = \sum_{Y}p(X|Y)p(Y)$$</center>  
+
+<p>&emsp;&emsp;当事件$X$已经发生，我们要通过观察到的事件$X$发生的情况，来推测事件$Y$的发生概率，可以用贝叶斯公式进行计算。这时候我们称$p(Y|X)$为<strong>后验概率</strong>；而$p(X|Y)$是一个<strong>用条件概率来表达的似然函数</strong>，它可以被看做是关于$Y$的函数；而$p(Y)$表示<strong>先验概率</strong>。<br>&emsp;&emsp;于是我们可以得到：</p>
+<center>$$后验概率\propto似然函数 \times 先验概率$$</center>  
+
+
+<h1 id="二项分布与Beta分布"><a href="#二项分布与Beta分布" class="headerlink" title="二项分布与Beta分布"></a>二项分布与Beta分布</h1><h1 id="多项式分布与狄利克雷分布"><a href="#多项式分布与狄利克雷分布" class="headerlink" title="多项式分布与狄利克雷分布"></a>多项式分布与狄利克雷分布</h1>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -224,11 +231,11 @@
 			
 		
 			
-				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+				<li><a href="/tags/框架/" title="框架">框架<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
 			
 		
 			
@@ -236,15 +243,15 @@
 			
 		
 			
-				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/框架/" title="框架">框架<sup>1</sup></a></li>
+				<li><a href="/tags/栈/" title="栈">栈<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
 			
 		
 		</ul>
