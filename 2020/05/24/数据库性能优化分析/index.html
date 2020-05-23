@@ -1,0 +1,702 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>数据库性能优化方法分析 | Aaron Wu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Aaron Wu">
+    
+
+    
+    <meta name="description" content="最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 **table_a**，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库性能优化方法分析">
+<meta property="og:url" content="https://wanz2.github.io/2020/05/24/数据库性能优化分析/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 **table_a**，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-23T16:21:36.164Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库性能优化方法分析">
+<meta name="twitter:description" content="最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 **table_a**，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 3996866491135379000 ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/05/24/数据库性能优化分析/" title="数据库性能优化方法分析" itemprop="url">数据库性能优化方法分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
+		
+  <p class="article-time">
+    <time datetime="2020-05-24T00:14:17.000Z" itemprop="datePublished"> 发表于 2020-05-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-数据库常用优化方法分析"><span class="toc-number">1.</span> <span class="toc-text">1 数据库常用优化方法分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-数据删除策略"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 数据删除策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-理论依据"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 理论依据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-优化SQL设计"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 优化SQL设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-优化数据库对象设计"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 优化数据库对象设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-缓存策略"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 缓存策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-理论依据"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.4.1 理论依据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-适用性分析"><span class="toc-number">1.4.2.</span> <span class="toc-text">1.4.2 适用性分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-读写分离"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-1-理论依据"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.5.1 理论依据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-2-适用性分析"><span class="toc-number">1.5.2.</span> <span class="toc-text">1.5.2 适用性分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-数据库水平切分：分区、水平库内分表、水平分库分表"><span class="toc-number">1.6.</span> <span class="toc-text">1.6 数据库水平切分：分区、水平库内分表、水平分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-1-理论依据："><span class="toc-number">1.6.1.</span> <span class="toc-text">1.6.1 理论依据：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-2-分区"><span class="toc-number">1.6.2.</span> <span class="toc-text">1.6.2 分区</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-2-1-理论依据"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">1.6.2.1 理论依据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-2-2-适用性分析"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">1.6.2.2 适用性分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-2-3-优劣分析"><span class="toc-number">1.6.2.3.</span> <span class="toc-text">1.6.2.3 优劣分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-3-水平库内分表"><span class="toc-number">1.6.3.</span> <span class="toc-text">1.6.3 水平库内分表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-3-1优劣分析"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">1.6.3.1优劣分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-4-水平分库分表"><span class="toc-number">1.6.4.</span> <span class="toc-text">1.6.4 水平分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-4-1-适用性分析"><span class="toc-number">1.6.4.1.</span> <span class="toc-text">1.6.4.1 适用性分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-4-2-优劣分析"><span class="toc-number">1.6.4.2.</span> <span class="toc-text">1.6.4.2 优劣分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-数据库优化相关工具"><span class="toc-number">2.</span> <span class="toc-text">2 数据库优化相关工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-优惠券服务数据库性能优化方案"><span class="toc-number">3.</span> <span class="toc-text">3 优惠券服务数据库性能优化方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-优化SQL设计（开发时优化）"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 优化SQL设计（开发时优化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-优化索引设计（开发时优化）"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 优化索引设计（开发时优化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-数据删除策略"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 数据删除策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-使用分布式缓存"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 使用分布式缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-实施水平分库分表"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 实施水平分库分表</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>背景：最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 <strong>table_a</strong>，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。</p>
+<p>本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。若要跳过各数据库优化方法的分析，直接看优化方案，<strong>可直接跳到第3节</strong>。</p>
+<h2 id="1-数据库常用优化方法分析"><a href="#1-数据库常用优化方法分析" class="headerlink" title="1 数据库常用优化方法分析"></a>1 数据库常用优化方法分析</h2><p>首先，介绍一下较为常用的数据库优化方案，并进行适用场景、优势劣势分析。</p>
+<h3 id="1-1-数据删除策略"><a href="#1-1-数据删除策略" class="headerlink" title="1.1 数据删除策略"></a>1.1 数据删除策略</h3><h4 id="1-1-1-理论依据"><a href="#1-1-1-理论依据" class="headerlink" title="1.1.1 理论依据"></a>1.1.1 理论依据</h4><p>参考原则：任何表的设计都要考虑到数据的删除策略，表中的数据不能无止境的增长而不删除。</p>
+<h3 id="1-2-优化SQL设计"><a href="#1-2-优化SQL设计" class="headerlink" title="1.2 优化SQL设计"></a>1.2 优化SQL设计</h3><p>包括SQL语句优化、游标、存储过程等</p>
+<h3 id="1-3-优化数据库对象设计"><a href="#1-3-优化数据库对象设计" class="headerlink" title="1.3 优化数据库对象设计"></a>1.3 优化数据库对象设计</h3><p>包括表、索引、分区设计等</p>
+<h3 id="1-4-缓存策略"><a href="#1-4-缓存策略" class="headerlink" title="1.4 缓存策略"></a>1.4 缓存策略</h3><h4 id="1-4-1-理论依据"><a href="#1-4-1-理论依据" class="headerlink" title="1.4.1 理论依据"></a>1.4.1 理论依据</h4><p>缓存策略：对于高并发需要访问数据库的业务操作，可以考虑在业务和数据库之间增设高速缓存组件xxx，从而提高业务性能。</p>
+<h4 id="1-4-2-适用性分析"><a href="#1-4-2-适用性分析" class="headerlink" title="1.4.2 适用性分析"></a>1.4.2 适用性分析</h4><p>项目中引入缓存一般是为了应对高频访问且不常修改的数据的查询，防止大量的请求进入数据库，导致其他数据操作的延迟。</p>
+<h3 id="1-5-读写分离"><a href="#1-5-读写分离" class="headerlink" title="1.5 读写分离"></a>1.5 读写分离</h3><h4 id="1-5-1-理论依据"><a href="#1-5-1-理论依据" class="headerlink" title="1.5.1 理论依据"></a>1.5.1 理论依据</h4><p>读写分离策略：</p>
+<p>1）对于读多、写少访问特别频繁的表，可以考虑采取读写分离的架构，通过增加读库来提高业务读操作的能力。</p>
+<p>2）如果业务需要构建读写分离能力，统一使用DRDS中间件这个标准方案</p>
+<h4 id="1-5-2-适用性分析"><a href="#1-5-2-适用性分析" class="headerlink" title="1.5.2 适用性分析"></a>1.5.2 适用性分析</h4><p>l 读写分离原理： 将数据库分为主从库，一个主库用于写数据，多个从库完成读数据的操作，主从库之间通过某种机制进行数据的同步，是一种常见的数据库架构。</p>
+<p>l 读写分离解决的问题：在读多写少的场景下，数据库的读会首先称为数据库的瓶颈。这时，如果我们希望能够线性的提升数据库的读性能，消除读写锁冲突从而提升数据库的写性能，那么就可以使用读写分离架构。读写分离分散了数据库读写的压力，但没有分散存储压力。</p>
+<p>l 对时效性没有那么高的场景下，才可以使用读写分离，如：需要生成运营报表，可以用读写分离。对于业务相关的数据库操作，时效性要求比较高，都不要做读写分离</p>
+<h3 id="1-6-数据库水平切分：分区、水平库内分表、水平分库分表"><a href="#1-6-数据库水平切分：分区、水平库内分表、水平分库分表" class="headerlink" title="1.6 数据库水平切分：分区、水平库内分表、水平分库分表"></a>1.6 数据库水平切分：分区、水平库内分表、水平分库分表</h3><p>数据库水平切分，可以分为分区、分库、分表，本节对这几种方式分别进行简要分析。</p>
+<h4 id="1-6-1-理论依据："><a href="#1-6-1-理论依据：" class="headerlink" title="1.6.1 理论依据："></a>1.6.1 理论依据：</h4><p>分表分库策略</p>
+<p>1）对于记录数超过2000w的大表，需要考虑物理分库、分表或者创建分区表，分区记录同样不超过2000w</p>
+<p>2）业务数据量超过1亿，数据库文件&gt;500G，并且随着时间的推移会持续增长，建议考虑使用分库分表的解决方案，使用分布式数据库中间件xxxx来实现。</p>
+<h4 id="1-6-2-分区"><a href="#1-6-2-分区" class="headerlink" title="1.6.2 分区"></a>1.6.2 分区</h4><h5 id="1-6-2-1-理论依据"><a href="#1-6-2-1-理论依据" class="headerlink" title="1.6.2.1 理论依据"></a>1.6.2.1 理论依据</h5><p>对于超过1000万行的大表，要考虑建分区</p>
+<p>分区的目的</p>
+<p>1) 易于管理：随着数据量的递增，表和索引越来越难维护，增删改查的速度也会越来越慢，使用分区将表和索引分割成较小的单元，便于维护与管理。使用分区能够聚焦于特别的分区，比如按月分区表，只需要逻辑备份当前月的数据，因此可以使用partiton指定到本月而不用全表备份。在清理历史数据的时候，只需要针对历史分区采用truncate操作，极大的降低了管理的难度。</p>
+<p>2) 提高性能：由于每个分区的数据量大大减少，因此在增删改查的时候，可以通过指定分区范围来提高检索的性能。在进行并行操作的时候，采用智能分区连接减少上下文的切换也可以极大的提高性能。</p>
+<p>3) 提高可用性：某个分区出现问题不会影响正常分区的使用；通过指定不同的tablespace作物理分割，不但可以提高查询的性能，还能够避免热块竞争。</p>
+<h5 id="1-6-2-2-适用性分析"><a href="#1-6-2-2-适用性分析" class="headerlink" title="1.6.2.2 适用性分析"></a>1.6.2.2 适用性分析</h5><p>分析：使用分区，需要考虑分区键约束。MySQL官方给出的分区键的约束条件如下：</p>
+<p>​     <strong>分区表达式中的所有列都必须是每个唯一键（包括主键）的一部分。</strong></p>
+<p>换句话说：<strong>表中的每一个唯一键（包括主键），都必须包含分区表达式中的所有列。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img ./数据库性能优化分析/mysql screen shot.png This is an example image %&#125;</span><br></pre></td></tr></table></figure>
+<p>​                               </p>
+<p>具体说明见MySQL官方文档：<a href="https://dev.mysql.com/doc/refman/5.6/en/partitioning-limitations-partitioning-keys-unique-keys.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.6/en/partitioning-limitations-partitioning-keys-unique-keys.html</a></p>
+<p>依据上述约束条件，若要使用分区，需要考虑以下几点：</p>
+<ul>
+<li>表table_a必须存在主键</li>
+</ul>
+<ul>
+<li>若要使用table_a的非主键字段进行分区，则要将其加入该表的主键和唯一索引字段，使得主键成为复合主键，唯一索引成为联合唯一索引。但一旦将其加入主键，使主键成为复合主键，则不满足第二范式：每一个非主键字段必须完全依赖于主键。</li>
+</ul>
+<p>对分区键约束条件的理解： 若不遵循该约束条件，则mysql无法在各分区之间保证由主键索引和唯一索引要求的记录唯一性。</p>
+<h5 id="1-6-2-3-优劣分析"><a href="#1-6-2-3-优劣分析" class="headerlink" title="1.6.2.3 优劣分析"></a>1.6.2.3 优劣分析</h5><ul>
+<li>优势：<ul>
+<li>对代码侵入小</li>
+<li>若使用用户id字段分区，能够将记录按用户均匀分配到不同分区中，能提高查询性能</li>
+<li>若使用时间字段分区，有利于记录按时间段删除，避免delete语句带来的空间不释放问题（但如果使用了分库分表而不使用分区，磁盘空间碎片影响不大）</li>
+</ul>
+</li>
+<li>劣势：<ul>
+<li>使用分区需要调整主键和唯一索引，要将分区键加入主键和唯一索引。</li>
+<li>如果使用用户id字段进行hash分区，扩展性较差</li>
+<li>如果使用时间字段分区，单分区内数据量较大，未解决单表数据量过大的问题</li>
+<li>分区表，如果需要调整表结构，如加字段，会比较慢</li>
+<li>关联查询的逻辑需要调整</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-6-3-水平库内分表"><a href="#1-6-3-水平库内分表" class="headerlink" title="1.6.3 水平库内分表"></a>1.6.3 水平库内分表</h4><h5 id="1-6-3-1优劣分析"><a href="#1-6-3-1优劣分析" class="headerlink" title="1.6.3.1优劣分析"></a>1.6.3.1优劣分析</h5><ul>
+<li>优势：<ul>
+<li>解决了单表数据量过大的问题</li>
+</ul>
+</li>
+<li>劣势：<ul>
+<li>库内分表对应用业务逻辑侵入性较大</li>
+<li>只解决了单一表数据量过大的问题，但没有将表分布到不同机器的库上，因此对于减轻MySQL数据库的读写压力来说，帮助不是很大，大家还是竞争同一个物理机的CPU、内存、网络IO</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-6-4-水平分库分表"><a href="#1-6-4-水平分库分表" class="headerlink" title="1.6.4 水平分库分表"></a>1.6.4 水平分库分表</h4><h5 id="1-6-4-1-适用性分析"><a href="#1-6-4-1-适用性分析" class="headerlink" title="1.6.4.1 适用性分析"></a>1.6.4.1 适用性分析</h5><p>读写分离分散了数据库读写操作的压力，但没有分散存储的压力，当数据量达到千万甚至上亿条的时候，单台数据库服务器的存储能力会成为系统的瓶颈。单个数据库服务器存储的数据量不能太大，需要控制在一定的范围内。为了满足业务数据存储的需求，就需要将存储分散到多台数据库服务器上。</p>
+<h5 id="1-6-4-2-优劣分析"><a href="#1-6-4-2-优劣分析" class="headerlink" title="1.6.4.2 优劣分析"></a>1.6.4.2 优劣分析</h5><p>水平分库分表策略的优劣分析如下：</p>
+<ul>
+<li>优势：<ul>
+<li>同时解决单表数据量过大和单服务IO性能不足的问题</li>
+<li>对业务代码侵入小</li>
+<li>水平扩展性好，可以实现不停服平滑扩容，不需要和分区同时实施</li>
+</ul>
+</li>
+<li>l 劣势：<ul>
+<li>分库成本比较高，需要至少两套数据库服务器，目前云服务要求一套DB至少有4台机器（主备）</li>
+<li>分库可能带来以下问题：</li>
+<li>事务一致性问题</li>
+<li>跨节点关联查询 join 问题，关联查询逻辑需要调整</li>
+<li>跨节点分页、排序、函数问题</li>
+<li>全局主键避重问题</li>
+<li>数据迁移、扩容问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-数据库优化相关工具"><a href="#2-数据库优化相关工具" class="headerlink" title="2 数据库优化相关工具"></a>2 数据库优化相关工具</h2><p>业界常用开源数据库优化的工具有：</p>
+<h2 id="3-优惠券服务数据库性能优化方案"><a href="#3-优惠券服务数据库性能优化方案" class="headerlink" title="3 优惠券服务数据库性能优化方案"></a>3 优惠券服务数据库性能优化方案</h2><p>经过上述分析，结合优惠券服务特点，对于优惠券服务的数据库性能优化，建议按以下方法进行：</p>
+<p>a)    优化SQL设计</p>
+<p>b)    优化索引设计</p>
+<p>c)    使用数据删除策略</p>
+<p>d)    使用分布式缓存</p>
+<p>e)    实施水平分库分表</p>
+<p>注意，优惠券服务数据库性能优化方案，不建议使用分区，具体原因见本文<a href="#_1.6.2.2_适用性分析">1.6.2.2节的适用性分析</a>和<a href="#_1.6.2.3_优劣分析">1.6.2.3的优劣分析</a>。</p>
+<p>下面介绍上述各步骤的具体实施方案。</p>
+<h3 id="3-1-优化SQL设计（开发时优化）"><a href="#3-1-优化SQL设计（开发时优化）" class="headerlink" title="3.1 优化SQL设计（开发时优化）"></a>3.1 优化SQL设计（开发时优化）</h3><p>开发人员在编写SQL语句时，按规范要求优化SQL设计。</p>
+<h3 id="3-2-优化索引设计（开发时优化）"><a href="#3-2-优化索引设计（开发时优化）" class="headerlink" title="3.2 优化索引设计（开发时优化）"></a>3.2 优化索引设计（开发时优化）</h3><p>开发人员设计表索引时，按规范要求优化索引设计。</p>
+<h3 id="3-3-数据删除策略"><a href="#3-3-数据删除策略" class="headerlink" title="3.3 数据删除策略"></a>3.3 数据删除策略</h3><p>使用定时任务，定期按照时间字段删除过期优惠券，避免table_a表中记录无限增长。</p>
+<h3 id="3-4-使用分布式缓存"><a href="#3-4-使用分布式缓存" class="headerlink" title="3.4 使用分布式缓存"></a>3.4 使用分布式缓存</h3><p>识别热点数据和常用查询条件。</p>
+<p>l 热点数据从缓存查询，若缓存中数据不存在，则从DB中查询；</p>
+<p>l 非热点数据直接查DB。</p>
+<p>更新热点数据时，先更新DB，再令缓存中数据失效。</p>
+<h3 id="3-5-实施水平分库分表"><a href="#3-5-实施水平分库分表" class="headerlink" title="3.5 实施水平分库分表"></a>3.5 实施水平分库分表</h3><p>考虑数据量增长后的数据库扩展性，对于优惠券数据库，可以使用数据库中间件将数据量大的表实施水平分库分表。如对table_a表来说，可以使用用户id字段作为键来实施水平分库分表。</p>
+<p>注意不要过早实施分库分表，避免”过度设计”和”过早优化”，但要尽早考虑分库分表的方案，以具备该能力。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/数据库/">数据库</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/数据库/">数据库</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://wanz2.github.io/2020/05/24/数据库性能优化分析/" data-title="数据库性能优化方法分析 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/09/13/win10上PyCharm选择本地docker镜像中解释器报NullPointerException解决方案/"  title="win10上PyCharm选择本地docker镜像中解释器报NullPointerException解决方案">
+ <strong>下一篇：</strong><br/> 
+ <span>win10上PyCharm选择本地docker镜像中解释器报NullPointerException解决方案
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-数据库常用优化方法分析"><span class="toc-number">1.</span> <span class="toc-text">1 数据库常用优化方法分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-数据删除策略"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 数据删除策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-理论依据"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 理论依据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-优化SQL设计"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 优化SQL设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-优化数据库对象设计"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 优化数据库对象设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-缓存策略"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 缓存策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-理论依据"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.4.1 理论依据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-适用性分析"><span class="toc-number">1.4.2.</span> <span class="toc-text">1.4.2 适用性分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-读写分离"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 读写分离</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-1-理论依据"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.5.1 理论依据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-2-适用性分析"><span class="toc-number">1.5.2.</span> <span class="toc-text">1.5.2 适用性分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-数据库水平切分：分区、水平库内分表、水平分库分表"><span class="toc-number">1.6.</span> <span class="toc-text">1.6 数据库水平切分：分区、水平库内分表、水平分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-1-理论依据："><span class="toc-number">1.6.1.</span> <span class="toc-text">1.6.1 理论依据：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-2-分区"><span class="toc-number">1.6.2.</span> <span class="toc-text">1.6.2 分区</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-2-1-理论依据"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">1.6.2.1 理论依据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-2-2-适用性分析"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">1.6.2.2 适用性分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-2-3-优劣分析"><span class="toc-number">1.6.2.3.</span> <span class="toc-text">1.6.2.3 优劣分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-3-水平库内分表"><span class="toc-number">1.6.3.</span> <span class="toc-text">1.6.3 水平库内分表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-3-1优劣分析"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">1.6.3.1优劣分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-6-4-水平分库分表"><span class="toc-number">1.6.4.</span> <span class="toc-text">1.6.4 水平分库分表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-4-1-适用性分析"><span class="toc-number">1.6.4.1.</span> <span class="toc-text">1.6.4.1 适用性分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-6-4-2-优劣分析"><span class="toc-number">1.6.4.2.</span> <span class="toc-text">1.6.4.2 优劣分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-数据库优化相关工具"><span class="toc-number">2.</span> <span class="toc-text">2 数据库优化相关工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-优惠券服务数据库性能优化方案"><span class="toc-number">3.</span> <span class="toc-text">3 优惠券服务数据库性能优化方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-优化SQL设计（开发时优化）"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 优化SQL设计（开发时优化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-优化索引设计（开发时优化）"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 优化索引设计（开发时优化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-数据删除策略"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 数据删除策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-使用分布式缓存"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 使用分布式缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-实施水平分库分表"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 实施水平分库分表</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Python/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/经验心得/" title="经验心得">经验心得<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/框架/" title="框架">框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 10px;">Java虚拟机</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Web开发/" style="font-size: 10px;">Web开发</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/数据库/" style="font-size: 10px;">数据库</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/框架/" style="font-size: 10px;">框架</a> <a href="/tags/泛型/" style="font-size: 10px;">泛型</a> <a href="/tags/系统架构/" style="font-size: 10px;">系统架构</a> <a href="/tags/经验心得/" style="font-size: 12.5px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://coolshell.cn" target="_blank" title="COOLSHELL">COOLSHELL</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qinjiangbo.com" target="_blank" title="心灵港">心灵港</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.whu.edu.cn" target="_blank" title="武汉大学">武汉大学</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> I&#39;m Aaron Wu. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Wanz2" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:wuwenan_6@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Aaron Wu">Aaron Wu</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261991776'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1261991776' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>
