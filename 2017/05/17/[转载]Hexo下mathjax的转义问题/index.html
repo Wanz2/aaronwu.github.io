@@ -1,0 +1,635 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>【转载】Hexo下mathjax的转义问题 | Aaron Wu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Aaron Wu">
+    
+
+    
+    <meta name="description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
+<meta name="keywords" content="经验心得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转载】Hexo下mathjax的转义问题">
+<meta property="og:url" content="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-23T12:26:10.184Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【转载】Hexo下mathjax的转义问题">
+<meta name="twitter:description" content="本文转载自博客 天空的城。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 3996866491135379000 ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/17/[转载]Hexo下mathjax的转义问题/" title="【转载】Hexo下mathjax的转义问题" itemprop="url">【转载】Hexo下mathjax的转义问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-17T11:02:35.000Z" itemprop="datePublished"> 发表于 2017-05-17</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法一：手动escape"><span class="toc-number">3.1.</span> <span class="toc-text">方法一：手动escape</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法二：保护代码块"><span class="toc-number">3.2.</span> <span class="toc-text">方法二：保护代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法三：更换Hexo的markdown引擎"><span class="toc-number">3.3.</span> <span class="toc-text">方法三：更换Hexo的markdown引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法四：修改Hexo渲染源码"><span class="toc-number">3.4.</span> <span class="toc-text">方法四：修改Hexo渲染源码</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>&emsp;&emsp;本文转载自博客<a href="http://shomy.top/2016/10/22/hexo-markdown-mathjax/" target="_blank" rel="noopener">天空的城</a>。markdwon和mathjax在语法上存在转义的冲突。我因为该问题折腾了半天，本文提供了该问题的最终解决方案，感谢作者。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>&emsp;&emsp;我们平时使用markdown写文档的时候，免不了会碰到数学公式，好在有强大的Mathjax,可以解析网页上的数学公式，与hexo的结合也很简单，可以手动加入js，或者直接使用hexo-math插件.大部分情况下都是可以的，但是Markdwon本身的特殊符号与Latex中的符号会出现冲突的时候:<br>—的转义，在markdown中，<code>_</code>是斜体，但是在latex中，却有下标的意思，就会出现问题。<br><code>\\</code>的换行，在markdown中，<code>\\</code>会被转义为<code>\</code>这样也会影响影响mathjax对公式中的<code>\\</code>进行渲染  </p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>&emsp;&emsp;hexo默认使用marked.js去解析我们写的markdown，比如一些符号，<code>_</code>代表斜体，会被处理为<code>&lt;em&gt;</code>标签，比如<code>x_i</code>在开始被渲染的时候，处理为<code>x&lt;em&gt;i&lt;/em&gt;</code>，这个时候mathjax就无法渲染成下标了。很多符号都有这个问题，比如粗体<code>*</code>,也是无法在mathjax渲染出来的，好在有替代的乘法等,包括<code>\\</code>同理。 所以说到底，是hexo使用的markdown引擎的锅，因为很多其它引擎在这方面处理的很好。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>在网上查了一些资料，结合自己使用经验，总结为如下的方法</p>
+<h3 id="方法一：手动escape"><a href="#方法一：手动escape" class="headerlink" title="方法一：手动escape"></a>方法一：手动escape</h3><p>&emsp;&emsp;这个方法最直接，需要转义我就转义。比如我需要在公式中写下标符号，那就修改写法写为: $x_i$;需要换行就使用<code>\\</code>,即可。 很明显，这种方式虽然可以解决问题通用性很差,比如想迁移到其它地方，就无法识别了，因为大部分的markdown引擎是没有这个问题的。</p>
+<h3 id="方法二：保护代码块"><a href="#方法二：保护代码块" class="headerlink" title="方法二：保护代码块"></a>方法二：保护代码块</h3><p>&emsp;&emsp;我们知道在markdown中的两个<code>`</code>之间的东西不会转义，正好符号我们的需求，我们保护<code>\[</code>之间的代码不被markdown渲染，这样就可以，但是有一个后遗症，就是的样式问题，markdown中是code的样式的，这样也还是有问题，解决思路就是重新处理code标签,使其遇见<code>\]</code>的话，跳过，详情见:<a href="https://liam0205.me/2015/09/09/fix-conflict-between-mathjax-and-markdown/" target="_blank" rel="noopener">解决MathJax与Markdown的冲突</a>这个方法有个问题，就是有时候我们的代码中会有$$的出现，这时候，仍然使用mathjax就有可能出现无法预料的结果了。</p>
+<h3 id="方法三：更换Hexo的markdown引擎"><a href="#方法三：更换Hexo的markdown引擎" class="headerlink" title="方法三：更换Hexo的markdown引擎"></a>方法三：更换Hexo的markdown引擎</h3><p>&emsp;&emsp;这个是最重的方法，直接换发动机，就是把hexo默认的渲染markdown的引擎换掉。查到了有如下几个插件可以使用:</p>
+<p><em>hexo-renderer-pandoc</em>，很强大的解析器，Pandoc的语法完全没有上述问题, 推荐使用。<br><em>hexo-renderer-kramed</em>,或者<em>hexo-renderer-marked</em>，这两个差不多，第一个fork了第二个，改了一部分bug，但是还是有部分问题。  </p>
+<p>&emsp;&emsp;下面说一下如何使用pandoc渲染。  </p>
+<ol>
+<li>首先安装Pandoc，官网提供了Ubuntu的deb安装包，按照官网教程就可以安装完成。  </li>
+<li>就是卸载hexo默认的markd,再安装新的:  </li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm uninstall hexo-renderer-marked --save</span><br><span class="line">npm install hexo-renderer-pandoc --save</span><br></pre></td></tr></table></figure>
+<p>如果决定要换的话，还是更换为Pandoc吧，虽然比较笨重，需要首先安装Pandoc， 不过的确可以完美解决上述的不兼容问题，另外它的语法与markdown有些微的差异，需要注意。  </p>
+<h3 id="方法四：修改Hexo渲染源码"><a href="#方法四：修改Hexo渲染源码" class="headerlink" title="方法四：修改Hexo渲染源码"></a>方法四：修改Hexo渲染源码</h3><p>这个方法是我目前使用的，相对来说，通用性较高的一种方式。思路就是修改hexo的渲染源码: <code>nodes_modules/marked/lib/marked.js</code>:  </p>
+<ul>
+<li>去掉<code>\\</code>的额外转义  </li>
+<li>将em标签对应的符号中，去掉<code>_</code>，因为markdown中有<code>*</code>可以表示斜体，<code>—</code>就去掉了。  </li>
+</ul>
+<p>具体思路参考了<a href="http://blog.csdn.net/emptyset110/article/details/50123231" target="_blank" rel="noopener">使Marked.js与MathJax共存</a>：  </p>
+<p>打开<code>nodes_modules/marked/lib/marked.js</code>:   </p>
+<p>第一步: 找到下面的代码:  </p>
+<pre><code class="javascript"><span class="built_in">escape</span>: <span class="regexp">/^\\([\\`*{}\[\]()# +\-.!_&gt;])/</span>,
+</code></pre>
+<p>改为:  </p>
+<pre><code class="javascript"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*{}\[\]()# +\-.!_&gt;])/</span>,
+</code></pre>
+<p>这样就会去掉<code>\\</code>的转义了。<br>第二步: 找到em的符号:  </p>
+<pre><code class="javascript">em: <span class="regexp">/^\b_((?:[^_]|__)+?)_\b|^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,
+</code></pre>
+<p>改为:   </p>
+<pre><code class="javascript">em:<span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,
+</code></pre>
+<p>去掉<code>_</code>的斜体含义，这样就解决了。这种方式指标不治本，因为保证不了还可能有其它的字符会冲突，这样的话，还需要返回去接着修改。但是通用性很高，因为我们没有修改文章的内容，可以放到别的引擎下也基本上顺利渲染。<br>建议使用最后两种方法。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/经验心得/">经验心得</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/经验心得/">经验心得</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://wanz2.github.io/2017/05/17/[转载]Hexo下mathjax的转义问题/" data-title="【转载】Hexo下mathjax的转义问题 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/31/设计模式——策略模式/" title="设计模式——策略模式">
+  <strong>上一篇：</strong><br/>
+  <span>
+  设计模式——策略模式</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/05/12/JavaWeb——Servlet异步处理支持和异步监听器/"  title="JavaWeb——Servlet异步处理支持和异步监听器">
+ <strong>下一篇：</strong><br/> 
+ <span>JavaWeb——Servlet异步处理支持和异步监听器
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">2.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">3.</span> <span class="toc-text">解决方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法一：手动escape"><span class="toc-number">3.1.</span> <span class="toc-text">方法一：手动escape</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法二：保护代码块"><span class="toc-number">3.2.</span> <span class="toc-text">方法二：保护代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法三：更换Hexo的markdown引擎"><span class="toc-number">3.3.</span> <span class="toc-text">方法三：更换Hexo的markdown引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法四：修改Hexo渲染源码"><span class="toc-number">3.4.</span> <span class="toc-text">方法四：修改Hexo渲染源码</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Python/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/经验心得/" title="经验心得">经验心得<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/框架/" title="框架">框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 10px;">Java虚拟机</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Web开发/" style="font-size: 10px;">Web开发</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/框架/" style="font-size: 10px;">框架</a> <a href="/tags/泛型/" style="font-size: 10px;">泛型</a> <a href="/tags/系统架构/" style="font-size: 10px;">系统架构</a> <a href="/tags/经验心得/" style="font-size: 12.5px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://coolshell.cn" target="_blank" title="COOLSHELL">COOLSHELL</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qinjiangbo.com" target="_blank" title="心灵港">心灵港</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.whu.edu.cn" target="_blank" title="武汉大学">武汉大学</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> I&#39;m Aaron Wu. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Wanz2" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:wuwenan_6@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Aaron Wu">Aaron Wu</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261991776'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1261991776' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

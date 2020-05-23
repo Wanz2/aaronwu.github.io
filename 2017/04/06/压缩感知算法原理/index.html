@@ -1,0 +1,731 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>压缩感知算法原理 | Aaron Wu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Aaron Wu">
+    
+
+    
+    <meta name="description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
+<meta name="keywords" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="压缩感知算法原理">
+<meta property="og:url" content="https://wanz2.github.io/2017/04/06/压缩感知算法原理/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90">
+<meta property="og:image" content="http://odnk9as2f.bkt.clouddn.com/L1.png?imageView/2/w/300/q/90">
+<meta property="og:updated_time" content="2020-05-23T12:26:10.184Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="压缩感知算法原理">
+<meta name="twitter:description" content="本文是笔者在学习压缩感知算法之后的总结和整理。">
+<meta name="twitter:image" content="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 3996866491135379000 ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/06/压缩感知算法原理/" title="压缩感知算法原理" itemprop="url">压缩感知算法原理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-06T23:30:03.000Z" itemprop="datePublished"> 发表于 2017-04-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-本文中使用的符号一览"><span class="toc-number">1.</span> <span class="toc-text">1. 本文中使用的符号一览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#传统正交变换中："><span class="toc-number">1.1.</span> <span class="toc-text">传统正交变换中：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#压缩感知算法中："><span class="toc-number">1.2.</span> <span class="toc-text">压缩感知算法中：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-压缩感知算法目的"><span class="toc-number">2.</span> <span class="toc-text">2. 压缩感知算法目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-采集策略"><span class="toc-number">3.</span> <span class="toc-text">3. 采集策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-传统解决思路——正交变换"><span class="toc-number">4.</span> <span class="toc-text">4. 传统解决思路——正交变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-步骤"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-编码解码策略"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 编码解码策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-压缩误差分析"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 压缩误差分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-新的思路——压缩传感"><span class="toc-number">5.</span> <span class="toc-text">5. 新的思路——压缩传感</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-压缩传感思想："><span class="toc-number">5.1.</span> <span class="toc-text">5.1 压缩传感思想：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-根据以上分析，可以得出编码解码策略"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 根据以上分析，可以得出编码解码策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-观测矩阵-Phi-需要满足的性质"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 观测矩阵$\Phi$需要满足的性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-如何解决4-1中提出的优化问题"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 如何解决4.1中提出的优化问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"><span class="toc-number">5.4.1.</span> <span class="toc-text">5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><span class="toc-number">5.4.2.</span> <span class="toc-text">5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<p>&emsp;&emsp;本文是笔者在学习压缩感知算法之后的总结和整理。  </p>
+<a id="more"></a>
+<h2 id="1-本文中使用的符号一览"><a href="#1-本文中使用的符号一览" class="headerlink" title="1. 本文中使用的符号一览"></a>1. 本文中使用的符号一览</h2><h3 id="传统正交变换中："><a href="#传统正交变换中：" class="headerlink" title="传统正交变换中："></a>传统正交变换中：</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>$R^{N\times 1}$</td>
+<td>原始信号</td>
+</tr>
+<tr>
+<td>$y$</td>
+<td>$R^{N\times 1}$</td>
+<td>压缩后的信号，不稀疏</td>
+</tr>
+<tr>
+<td>$\hat{y}$</td>
+<td>$R^{N\times 1}$</td>
+<td>由$y$中$K$个分量放在对应位置构成，其余位置为0，是$K$-稀疏的</td>
+</tr>
+</tbody>
+</table>
+<h3 id="压缩感知算法中："><a href="#压缩感知算法中：" class="headerlink" title="压缩感知算法中："></a>压缩感知算法中：</h3><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$</td>
+<td>$R^{N\times 1}$</td>
+<td>原始信号</td>
+</tr>
+<tr>
+<td>$y$</td>
+<td>$R^{M\times 1}$</td>
+<td>压缩感知的<strong>观测向量</strong>，是$x$的$M$个线性度量</td>
+</tr>
+<tr>
+<td>$s$</td>
+<td>$R^{N\times 1}$</td>
+<td>信号$x$在$\Psi$域的稀疏表示，是$K$-稀疏的</td>
+</tr>
+<tr>
+<td>$\Psi$</td>
+<td>$C^{N\times N}$</td>
+<td><strong>稀疏矩阵</strong>，为正交变换矩阵</td>
+</tr>
+<tr>
+<td>$\Psi^\mathrm{H}$</td>
+<td>$C^{N\times N}$</td>
+<td>正交变换矩阵$\Psi$的转置矩阵</td>
+</tr>
+<tr>
+<td>$\Phi$</td>
+<td>$R^{M\times N}$</td>
+<td>称为<strong>测量矩阵</strong>，有$M\ll N$</td>
+</tr>
+<tr>
+<td>$T$</td>
+<td>$R^{M\times N}$</td>
+<td>$T=\Phi\Psi^\mathrm{H}$，称为<strong>传感矩阵</strong></td>
+</tr>
+<tr>
+<td>$\delta$</td>
+<td>$1\times 1$</td>
+<td>一个较小的正的常数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-压缩感知算法目的"><a href="#2-压缩感知算法目的" class="headerlink" title="2. 压缩感知算法目的"></a>2. 压缩感知算法目的</h2><p>&emsp;&emsp;压缩感知算法的目的是采集很少一部分数据，并希望从中“解压缩”出大量信息，达到恢复原信号的效果  </p>
+<h2 id="3-采集策略"><a href="#3-采集策略" class="headerlink" title="3. 采集策略"></a>3. 采集策略</h2><p>&emsp;&emsp;a. 少量的采集到的数据包含了原信号的全局信息<br>&emsp;&emsp;b. 存在一种算法能够从这些少量的数据中还原出原先的信息来  </p>
+<h2 id="4-传统解决思路——正交变换"><a href="#4-传统解决思路——正交变换" class="headerlink" title="4. 传统解决思路——正交变换"></a>4. 传统解决思路——正交变换</h2><h3 id="4-1-步骤"><a href="#4-1-步骤" class="headerlink" title="4.1 步骤"></a>4.1 步骤</h3><ol>
+<li><p>对于原始信号$x\in R^{N\times 1}$，可以通过正交变换来进行压缩，正变换：$y=\Psi x$，反变换$x=\Psi^\mathrm{H}y$。<br>这里$\Psi$是正交矩阵，有$\Psi\Psi^\mathrm{H}=\Psi^\mathrm{H}\Psi=I$，亦即$\Psi^\mathrm{H}=\Psi^\mathrm{-1}$，$\Psi\in C^{N\times N}$，$I$是单位矩阵。  </p>
+</li>
+<li><p>对于$y\in C^{N\times 1}$，能量较$x$集中，本质上去除了$x$中的相关性。因此，我们只保留$K$个较大分量，而把其他$N-K$个置为零，通过反变换，我们能够近乎完美的重建原始信号 ，具有这样性质的信号被称为$K$“稀疏”的。  </p>
+</li>
+</ol>
+<h3 id="4-2-编码解码策略"><a href="#4-2-编码解码策略" class="headerlink" title="4.2 编码解码策略"></a>4.2 编码解码策略</h3><p>&emsp;&emsp;编码：构造$\Psi $，做正变换$y=\Psi x$，保留$y$中最重要的$K$个分量和其对应位置。  </p>
+<p>&emsp;&emsp;解码：把$K$个分量放回到对应位置，其他位置填上0，构造$\Psi^\mathrm{H}$，反变换$\hat{x}=\Psi^\mathrm{H} \hat{y}$。  </p>
+<h3 id="4-3-压缩误差分析"><a href="#4-3-压缩误差分析" class="headerlink" title="4.3 压缩误差分析"></a>4.3 压缩误差分析</h3><p>&emsp;&emsp;显然，我们希望$\Vert x-\hat{x}\Vert _2=\Vert y-\hat{y}\Vert _2\leq \delta$，$\delta$是一个小的常数。  </p>
+<p>&emsp;&emsp;但更有效的是利用<font style="color:red;">相对误差</font> $\frac{\Vert y-\hat{y}\Vert _2}{\Vert y\Vert _2}\leq\delta$。  </p>
+<h2 id="5-新的思路——压缩传感"><a href="#5-新的思路——压缩传感" class="headerlink" title="5. 新的思路——压缩传感"></a>5. 新的思路——压缩传感</h2><h3 id="5-1-压缩传感思想："><a href="#5-1-压缩传感思想：" class="headerlink" title="5.1 压缩传感思想："></a>5.1 压缩传感思想：</h3><p>&emsp;&emsp;对于信号，$x\in R^{N\times 1}$，我们可以找到它的$M$个线性测量（Linear Measurement，意即降维后的信号为$M$维），$y=\Phi x，\Phi\in R^{M\times N}$。  </p>
+<p>&emsp;&emsp;$\Phi$中的每一行看作一个传感器，它与信号相乘，拾取了信号的一部分信息。拥有了这$M$个测量（即$y$）和$\Phi$，我们就可以近乎完美的重构原始信号了。  </p>
+<p>&emsp;&emsp;<strong>那么已知$y$和$\Phi$如何重构信号？这是一个最优化问题，根据以下式子:</strong>  </p>
+  <p align="center">目标函数$min\Vert s\Vert _0$，且满足等式约束<br>      $\Phi\Psi^\mathrm{H}s=y$<br>      <br>或者可以写成<br>$min\Vert y-\Phi\Psi^\mathrm{H}s\Vert _2+\lambda\Vert s\Vert _0$</p>  
+
+<p>可以求得$s$。<br>&emsp;&emsp;因为$\Phi\Psi^\mathrm{H}s=\Phi\hat{x}=y$，所以$\hat{x}=\Psi^\mathrm{H}s$，这里就是传统方法正交变换中用$s$恢复$x$的方法，这里的$s$是K-sparse的。    </p>
+<h3 id="5-2-根据以上分析，可以得出编码解码策略"><a href="#5-2-根据以上分析，可以得出编码解码策略" class="headerlink" title="5.2 根据以上分析，可以得出编码解码策略"></a>5.2 根据以上分析，可以得出编码解码策略</h3><p>&emsp;&emsp;编码：针对原始信号$x$构造$\Phi$，生成测量$y=\Phi x$，保留$y$。  </p>
+<p>&emsp;&emsp;解码：构造同样的$\Phi$，构造<font style="color:red">任一种正交变换$\Psi^\mathrm{H}$</font>，根据$y$重构$x$。  </p>
+<hr>
+<p>&emsp;&emsp;到这里，我们已经知道通过$y$恢复$x$的大致步骤，那么具体怎样操作呢？有这样三个关键问题： </p>
+<p>&emsp;&emsp;(1) 观测矩阵$\Phi$的选择需要满足什么性质？  </p>
+<p>&emsp;&emsp;(2) 如何最优化本文4.1中 $min\Vert y-\Phi\Psi^\mathrm{H}s\Vert _2+\lambda\Vert s\Vert _0$ 这个函数以求出$s$呢？  </p>
+<p>&emsp;&emsp;下文将针对上述两个问题进行分析。  </p>
+<hr>
+<h3 id="5-3-观测矩阵-Phi-需要满足的性质"><a href="#5-3-观测矩阵-Phi-需要满足的性质" class="headerlink" title="5.3 观测矩阵$\Phi$需要满足的性质"></a>5.3 观测矩阵$\Phi$需要满足的性质</h3><p>&emsp;&emsp;1. 随机性。$\Phi$可以是高斯分布的白噪声矩阵，或伯努利分布的$\pm1$矩阵。  </p>
+<p>&emsp;&emsp;2. 使线性测量有稳定的能量性质，即满足$1-\delta\leq\frac{\Vert \Phi\Psi^\mathrm{H}s\Vert _2}{\Vert s\Vert _2}\leq1+\delta$，也就是它要保持$K$个重要分量的长度。  </p>
+<p>&emsp;&emsp;3. 实际运用中，对$\Phi$的维度有要求，$y$的长度一般是重要分量长度的4倍，才能近乎完美重构。即$M\approx4K$或者$M\geq Klog_2(\frac{N}{K})$。  </p>
+<h3 id="5-4-如何解决4-1中提出的优化问题"><a href="#5-4-如何解决4-1中提出的优化问题" class="headerlink" title="5.4 如何解决4.1中提出的优化问题"></a>5.4 如何解决4.1中提出的优化问题</h3><p>&emsp;&emsp;对于$min\Vert y-\Phi\Psi^\mathrm{H}s\Vert _2+\lambda\Vert s\Vert _0$ 的优化，其中的0-范数优化问题是NP难问题，因此我们必须要换成1-范数进行优化，而1-范数优化是一个凸优化问题。  </p>
+<h4 id="5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"><a href="#5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？" class="headerlink" title="5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"></a>5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？</h4><p>&emsp;&emsp;我们把问题放到二维空间来看：  </p>
+<p>&emsp;&emsp;在二维空间里，假设$s$有两个分量$(s_1,s_2)$，则假设$y$为1维向量，也就是一个数。  </p>
+<p>&emsp;&emsp;假设我们使用2-范数那么根据文章思路，令$T=\Phi\Psi^\mathrm{H}$，则有$y=Ts$。  </p>
+<p>&emsp;&emsp;<strong>那么问题就变成了在满足等式约束$y=Ts$的情况下，求$\Vert s\Vert _2$的最小值。</strong>  </p>
+<p>&emsp;&emsp;$y=Ts$是二维空间中的一个超平面，为了简化，在2-D问题中看作一条直线；而$\Vert s\Vert _2^2=s_1^2+s_2^2$，即为半径为$\Vert s\Vert _2$的圆，要求该圆半径的最小值。直线和圆的关系在二维空间中如图所示：  </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/L2.png?imageView/2/w/300/q/90" alt="二维空间中直线和圆的关系">  </p>
+<p>我们将圆的半径逐渐增大，直到与$y=Ts$相切时，有$\Vert s\Vert _2^2$最小，此时圆与直线的交点坐标即为$s$的两个分量值，此时的$s$几乎不可能是稀疏的。  </p>
+<p>&emsp;&emsp;因此我们考虑$\hat{y}$的1-范数，那么问题变成了在满足$y=Ts$的情况下，求$\Vert s\Vert _1$的最小值。$\Vert s\Vert _1=\vert s_1\vert +\vert s_2\vert $，该函数在二维空间中的图如下所示：  </p>
+<p><img src="http://odnk9as2f.bkt.clouddn.com/L1.png?imageView/2/w/300/q/90" alt>  </p>
+<p>我们将菱形边长从原点开始逐渐增大，直到与直线$y=Ts$相切位置，菱形与直线的交点即为$s$的两个分量值，此时有很大可能性该交点在坐标轴上，因此所求$s$很可能是稀疏的。  </p>
+<h4 id="5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><a href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法" class="headerlink" title="5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"></a>5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</h4><p>&emsp;&emsp;对于$y=Ts$,由于$s$是$K$稀疏的，我们要找其$K$个分量，这$K$个分量系数的绝对值应该比其他$N-K$个分量的系数大得多。  </p>
+<p>&emsp;&emsp;我们先假设$K=1$，此时唯一非零元素$s_q$在$s$中对应的位置在$q$。则$Ts$就是恢复矩阵$T$的第$q$列$T_q$与$s$中的非零元素$s_q$的乘积，即$T_qs_q=y_q$，且$\frac{\Vert y-y_q\Vert _2}{\Vert y\Vert _2}&lt;\delta$。换句话说，$T$的第$q$列与$y$的相似程度最高，即$\vert \langle T_q,y\rangle \vert =\vert T_q^\mathrm{H}y\vert \gg \vert T_r^\mathrm{H}y\vert =\vert \langle T_r,y\rangle \vert , r\neq q$。所以，我们只要计算恢复矩阵$T$的所有列与$y$的内积，找到内积绝对值最大的那列就行了，该列对应的位置就是$q$。根据最小二乘法，$s_q=(T_q^\mathrm{H}T_q)^{-1}T_q^\mathrm{H}y$，就是使$\Vert y-T_qs_q\Vert _2$最小的那个$s_q$。此时余量$r_n=y-\frac{\langle T_q,y \rangle}{\langle T_q,T_q\rangle }T_q$，始终同$T_q$正交，很像施密特正交化方法。  </p>
+<p>&emsp;&emsp;当$K=2$，则$s$有两个非零元素$s_{q1}$和$s_{q2}$，其在$s$中的位置分别为$q1$和$q2$。则$T$的第$q1$和$q2$列与$y$的相似程度最高。我们要找到使$\Vert y-(T_{q2},T_{q1})\begin{pmatrix} s_{q2}\ s_{q1} \end{pmatrix}\Vert <em>2$最小的那个$\begin{pmatrix} s</em>{q2}\ s_{q1} \end{pmatrix}$。这里$T_{q1}$是我们第一次找到的那一列，$T_{q2}$是我们要重新找的那一列。此时我们找到两个在变换域最关键的元素和其在$s$中对应的位置了。令$T_q=(T_{q2},T_{q1})$，余量$r_n$又一次被写为$r_n=y-\frac{\langle T_q,y \rangle}{\langle T_q,T_q \rangle}T_q$。  </p>
+<p>&emsp;&emsp;当$K&gt;1$时，类似上面的步骤，迭代找到变换域中$K$个最重要的分量。正交匹配的迭代次数$m\geq K$，实际上操作只要满足$\frac{\Vert r_n\Vert _2}{\Vert y\Vert _2}&lt;\delta$，迭代就可以中止了。</p>
+<p>  主要参考：  </p>
+<ol>
+<li><a href="http://blog.csdn.net/abcjennifer/article/details/7748833" target="_blank" rel="noopener">http://blog.csdn.net/abcjennifer/article/details/7748833</a>  </li>
+<li>《“压缩传感”引论》.沙威.香港大学</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/图像处理/">图像处理</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/图像处理/">图像处理</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://wanz2.github.io/2017/04/06/压缩感知算法原理/" data-title="压缩感知算法原理 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/04/29/深度学习笔记：稀疏自编码器（1）————神经元与神经网络/" title="深度学习笔记：稀疏自编码器（1）——神经元与神经网络">
+  <strong>上一篇：</strong><br/>
+  <span>
+  深度学习笔记：稀疏自编码器（1）——神经元与神经网络</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/"  title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
+ <strong>下一篇：</strong><br/> 
+ <span>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-本文中使用的符号一览"><span class="toc-number">1.</span> <span class="toc-text">1. 本文中使用的符号一览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#传统正交变换中："><span class="toc-number">1.1.</span> <span class="toc-text">传统正交变换中：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#压缩感知算法中："><span class="toc-number">1.2.</span> <span class="toc-text">压缩感知算法中：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-压缩感知算法目的"><span class="toc-number">2.</span> <span class="toc-text">2. 压缩感知算法目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-采集策略"><span class="toc-number">3.</span> <span class="toc-text">3. 采集策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-传统解决思路——正交变换"><span class="toc-number">4.</span> <span class="toc-text">4. 传统解决思路——正交变换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-步骤"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-编码解码策略"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 编码解码策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-压缩误差分析"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 压缩误差分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-新的思路——压缩传感"><span class="toc-number">5.</span> <span class="toc-text">5. 新的思路——压缩传感</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-压缩传感思想："><span class="toc-number">5.1.</span> <span class="toc-text">5.1 压缩传感思想：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-根据以上分析，可以得出编码解码策略"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 根据以上分析，可以得出编码解码策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-观测矩阵-Phi-需要满足的性质"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 观测矩阵$\Phi$需要满足的性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-如何解决4-1中提出的优化问题"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 如何解决4.1中提出的优化问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-1-为什么要将0-范数转换成1-范数而非2-范数进行优化呢？"><span class="toc-number">5.4.1.</span> <span class="toc-text">5.4.1 为什么要将0-范数转换成1-范数而非2-范数进行优化呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-2-对于1-范数的优化问题，如何进行求解？——正交匹配追踪法"><span class="toc-number">5.4.2.</span> <span class="toc-text">5.4.2 对于1-范数的优化问题，如何进行求解？——正交匹配追踪法</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Python/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/经验心得/" title="经验心得">经验心得<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/框架/" title="框架">框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 10px;">Java虚拟机</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Web开发/" style="font-size: 10px;">Web开发</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/框架/" style="font-size: 10px;">框架</a> <a href="/tags/泛型/" style="font-size: 10px;">泛型</a> <a href="/tags/系统架构/" style="font-size: 10px;">系统架构</a> <a href="/tags/经验心得/" style="font-size: 12.5px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://coolshell.cn" target="_blank" title="COOLSHELL">COOLSHELL</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qinjiangbo.com" target="_blank" title="心灵港">心灵港</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.whu.edu.cn" target="_blank" title="武汉大学">武汉大学</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> I&#39;m Aaron Wu. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Wanz2" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:wuwenan_6@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Aaron Wu">Aaron Wu</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261991776'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1261991776' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>

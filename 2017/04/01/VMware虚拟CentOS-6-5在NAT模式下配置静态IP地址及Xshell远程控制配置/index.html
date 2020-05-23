@@ -1,0 +1,638 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Aaron Wu">
+    
+
+    
+    <meta name="description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
+<meta name="keywords" content="经验心得,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
+<meta property="og:url" content="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/index.html">
+<meta property="og:site_name" content="Aaron Wu">
+<meta property="og:description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045435665?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045508291?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500">
+<meta property="og:image" content="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500">
+<meta property="og:updated_time" content="2020-05-23T12:26:10.184Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置">
+<meta name="twitter:description" content="由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+</html>
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Aaron Wu">Aaron Wu</a></h1>
+				<h2 class="blog-motto">Strive for excellence, not perfection.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/tags">标签</a></li>
+					
+						<li><a href="/categories">分类</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="/search" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 3996866491135379000 ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置" itemprop="url">VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-01T03:29:51.000Z" itemprop="datePublished"> 发表于 2017-04-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>&emsp;&emsp;由于研究需要，笔者在Win10下的VMware虚拟机中安装了CentOS6.5，但在CentOS的网络配置上却遇到了一些问题。众所周知在主机上通过Xshell工具远程管理虚拟系统相当快捷方便，但在虚拟系统NAT网络模式下笔者的主机却始终ping不通虚拟机，折腾了很久才搞定。在此将踩过坑之后的正确配置方法记录一下，希望能够帮助到一些同学。本文内容主要分为两块：</p>
+<ol>
+<li>VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</li>
+<li>Windows主机中配置Xshell工具以远程控制虚拟系统<a id="more"></a>
+</li>
+</ol>
+<h1 id="二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><a href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置" class="headerlink" title="二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置"></a>二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</h1><ol>
+<li>在VMware中配置NAT网络模式<br> 1.1 在虚拟机设置中将网络适配器设置为NAT模式<br><img src="http://img.blog.csdn.net/20161015045000229?imageView/2/w/500" alt><br> 1.2 在VMware工具栏点击“编辑”-“虚拟网络编辑器”，在弹出的窗口中选择“更改设置”<br><img src="http://img.blog.csdn.net/20161015045052680?imageView/2/w/500" alt><br> 1.3 在弹出的窗口中选择VMnet8，并将其VMnet信息选择为NAT模式，点击“NAT设置”<br><img src="http://img.blog.csdn.net/20161015045131242?imageView/2/w/500" alt><br> 1.4 在弹出的窗口中，记住“网关IP”，之后配置IP地址会用到。在“端口转发”中选择“添加”<br><img src="http://img.blog.csdn.net/20161015045215555?imageView/2/w/500" alt><br> 1.5 在弹出的窗口中进行如下配置，其中主机端口可以自行设定，推荐设定值范围在10000和65535之间；虚拟机IP地址的前三位与上一步中网关地址的前三位相同，表示网段，虚拟机IP地址的最后一位可自行设定；虚拟机端口设置为22，为SSH协议的默认接口；“描述”选项可自行设定。设定结束后选择“确定”，在上一级窗口中选择“应用”并确定，至此VMware中的NAT网络配置结束。<br><img src="http://img.blog.csdn.net/20161015045308234?imageView/2/w/500" alt></li>
+<li>在CentOS中配置静态IP地址<br> 2.1 打开CentOS，输入<pre><code>  `ifconfig`
+查看网卡信息，注意信息中的网卡名：
+</code></pre><img src="http://img.blog.csdn.net/20161015045354993?imageView/2/w/500" alt><pre><code>上图中“eth0”即为网卡名，表示第一块网卡
+</code></pre> 2.2 静态IP地址配置主要用到以下三个文件：<pre><code>  `/etc/sysconfig/network-scripts/ifcfg-eth0`
+  `/etc/sysconfig/network`
+  `/etc/resolv.conf`
+注意：第一个文件名中的“ifcfg-eth0”可能有所不同，实际使用时根据上一步中查看的网卡名进行设置
+</code></pre> 2.3 首先编辑<code>/etc/sysconfig/network</code>，配置如下：<br><img src="http://img.blog.csdn.net/20161015045435665?imageView/2/w/500" alt><pre><code>其中GATEWAY即为之前查看到的网关地址
+</code></pre> 2.4 其次编辑<code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>，若找不到该文件，则说明网卡eth0尚未启动，则可以创建该文件并配置如下：<br><img src="http://img.blog.csdn.net/20161015045508291?imageView/2/w/500" alt><pre><code>其中IP地址为之前在NAT设置中配置的IP地址，NETMASK为子网掩码，GATEWAY即默认网关地址
+注意：DNS1和DNS2必须填写，若不填写则无法进行域名解析，其中DNS1与GATEWAY地址相同，而DNS2则可选择常用的DNS服务器地址，这里使用的8.8.8.8是谷歌的DNS服务器
+</code></pre> 2.5 上一步配置完成后，系统会在<code>/etc/resolv.conf</code>文件中自动写入DNS服务器地址，如图：<br><img src="http://img.blog.csdn.net/20161015045535228?imageView/2/w/500" alt><br> 2.6 配置完成后输入命令<code>service network restart</code>重启网络服务，至此静态IP配置完成，虚拟CentOS的IP地址为192.168.81.23</li>
+<li>打开ssh服务<br> 3.1 在配置Xshell前，要在系统中打开ssh服务，输入如下命令<br> 打开ssh服务：<code>service sshd start</code><br> 设置开机运行ssh：<code>chkconfig sshd on</code></li>
+</ol>
+<h1 id="三、配置Xshell工具"><a href="#三、配置Xshell工具" class="headerlink" title="三、配置Xshell工具"></a>三、配置Xshell工具</h1><ol>
+<li>打开Xshell工具，选择“文件”-“新建”，在弹出窗口选择“连接”，作如下配置：<br><img src="http://img.blog.csdn.net/20161015045604525?imageView/2/w/500" alt><br> a. 协议选择SSH<br> b. 由于已经将主机的10023端口映射为虚拟机的22号端口，因此主机设置为127.0.0.1，端口号设置为步骤1.5中设置的“主机端口号”，即10023</li>
+<li>在“用户身份验证”中输入登录用帐号密码：<br><img src="http://img.blog.csdn.net/20161015045633192?imageView/2/w/500" alt></li>
+<li>配置成功，点击连接即可接入虚拟系统</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/经验心得/">经验心得</a><a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://wanz2.github.io/2017/04/01/VMware虚拟CentOS-6-5在NAT模式下配置静态IP地址及Xshell远程控制配置/" data-title="VMware虚拟CentOS 6.5在NAT模式下配置静态IP地址及Xshell远程控制配置 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/04/06/压缩感知算法原理/" title="压缩感知算法原理">
+  <strong>上一篇：</strong><br/>
+  <span>
+  压缩感知算法原理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/04/01/Caffe：Windows-64位-VS2013下的Caffe-CPU-Only-安装配置/"  title="Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置">
+ <strong>下一篇：</strong><br/> 
+ <span>Caffe：Windows(64位)+VS2013下的Caffe(CPU Only)安装配置
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、前言"><span class="toc-number">1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、VMware下CentOS6-5在NAT网络模式下静态IP地址的配置"><span class="toc-number">2.</span> <span class="toc-text">二、VMware下CentOS6.5在NAT网络模式下静态IP地址的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、配置Xshell工具"><span class="toc-number">3.</span> <span class="toc-text">三、配置Xshell工具</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Python/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/经验心得/" title="经验心得">经验心得<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/机器学习/" title="机器学习">机器学习<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/经验心得/" title="经验心得">经验心得<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/图像处理/" title="图像处理">图像处理<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java虚拟机/" title="Java虚拟机">Java虚拟机<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/泛型/" title="泛型">泛型<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Web开发/" title="Web开发">Web开发<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Docker/" title="Docker">Docker<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统架构/" title="系统架构">系统架构<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/框架/" title="框架">框架<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 10px;">Java虚拟机</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Web开发/" style="font-size: 10px;">Web开发</a> <a href="/tags/图像处理/" style="font-size: 10px;">图像处理</a> <a href="/tags/数据结构与算法/" style="font-size: 10px;">数据结构与算法</a> <a href="/tags/机器学习/" style="font-size: 17.5px;">机器学习</a> <a href="/tags/框架/" style="font-size: 10px;">框架</a> <a href="/tags/泛型/" style="font-size: 10px;">泛型</a> <a href="/tags/系统架构/" style="font-size: 10px;">系统架构</a> <a href="/tags/经验心得/" style="font-size: 12.5px;">经验心得</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://coolshell.cn" target="_blank" title="COOLSHELL">COOLSHELL</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qinjiangbo.com" target="_blank" title="心灵港">心灵港</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.whu.edu.cn" target="_blank" title="武汉大学">武汉大学</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> I&#39;m Aaron Wu. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Wanz2" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:wuwenan_6@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Aaron Wu">Aaron Wu</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261991776'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1261991776' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  </body>
+</html>
