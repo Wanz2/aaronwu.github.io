@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://wanz2.github.io/2017/04/29/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E7%A8%80%E7%96%8F%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%A5%9E%E7%BB%8F%E5%85%83%E4%B8%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2020-05-23</lastmod>
-  </url>  <url>
-    <loc>https://wanz2.github.io/2017/04/01/Caffe%EF%BC%9AWindows-64%E4%BD%8D-VS2013%E4%B8%8B%E7%9A%84Caffe-CPU-Only-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
-    <lastmod>2020-05-23</lastmod>
-  </url>  <url>
     <loc>https://wanz2.github.io/2017/08/11/Intellij-IDEA-%E6%93%8D%E4%BD%9C%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2020-05-23</lastmod>
   </url>  <url>
@@ -80,6 +74,12 @@
     <lastmod>2020-05-23</lastmod>
   </url>  <url>
     <loc>https://wanz2.github.io/2017/06/16/Java%E2%80%94%E2%80%94Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%87%E4%BB%A4%E9%9B%86/</loc>
+    <lastmod>2020-05-23</lastmod>
+  </url>  <url>
+    <loc>https://wanz2.github.io/2017/04/01/Caffe%EF%BC%9AWindows-64%E4%BD%8D-VS2013%E4%B8%8B%E7%9A%84Caffe-CPU-Only-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</loc>
+    <lastmod>2020-05-23</lastmod>
+  </url>  <url>
+    <loc>https://wanz2.github.io/2017/04/29/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E7%A8%80%E7%96%8F%E8%87%AA%E7%BC%96%E7%A0%81%E5%99%A8%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E2%80%94%E2%80%94%E7%A5%9E%E7%BB%8F%E5%85%83%E4%B8%8E%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2020-05-23</lastmod>
   </url>
 </urlset>
