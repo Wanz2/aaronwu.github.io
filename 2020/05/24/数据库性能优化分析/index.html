@@ -19,13 +19,13 @@
 <meta property="og:site_name" content="Aaron Wu">
 <meta property="og:description" content="最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 **table_a**，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://wanz2.github.io/Users/wuwenan/Documents/blog_aaronwu/source/_posts/数据库性能优化分析/mysql%20screen%20shot.png">
-<meta property="og:image" content="https://wanz2.github.io/Users/wuwenan/Documents/blog_aaronwu/source/_posts/数据库性能优化分析/db%20middleware.png">
-<meta property="og:updated_time" content="2020-05-23T16:30:33.908Z">
+<meta property="og:image" content="https://wanz2.github.io/2020/05/24/数据库性能优化分析/数据库性能优化分析/mysql%20screen%20shot.png">
+<meta property="og:image" content="https://wanz2.github.io/2020/05/24/数据库性能优化分析/数据库性能优化分析/db%20middleware.png">
+<meta property="og:updated_time" content="2020-05-23T16:34:03.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库性能优化方法专题分析">
 <meta name="twitter:description" content="最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 **table_a**，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。">
-<meta name="twitter:image" content="https://wanz2.github.io/Users/wuwenan/Documents/blog_aaronwu/source/_posts/数据库性能优化分析/mysql%20screen%20shot.png">
+<meta name="twitter:image" content="https://wanz2.github.io/2020/05/24/数据库性能优化分析/数据库性能优化分析/mysql%20screen%20shot.png">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -131,7 +131,7 @@
 <h5 id="1-6-2-2-适用性分析"><a href="#1-6-2-2-适用性分析" class="headerlink" title="1.6.2.2 适用性分析"></a>1.6.2.2 适用性分析</h5><p>​    分析：使用分区，需要考虑分区键约束。MySQL官方给出的分区键的约束条件如下：</p>
 <p>​     <strong>分区表达式中的所有列都必须是每个唯一键（包括主键）的一部分。</strong></p>
 <p>换句话说：<strong>表中的每一个唯一键（包括主键），都必须包含分区表达式中的所有列。</strong></p>
-<p><img src="/Users/wuwenan/Documents/blog_aaronwu/source/_posts/数据库性能优化分析/mysql screen shot.png" alt="MySql 官网分区约束截图">                               </p>
+<p><img src="./数据库性能优化分析/mysql screen shot.png" alt="MySql 官网分区约束截图">                               </p>
 <p>具体说明见MySQL官方文档：<a href="https://dev.mysql.com/doc/refman/5.6/en/partitioning-limitations-partitioning-keys-unique-keys.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.6/en/partitioning-limitations-partitioning-keys-unique-keys.html</a></p>
 <p>依据上述约束条件，若要使用分区，需要考虑以下几点：</p>
 <ul>
@@ -189,7 +189,7 @@
 </li>
 </ul>
 <h2 id="2-数据库优化相关工具"><a href="#2-数据库优化相关工具" class="headerlink" title="2 数据库优化相关工具"></a>2 数据库优化相关工具</h2><p>业界常用开源数据库优化的工具有：</p>
-<p><img src="/Users/wuwenan/Documents/blog_aaronwu/source/_posts/数据库性能优化分析/db middleware.png" alt></p>
+<p><img src="./数据库性能优化分析/db middleware.png" alt="业界常用开源数据库优化工具"></p>
 <h2 id="3-优惠券服务数据库性能优化方案"><a href="#3-优惠券服务数据库性能优化方案" class="headerlink" title="3 优惠券服务数据库性能优化方案"></a>3 优惠券服务数据库性能优化方案</h2><p>经过上述分析，结合优惠券服务特点，对于优惠券服务的数据库性能优化，建议按以下方法进行：</p>
 <p>a)    优化SQL设计</p>
 <p>b)    优化索引设计</p>
