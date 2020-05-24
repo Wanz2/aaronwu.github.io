@@ -21,7 +21,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://wanz2.github.io/2020/04/20/数据库性能优化分析/mysql%20screen%20shot.png">
 <meta property="og:image" content="https://wanz2.github.io/2020/04/20/数据库性能优化分析/db%20middleware.png">
-<meta property="og:updated_time" content="2020-05-24T09:17:13.104Z">
+<meta property="og:updated_time" content="2020-05-24T09:21:38.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库性能优化方法专题分析">
 <meta name="twitter:description" content="最近负责考虑自己所在项目的数据库性能优化方案，主要是一张大表 **table_a**，预计上线以后会有亿级甚至十亿级数据，需要解决单表数据量过大所带来的性能和管理问题。本文对常用数据库优化方法进行整理、分析和总结，最终给出了适合本项目的数据库优化方案。">
@@ -109,7 +109,7 @@
 <h4 id="1-4-2-适用性分析"><a href="#1-4-2-适用性分析" class="headerlink" title="1.4.2 适用性分析"></a>1.4.2 适用性分析</h4><p>​    项目中引入缓存一般是为了应对高频访问且不常修改的数据的查询，防止大量的请求进入数据库，导致其他数据操作的延迟。</p>
 <h3 id="1-5-读写分离"><a href="#1-5-读写分离" class="headerlink" title="1.5 读写分离"></a>1.5 读写分离</h3><h4 id="1-5-1-理论依据"><a href="#1-5-1-理论依据" class="headerlink" title="1.5.1 理论依据"></a>1.5.1 理论依据</h4><p>​    读写分离策略：</p>
 <p>1）对于读多、写少访问特别频繁的表，可以考虑采取读写分离的架构，通过增加读库来提高业务读操作的能力。</p>
-<p>2）如果业务需要构建读写分离能力，统一使用DRDS中间件这个标准方案</p>
+<p>2）如果业务需要构建读写分离能力，统一使用分布式数据库中间件这个标准方案</p>
 <h4 id="1-5-2-适用性分析"><a href="#1-5-2-适用性分析" class="headerlink" title="1.5.2 适用性分析"></a>1.5.2 适用性分析</h4><ul>
 <li>读写分离原理： 将数据库分为主从库，一个主库用于写数据，多个从库完成读数据的操作，主从库之间通过某种机制进行数据的同步，是一种常见的数据库架构。</li>
 </ul>
