@@ -49,7 +49,7 @@ highlight_theme: night
 
 #### index post is expanding or not  首页文章是否展开
 index:
-  expand: fales           ## default is unexpanding,so you can only see the short description of each post.
+  expand: false           ## default is unexpanding,so you can only see the short description of each post.
   excerpt_link: Read More
 
 close_aside: false  #close sidebar in post page if true
@@ -81,6 +81,7 @@ author:
 toc:
   article: true   ## show contents in article.
   aside: true     ## show contents in aside.
+  number: false
 ## you can set both of the value to true of neither of them.
 ## if you don't want display contents in a specified post,you can modify `front-matter` and add `toc: false`.
 
