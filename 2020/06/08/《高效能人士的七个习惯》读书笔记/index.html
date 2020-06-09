@@ -4,25 +4,25 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   
-    <title>Java——利用Collections.sort()对泛型为String的List排序 | Aaron Wu</title>
+    <title>《高效能人士的七个习惯》读书笔记 | Aaron Wu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Aaron Wu">
     
 
     
-    <meta name="description" content="本文利用Collections.sort()对泛型为String的List排序">
-<meta name="keywords" content="Java">
+    <meta name="description" content="《高效能人士的七个习惯》读书笔记">
+<meta name="keywords" content="经验心得">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java——利用Collections.sort()对泛型为String的List排序">
-<meta property="og:url" content="https://wanz2.github.io/2017/04/30/Java——利用Collections.sort()对List排序/index.html">
+<meta property="og:title" content="《高效能人士的七个习惯》读书笔记">
+<meta property="og:url" content="https://wanz2.github.io/2020/06/08/《高效能人士的七个习惯》读书笔记/index.html">
 <meta property="og:site_name" content="Aaron Wu">
-<meta property="og:description" content="本文利用Collections.sort()对泛型为String的List排序">
+<meta property="og:description" content="《高效能人士的七个习惯》读书笔记">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2020-06-09T02:39:45.584Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java——利用Collections.sort()对泛型为String的List排序">
-<meta name="twitter:description" content="本文利用Collections.sort()对泛型为String的List排序">
+<meta name="twitter:title" content="《高效能人士的七个习惯》读书笔记">
+<meta name="twitter:description" content="《高效能人士的七个习惯》读书笔记">
 
     
     <link rel="alternative" href="/atom.xml" title="Aaron Wu" type="application/atom+xml">
@@ -76,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/30/Java——利用Collections.sort()对List排序/" title="Java——利用Collections.sort()对泛型为String的List排序" itemprop="url">Java——利用Collections.sort()对泛型为String的List排序</a>
+      <a href="/2020/06/08/《高效能人士的七个习惯》读书笔记/" title="《高效能人士的七个习惯》读书笔记" itemprop="url">《高效能人士的七个习惯》读书笔记</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Aaron Wu" target="_blank" itemprop="author">Aaron Wu</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-30T13:23:10.000Z" itemprop="datePublished"> 发表于 2017-04-30</time>
+    <time datetime="2020-06-08T22:34:40.000Z" itemprop="datePublished"> 发表于 2020-06-08</time>
     
   </p>
 </header>
@@ -92,20 +92,17 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#一、思维方式的重要性"><span class="toc-number">1.</span> <span class="toc-text">一、思维方式的重要性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#二、培养以原则为中心的思维方式"><span class="toc-number">2.</span> <span class="toc-text">二、培养以原则为中心的思维方式</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#三、什么是效能"><span class="toc-number">3.</span> <span class="toc-text">三、什么是效能</span></a></li></ol>
 		
 		</div>
 		
-		<p>&emsp;&emsp;本文利用Collections.sort()对泛型为String的List排序  </p>
-<p>练习：利用Collections.sort()方法对泛型为String的List进行排序，要求：  </p>
-<ol>
-<li>创建完List<string>之后，往其中添加十条随机字符串  </string></li>
-<li>每条字符串的长度为10以内的随机整数  </li>
-<li>每条字符串的每个字符都为随机生成的字符，字符可以重复  </li>
-<li>每条随机字符串不可重复  </li>
-</ol>
-<p>&emsp;&emsp;以下是实现代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by Wenan Wu on 2016/11/16 0016.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Exercise6_5</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 练习：利用Collections.sort()方法对泛型为String的List进行排序：</span></span><br><span class="line"><span class="comment">     * 1.创建完list&lt;String&gt;之后，往其中添加十条随机字符串</span></span><br><span class="line"><span class="comment">     * 2.每条字符串的长度为10以内的随机整数</span></span><br><span class="line"><span class="comment">     * 3.每条字符串的每个字符都为随机生成的字符，字符可以重复</span></span><br><span class="line"><span class="comment">     * 4.每条随机字符串不可重复</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 随机生成长度为10以内整数的字符串方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getRandomString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String base = <span class="string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"</span>;</span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">int</span> length; <span class="comment">// 字符串长度值</span></span><br><span class="line">        <span class="keyword">do</span> &#123; <span class="comment">//确保字符串长度不为0</span></span><br><span class="line">            length = random.nextInt(<span class="number">10</span>);</span><br><span class="line">        &#125; <span class="keyword">while</span> (length==<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> number = random.nextInt(base.length());</span><br><span class="line">            sb.append(base.charAt(number));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试字符串排序</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Exercise6_5 ex1 = <span class="keyword">new</span> Exercise6_5();</span><br><span class="line">        List&lt;String&gt; stringList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        String string;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;<span class="comment">//确保List中没有重复字符串</span></span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                string = ex1.getRandomString();</span><br><span class="line">            &#125;<span class="keyword">while</span> (stringList.contains(string));</span><br><span class="line">            stringList.add(string);</span><br><span class="line">            System.out.println(<span class="string">"增加的字符串为："</span> + string);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"------------排序前----------"</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s :</span><br><span class="line">                stringList) &#123;</span><br><span class="line">            System.out.println(<span class="string">"元素："</span> + s);</span><br><span class="line">        &#125;</span><br><span class="line">        Collections.sort(stringList);</span><br><span class="line">        System.out.println(<span class="string">"---------排序后---------"</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s :</span><br><span class="line">                stringList) &#123;</span><br><span class="line">            System.out.println(<span class="string">"元素："</span> + s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Exercise6_5 ex = <span class="keyword">new</span> Exercise6_5();</span><br><span class="line">        ex.testSort();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+		<p>最近《高效能人士的七个习惯》中讲述了在人类成长的过程中，有关个人成功的三个习惯：积极主动、以终为始、要事第一，以及追求公众成功的三个习惯：双赢思维、知彼解己、统合综效，以及加强前面六个习惯的第七个习惯——不断更新。七个习惯可以视为个人成长由依赖走向独立乃至互赖的普遍方法论，但作者并不是开篇直接切入介绍这七个习惯，而是用第一章和第二章的来论述了这七个习惯的重要意义以及学习这七个习惯前的思想准备，逻辑推导严谨而有趣，本文想整理一下作者的思维逻辑，以加深自己的理解。</p>
+<p>《高效能人士的七个习惯》中讲述了在人类成长的过程中，有关个人成功的三个习惯：积极主动、以终为始、要事第一，以及追求公众成功的三个习惯：双赢思维、知彼解己、统合综效，以及加强前面六个习惯的第七个习惯——不断更新。七个习惯可以视为个人成长由依赖走向独立乃至互赖的普遍方法论，但作者并不是开篇直接切入介绍这七个习惯，而是用第一章和第二章的来论述了这七个习惯的重要意义以及学习这七个习惯前的思想准备，逻辑推导严谨而有趣，本文想整理一下作者的思维逻辑，以加深自己的理解。</p>
+<p>最近部门组织大家学习《高效能人士的七个习惯》。本书讲述了在人类成长的过程中，有关个人成功的三个习惯：积极主动、以终为始、要事第一，以及追求公众成功的三个习惯：双赢思维、知彼解己、统合综效，以及加强前面六个习惯的第七个习惯——不断更新。七个习惯可以视为个人成长由依赖走向独立乃至互赖的普遍方法论，但作者并不是开篇直接切入介绍这七个习惯，而是用第一章和第二章的来论述了这七个习惯的重要意义以及学习这七个习惯前的思想准备，逻辑推导严谨而有趣，本文想整理一下作者的思维逻辑，以加深自己的理解。</p>
+<h6 id="一、思维方式的重要性"><a href="#一、思维方式的重要性" class="headerlink" title="一、思维方式的重要性"></a>一、思维方式的重要性</h6><p>书中介绍的七个习惯，并不是处理具体问题的方法，而是我们生活工作中需要遵循的思想上的原则，是一种思维方式。但如果你不认可思维方式的重要性，那么你大概也不会意识到培养这样的思维方式的必要性。作者举了不少例子，说明了外接的的条件作用会对人类的认知和思维方式产生强大的影响，而思维方式是行为与态度的源头，它会指导人的行为方式。倘若我们只改变表面的行为，而不改变真正的思维方式，那就是表里不一、言不由衷。而由于思维方式方式易受外界影响，因此我们必须对它负责，不断审视它，在现实中检验它，从而让自己能够更加客观地去看待外部世界，并做出正确的选择。</p>
+<h6 id="二、培养以原则为中心的思维方式"><a href="#二、培养以原则为中心的思维方式" class="headerlink" title="二、培养以原则为中心的思维方式"></a>二、培养以原则为中心的思维方式</h6><p>当我们认识到思维方式的重要性之后，我们就需要明白培养思维方式的正确方向： 使其符合原则。这就是以原则为中心的思维方式。原则如灯塔，是不容动摇的自然法则，一个人的思维方式越符合原则或自然法则，就越能正确而高效地生活。七个习惯想强调的并不是机械地遵循一些方法去生活，而是要理解这些方法背后的原则，而这些原则是放之四海皆准的真理。这和唯物主义辩证法的思想是一致的，要求我们坚持真理，实事求是。</p>
+<h6 id="三、什么是效能"><a href="#三、什么是效能" class="headerlink" title="三、什么是效能"></a>三、什么是效能</h6><p>我们建立起以原则为中心的思维方式之后，我们可以开始学习七个习惯所依赖的原则基础：“产出/产能平衡”（P/PC Balance），可以用公司内常讲到的我们要“多打粮食，增加土地肥力”来理解。“粮食”就是产出，“土地肥力”就是产能。“产出”是我们收获的成果，“产能”是我们用以生产的资产或能力。“效能”即在于产出/产能平衡的平衡。这一原则蕴藏在工作、生活、个人发展、企业发展的方方面面。倘若我们只重视产出，忽略产能，我们便是竭泽而渔，失去了可持续发展的能力；倘若我们只重视产能，忽视产出，便迟迟没有收获，也会失去提升产能的能力和动力。</p>
+<p>我们以“产出/产能平衡”的原则为逻辑起点，去思考怎样提升效能水平，便能更好地去理解七个习惯，前三个习惯将帮助我们提升个人的效能，第四到第七个习惯有助于提升团队的效能，第七个习惯有助于我们不断提升其他六个习惯的实施效率。作者由浅入深，逻辑清晰，令人信服。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -113,13 +110,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Java/">Java</a>
+  <a class="article-category-link" href="/categories/经验心得/">经验心得</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java/">Java</a>
+  <span></span> <a href="/tags/经验心得/">经验心得</a>
   </div>
 
 </div>
@@ -128,7 +125,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://wanz2.github.io/2017/04/30/Java——利用Collections.sort()对List排序/" data-title="Java——利用Collections.sort()对泛型为String的List排序 | Aaron Wu" data-tsina="undefined" class="share clearfix">
+	  <div data-url="https://wanz2.github.io/2020/06/08/《高效能人士的七个习惯》读书笔记/" data-title="《高效能人士的七个习惯》读书笔记 | Aaron Wu" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -141,19 +138,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/05/04/Java——JDBC执行SQL语句的两种方式/" title="Java——JDBC执行SQL语句的两种方式">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Java——JDBC执行SQL语句的两种方式</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/04/30/Java——重写equals-方法/"  title="Java——重写equals()方法">
+<a href="/2020/04/20/数据库性能优化分析/"  title="数据库性能优化方法专题分析">
  <strong>下一篇：</strong><br/> 
- <span>Java——重写equals()方法
+ <span>数据库性能优化方法专题分析
 </span>
 </a>
 </div>
@@ -168,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#一、思维方式的重要性"><span class="toc-number">1.</span> <span class="toc-text">一、思维方式的重要性</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#二、培养以原则为中心的思维方式"><span class="toc-number">2.</span> <span class="toc-text">二、培养以原则为中心的思维方式</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#三、什么是效能"><span class="toc-number">3.</span> <span class="toc-text">三、什么是效能</span></a></li></ol>
  
   </div>
 
