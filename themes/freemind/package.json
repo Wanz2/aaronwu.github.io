@@ -1,0 +1,13 @@
+{
+  "name": "hexo-site",
+  "version": "2.8.3",
+  "private": true,
+  "dependencies": {
+    "hexo-generator-search": "^2.4.0",
+    "hexo-recommended-posts": "^1.1.0",
+    "hexo-renderer-ejs": "*",
+    "hexo-renderer-marked": "*",
+    "hexo-renderer-stylus": "*",
+    "hexo-tag-bootstrap": "^0.2.1"
+  }
+}

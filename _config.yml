@@ -64,7 +64,7 @@ pagination_dir: page
 # Extensions 扩展
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: jacman # 当前主题名称
+theme: freemind # 当前主题名称
 stylus: true
 
 # Deployment 部署设置
