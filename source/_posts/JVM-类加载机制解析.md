@@ -26,7 +26,7 @@ date: 2020-06-27 22:16:09
 
 ​	此处特别要提到一点，Java 类加载机制遵循“双亲委派模型”，上文中也说到引导类加载器是所有类加载器的双亲，**但并不意味着上述的几个类加载器有继承关系**，事实上，这几个类加载器在 jdk 源码中的实现，存在的是关联关系，“双亲委派”也只是通过程序的调用逻辑上去实现的。真正的类加载器类之间的关系如下图：
 
-![JVM 类加载器模型类图](dClassLoader Class Diag.jpg)
+![JVM 类加载器模型类图](ClassLoader Class Diag.png)
 
 ## 双亲委派机制
 
@@ -38,11 +38,11 @@ date: 2020-06-27 22:16:09
 
 ​	双亲委派机制的流程图如下：
 
-![双亲委派机制](parent delegation.jpg)
+![双亲委派机制](parent delegation.png)
 
 ## ClassLoader.loadClass 双亲委派机制实现流程
 
 ​	本着源码说话的原则，我将实现双亲委派机制的核心方法 loadClass 方法的处理流程画成了活动图，以供参考。
 
-![ClassLoader.loadClass 方法活动图](ClassLoader.loadClass Activity Diag.jpg)
+![ClassLoader.loadClass 方法活动图](ClassLoader.loadClass Activity Diag.png)
 
