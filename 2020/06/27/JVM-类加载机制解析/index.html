@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://wanz2.github.io/2020/06/27/JVM-类加载机制解析/ClassLoader%20Class%20Diag.png">
 <meta property="og:image" content="https://wanz2.github.io/2020/06/27/JVM-类加载机制解析/parent%20delegation.png">
 <meta property="og:image" content="https://wanz2.github.io/2020/06/27/JVM-类加载机制解析/ClassLoader.loadClass%20Activity%20Diag.png">
-<meta property="og:updated_time" content="2020-06-27T15:12:26.635Z">
+<meta property="og:updated_time" content="2020-06-29T00:37:04.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM 类加载机制解析">
 <meta name="twitter:description" content="从jdk 源码层面谈谈 jvm 类加载机制。">
@@ -96,7 +96,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器"><span class="toc-number">1.</span> <span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双亲委派机制"><span class="toc-number">2.</span> <span class="toc-text">双亲委派机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ClassLoader-loadClass-双亲委派机制实现流程"><span class="toc-number">3.</span> <span class="toc-text">ClassLoader.loadClass 双亲委派机制实现流程</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器"><span class="toc-number">1.</span> <span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双亲委派机制"><span class="toc-number">2.</span> <span class="toc-text">双亲委派机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ClassLoader-loadClass-双亲委派机制实现流程"><span class="toc-number">3.</span> <span class="toc-text">ClassLoader.loadClass 双亲委派机制实现流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打破双亲委派机制"><span class="toc-number">4.</span> <span class="toc-text">打破双亲委派机制</span></a></li></ol>
 		
 		</div>
 		
@@ -117,8 +117,12 @@
 <p>​    所有的类加载器都继承自 ClassLoader 类，他们都使用 loadClass 方法加载类，而双亲委派机制也是在 loadClass 方法中实现。当类加载器发现父加载器无法加载而需要自己去加载类的时候（在 loadClass 方法体内的逻辑），会调用 findClass 方法去加载指定类，这个方法最终会调用到由 C++实现的 native 方法。</p>
 <p>​    双亲委派机制的流程图如下：</p>
 <p><img src="parent delegation.png" alt="双亲委派机制"></p>
-<h2 id="ClassLoader-loadClass-双亲委派机制实现流程"><a href="#ClassLoader-loadClass-双亲委派机制实现流程" class="headerlink" title="ClassLoader.loadClass 双亲委派机制实现流程"></a>ClassLoader.loadClass 双亲委派机制实现流程</h2><p>​    本着源码说话的原则，我将实现双亲委派机制的核心方法 loadClass 方法的处理流程画成了活动图，以供参考。</p>
+<h2 id="ClassLoader-loadClass-双亲委派机制实现流程"><a href="#ClassLoader-loadClass-双亲委派机制实现流程" class="headerlink" title="ClassLoader.loadClass 双亲委派机制实现流程"></a>ClassLoader.loadClass 双亲委派机制实现流程</h2><p>​    用源码说话，我将实现双亲委派机制的核心方法 loadClass 方法的处理流程画成了活动图，以供参考。</p>
 <p><img src="ClassLoader.loadClass Activity Diag.png" alt="ClassLoader.loadClass 方法活动图"></p>
+<h2 id="打破双亲委派机制"><a href="#打破双亲委派机制" class="headerlink" title="打破双亲委派机制"></a>打破双亲委派机制</h2><ol>
+<li>继承 ClassLoader 类，重写 loadClass方法</li>
+<li>使用线程上下文类加载器（ContextClassLoader）</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -173,7 +177,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器"><span class="toc-number">1.</span> <span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双亲委派机制"><span class="toc-number">2.</span> <span class="toc-text">双亲委派机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ClassLoader-loadClass-双亲委派机制实现流程"><span class="toc-number">3.</span> <span class="toc-text">ClassLoader.loadClass 双亲委派机制实现流程</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器"><span class="toc-number">1.</span> <span class="toc-text">类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双亲委派机制"><span class="toc-number">2.</span> <span class="toc-text">双亲委派机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ClassLoader-loadClass-双亲委派机制实现流程"><span class="toc-number">3.</span> <span class="toc-text">ClassLoader.loadClass 双亲委派机制实现流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打破双亲委派机制"><span class="toc-number">4.</span> <span class="toc-text">打破双亲委派机制</span></a></li></ol>
  
   </div>
 
