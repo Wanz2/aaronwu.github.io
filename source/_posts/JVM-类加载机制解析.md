@@ -42,7 +42,11 @@ date: 2020-06-27 22:16:09
 
 ## ClassLoader.loadClass 双亲委派机制实现流程
 
-​	本着源码说话的原则，我将实现双亲委派机制的核心方法 loadClass 方法的处理流程画成了活动图，以供参考。
+​	用源码说话，我将实现双亲委派机制的核心方法 loadClass 方法的处理流程画成了活动图，以供参考。
 
 ![ClassLoader.loadClass 方法活动图](ClassLoader.loadClass Activity Diag.png)
 
+## 打破双亲委派机制
+
+1. 继承 ClassLoader 类，重写 loadClass方法
+2. 使用线程上下文类加载器（ContextClassLoader）
